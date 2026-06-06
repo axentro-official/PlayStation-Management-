@@ -118,6 +118,7 @@
             justify-content: center;
             gap: 12px;
             margin-bottom: 1.5rem;
+            direction: ltr;
         }
 
         .pin-dot {
@@ -133,6 +134,7 @@
             color: var(--primary);
             transition: all 0.3s ease;
             background: var(--gray-50);
+            direction: ltr;
         }
 
         .pin-dot.filled {
@@ -179,6 +181,7 @@
             cursor: pointer;
             transition: all 0.2s ease;
             font-family: inherit;
+            direction: ltr;
         }
 
         .num-btn:hover {
@@ -394,6 +397,8 @@
             font-weight: 800;
             color: var(--gray-900);
             margin-bottom: 0.25rem;
+            direction: ltr;
+            display: inline-block;
         }
 
         .stat-label {
@@ -499,7 +504,7 @@
             background: white;
             border-radius: var(--radius-2xl);
             width: 100%;
-            max-width: 480px;
+            max-width: 520px;
             max-height: 90vh;
             overflow-y: auto;
             box-shadow: var(--shadow-xl);
@@ -569,6 +574,7 @@
             font-family: inherit;
             font-size: 1rem;
             transition: all 0.2s ease;
+            direction: ltr;
         }
 
         .form-input:focus {
@@ -604,6 +610,34 @@
             color: white;
         }
 
+        .session-type-toggle {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .session-type-option {
+            padding: 1.25rem;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 700;
+        }
+
+        .session-type-option:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .session-type-option.selected {
+            border-color: var(--success);
+            background: #d1fae5;
+            color: #065f46;
+        }
+
         .duration-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -622,6 +656,8 @@
             font-size: 2rem;
             font-weight: 900;
             color: #92400e;
+            direction: ltr;
+            display: inline-block;
         }
 
         .btn-group {
@@ -666,9 +702,38 @@
         }
 
         /* Products Section */
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .add-product-btn {
+            background: linear-gradient(135deg, var(--primary), #3b82f6);
+            color: white;
+            border: none;
+            padding: 0.85rem 1.5rem;
+            border-radius: var(--radius-lg);
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .add-product-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+        }
+
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 1.25rem;
         }
 
@@ -723,6 +788,8 @@
             font-size: 1.35rem;
             font-weight: 900;
             color: var(--primary);
+            direction: ltr;
+            display: inline-block;
         }
 
         .add-btn {
@@ -749,17 +816,20 @@
             overflow: hidden;
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--gray-200);
+            overflow-x: auto;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 700px;
         }
 
         th, td {
             padding: 1rem;
             text-align: right;
             border-bottom: 1px solid var(--gray-200);
+            direction: ltr;
         }
 
         th {
@@ -784,6 +854,7 @@
         .badge-success { background: #d1fae5; color: #065f46; }
         .badge-danger { background: #fee2e2; color: #991b1b; }
         .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-info { background: var(--primary-light); color: var(--primary); }
 
         /* Clients List */
         .clients-grid {
@@ -834,6 +905,8 @@
         .client-phone {
             color: var(--gray-500);
             font-size: 0.88rem;
+            direction: ltr;
+            display: inline-block;
         }
 
         .client-stats {
@@ -853,6 +926,8 @@
             font-weight: 800;
             font-size: 1.1rem;
             color: var(--primary);
+            direction: ltr;
+            display: inline-block;
         }
 
         .client-stat-label {
@@ -973,6 +1048,62 @@
 
         .toast.success { background: var(--success); }
         .toast.error { background: var(--danger); }
+        .toast.warning { background: var(--warning); color: var(--dark); }
+
+        /* Session Timer Display */
+        .session-timer {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: white;
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            margin: 1rem 0;
+            font-size: 2.5rem;
+            font-weight: 900;
+            font-family: monospace;
+            direction: ltr;
+            letter-spacing: 2px;
+        }
+
+        .session-timer.warning {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .session-details {
+            background: var(--gray-50);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        .session-detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed var(--gray-200);
+        }
+
+        .session-detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: var(--gray-600);
+            font-weight: 600;
+        }
+
+        .detail-value {
+            font-weight: 800;
+            color: var(--gray-900);
+            direction: ltr;
+        }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -987,6 +1118,7 @@
             .duration-row { grid-template-columns: 1fr; }
             table { font-size: 0.85rem; }
             th, td { padding: 0.75rem 0.5rem; }
+            .session-type-toggle { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -1057,7 +1189,7 @@
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-icon blue">💰</div>
-                        <div class="stat-value" id="todayRevenue">0 ج.م</div>
+                        <div class="stat-value" id="todayRevenue">0 EGP</div>
                         <div class="stat-label">إيرادات اليوم</div>
                     </div>
                     <div class="stat-card">
@@ -1094,8 +1226,9 @@
                         <thead>
                             <tr>
                                 <th>الجهاز</th>
+                                <th>Screen Type</th>
                                 <th>العميل</th>
-                                <th>النوع</th>
+                                <th>نوع الجلسة</th>
                                 <th>البداية</th>
                                 <th>المدة</th>
                                 <th>السعر</th>
@@ -1104,7 +1237,7 @@
                             </tr>
                         </thead>
                         <tbody id="sessionsTableBody">
-                            <tr><td colspan="8" style="text-align:center;color:var(--gray-400);padding:2rem;">لا توجد جلسات نشطة</td></tr>
+                            <tr><td colspan="9" style="text-align:center;color:var(--gray-400);padding:2rem;">لا توجد جلسات نشطة</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1112,8 +1245,9 @@
 
             <!-- Products -->
             <section class="view-section" id="products">
-                <div class="section-header">
+                <div class="products-header">
                     <h2 class="section-title">🛒 المنتجات والباقات</h2>
+                    <button class="add-product-btn" onclick="openAddProductModal()">➕ إضافة منتج جديد</button>
                 </div>
                 <div class="products-grid" id="productsGrid"></div>
             </section>
@@ -1126,7 +1260,7 @@
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-icon blue">💵</div>
-                        <div class="stat-value" id="totalRevenue">0 ج.م</div>
+                        <div class="stat-value" id="totalRevenue">0 EGP</div>
                         <div class="stat-label">إجمالي الإيرادات</div>
                     </div>
                     <div class="stat-card">
@@ -1144,14 +1278,16 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>التاريخ</th>
-                                <th>النوع</th>
-                                <th>التفاصيل</th>
-                                <th>المبلغ</th>
+                                <th>Date (YYYY-MM-DD)</th>
+                                <th>Time (HH:MM AM/PM)</th>
+                                <th>Type</th>
+                                <th>Details</th>
+                                <th>Screen No.</th>
+                                <th>Amount (EGP)</th>
                             </tr>
                         </thead>
                         <tbody id="reportsTableBody">
-                            <tr><td colspan="4" style="text-align:center;color:var(--gray-400);padding:2rem;">لا توجد معاملات</td></tr>
+                            <tr><td colspan="6" style="text-align:center;color:var(--gray-400);padding:2rem;">لا توجد معاملات</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1242,31 +1378,176 @@
                 <div class="form-group">
                     <label class="form-label">نوع الجهاز</label>
                     <div class="type-toggle">
-                        <div class="type-option selected" data-type="ps4" data-price="50" onclick="selectType(this)">PS4 - 50 ج.م/ساعة</div>
-                        <div class="type-option" data-type="ps5" data-price="80" onclick="selectType(this)">PS5 - 80 ج.م/ساعة</div>
+                        <div class="type-option selected" data-type="ps4" data-price="50" onclick="selectType(this)">PS4 - 50 EGP/hr</div>
+                        <div class="type-option" data-type="ps5" data-price="80" onclick="selectType(this)">PS5 - 80 EGP/hr</div>
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">مدة الجلسة</label>
-                    <div class="duration-row">
-                        <input type="number" class="form-input" id="sessionHours" placeholder="ساعات" value="1" min="0" oninput="calcPrice()">
-                        <input type="number" class="form-input" id="sessionMinutes" placeholder="دقائق" value="0" min="0" max="59" oninput="calcPrice()">
+                    <label class="form-label">نوع الجلسة</label>
+                    <div class="session-type-toggle">
+                        <div class="session-type-option selected" data-sessiontype="timed" onclick="selectSessionType(this)">
+                            ⏰ محددة بوقت
+                        </div>
+                        <div class="session-type-option" data-sessiontype="open" onclick="selectSessionType(this)">
+                            ⏳ وقت مفتوح
+                        </div>
                     </div>
                 </div>
                 
-                <div class="price-calc">
-                    <div class="price-value" id="sessionPrice">50.00 ج.م</div>
+                <div id="timedSessionFields">
+                    <div class="form-group">
+                        <label class="form-label">مدة الجلسة</label>
+                        <div class="duration-row">
+                            <input type="number" class="form-input" id="sessionHours" placeholder="Hours" value="1" min="0" oninput="calcPrice()">
+                            <input type="number" class="form-input" id="sessionMinutes" placeholder="Minutes" value="0" min="0" max="59" oninput="calcPrice()">
+                        </div>
+                    </div>
+                    
+                    <div class="price-calc">
+                        <div class="price-value" id="sessionPrice">50.00 EGP</div>
+                    </div>
+                </div>
+                
+                <div id="openSessionInfo" style="display:none;">
+                    <div class="price-calc" style="background: linear-gradient(135deg, #dbeafe, #bfdbfe);">
+                        <div style="font-weight: 700; color: #1e40af; margin-bottom: 0.5rem;">سيتم الحساب حسب الوقت الفعلي</div>
+                        <div style="font-size: 0.9rem; color: #3b82f6;">السعر: <span id="hourlyRateDisplay">50</span> EGP / ساعة</div>
+                    </div>
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label">اسم العميل (اختياري)</label>
-                    <input type="text" class="form-input" id="customerName" placeholder="اسم العميل">
+                    <input type="text" class="form-input" id="customerName" placeholder="Customer Name">
                 </div>
                 
                 <div class="btn-group">
                     <button class="btn btn-cancel" onclick="closeModal()">إلغاء</button>
                     <button class="btn btn-primary" onclick="startSession()">✓ بدء الجلسة</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Session Management Modal -->
+    <div class="modal-overlay" id="activeSessionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">⏱ إدارة الجلسة النشطة</h3>
+                <button class="modal-close" onclick="closeActiveSessionModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="session-timer" id="sessionTimerDisplay">00:00:00</div>
+                
+                <div class="session-details">
+                    <div class="session-detail-row">
+                        <span class="detail-label">الجهاز:</span>
+                        <span class="detail-value" id="activeDeviceInfo">-</span>
+                    </div>
+                    <div class="session-detail-row">
+                        <span class="detail-label">العميل:</span>
+                        <span class="detail-value" id="activeCustomerName">-</span>
+                    </div>
+                    <div class="session-detail-row">
+                        <span class="detail-label">نوع الجلسة:</span>
+                        <span class="detail-value" id="activeSessionType">-</span>
+                    </div>
+                    <div class="session-detail-row">
+                        <span class="detail-label">الوقت المستخدم:</span>
+                        <span class="detail-value" id="activeElapsedTime">0 min</span>
+                    </div>
+                    <div class="session-detail-row">
+                        <span class="detail-label">التكلفة الحالية:</span>
+                        <span class="detail-value" id="activeCurrentCost">0.00 EGP</span>
+                    </div>
+                    <div class="session-detail-row" id="remainingTimeRow" style="display:none;">
+                        <span class="detail-label">الوقت المتبقي:</span>
+                        <span class="detail-value" id="activeRemainingTime" style="color: var(--danger);">0 min</span>
+                    </div>
+                </div>
+
+                <div id="sessionProductsList" style="margin: 1rem 0;">
+                    <h4 style="font-weight: 700; margin-bottom: 0.75rem; color: var(--gray-700);">🛒 منتجات مضافة لهذه الجلسة:</h4>
+                    <div id="sessionProductsItems" style="color: var(--gray-500); font-size: 0.9rem;">لا توجد منتجات</div>
+                </div>
+                
+                <div class="btn-group" style="grid-template-columns: 1fr;">
+                    <button class="btn btn-primary" onclick="endActiveSession()" style="background: linear-gradient(135deg, var(--success), #059669);">
+                        ✓ إنهاء الجلسة وحساب الفاتورة
+                    </button>
+                </div>
+                
+                <div class="btn-group" style="margin-top: 0.75rem;" id="extendTimeBtnGroup">
+                    <button class="btn" onclick="showExtendTimeOptions()" style="background: var(--warning); color: var(--dark);">
+                        ➕ إضافة وقت إضافي
+                    </button>
+                    <button class="btn btn-cancel" onclick="closeActiveSessionModal()">
+                        إغلاق
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div class="modal-overlay" id="addProductModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">🛒 إضافة منتج جديد</h3>
+                <button class="modal-close" onclick="closeAddProductModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">اسم المنتج</label>
+                    <input type="text" class="form-input" id="productName" placeholder="Product Name">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">سعر المنتج (EGP)</label>
+                    <input type="number" class="form-input" id="productPrice" placeholder="Price in EGP" min="0" step="0.01">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">رقم الشاشة (اختياري)</label>
+                    <select class="form-input" id="productScreenSelect">
+                        <option value="">-- بدون ربط بشاشة --</option>
+                    </select>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-cancel" onclick="closeAddProductModal()">إلغاء</button>
+                    <button class="btn btn-primary" onclick="addNewProduct()">✓ إضافة المنتج</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Extend Time Modal -->
+    <div class="modal-overlay" id="extendTimeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">⏰ إضافة وقت إضافي</h3>
+                <button class="modal-close" onclick="closeExtendTimeModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">الوقت الإضافي</label>
+                    <div class="duration-row">
+                        <input type="number" class="form-input" id="extendHours" placeholder="Hours" value="0" min="0">
+                        <input type="number" class="form-input" id="extendMinutes" placeholder="Minutes" value="30" min="0" max="59">
+                    </div>
+                </div>
+                
+                <div class="price-calc">
+                    <div style="font-weight: 700; color: #92400e; margin-bottom: 0.5rem;">التكلفة الإضافية:</div>
+                    <div class="price-value" id="extendPriceDisplay">0.00 EGP</div>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-cancel" onclick="closeExtendTimeModal()">إلغاء</button>
+                    <button class="btn btn-primary" onclick="confirmExtendTime()" style="background: linear-gradient(135deg, var(--warning), #d97706);">
+                        ✓ تأكيد إضافة الوقت
+                    </button>
                 </div>
             </div>
         </div>
@@ -1280,16 +1561,7 @@
         let appData = {
             devices: [],
             sessions: [],
-            products: [
-                { id: 1, name: 'بيبسي كبيرة', price: 15, emoji: '🥤' },
-                { id: 2, name: 'ميراندا', price: 12, emoji: '🥤' },
-                { id: 3, name: 'شيبس تشيبيس', price: 10, emoji: '🍟' },
-                { id: 4, name: 'شوكولاتة', price: 8, emoji: '🍫' },
-                { id: 5, name: 'باقة 3 ساعات PS4', price: 130, emoji: '🎮' },
-                { id: 6, name: 'باقة 5 ساعات PS5', price: 350, emoji: '🎮' },
-                { id: 7, name: 'كابل شحن', price: 80, emoji: '🔌' },
-                { id: 8, name: 'هيدست', price: 250, emoji: '🎧' }
-            ],
+            products: [],
             clients: [],
             transactions: [],
             settings: {
@@ -1302,10 +1574,23 @@
         let currentDevice = null;
         let selectedType = 'ps4';
         let selectedPrice = 50;
+        let selectedSessionType = 'timed';
+        let currentManagingSessionId = null;
+        let timerInterval = null;
+
+        // Audio for session alerts
+        let alertAudio = null;
 
         // ===== INITIALIZATION =====
         function init() {
             loadData();
+            
+            // Check if user is already logged in (using sessionStorage)
+            if (sessionStorage.getItem('isLoggedIn') === 'true') {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('appContainer').classList.add('active');
+            }
+            
             if (!appData.devices.length) {
                 // Initialize devices if first time
                 for (let i = 1; i <= 16; i++) {
@@ -1318,7 +1603,9 @@
                 }
                 saveData();
             }
+            
             renderAll();
+            startTimersForActiveSessions();
         }
 
         // ===== LOCAL STORAGE =====
@@ -1362,7 +1649,7 @@
         function updatePinDisplay() {
             const dots = document.querySelectorAll('.pin-dot');
             dots.forEach((dot, index) => {
-                dot.textContent = index < enteredPin.length ? '●' : '';
+                dot.textContent = index < enteredPin.length ? enteredPin[index] : '';
                 dot.classList.toggle('filled', index < enteredPin.length);
             });
             document.getElementById('errorMsg').classList.remove('show');
@@ -1370,6 +1657,8 @@
 
         function validatePin() {
             if (enteredPin === CORRECT_PIN) {
+                // Save login state to sessionStorage (persists until tab close)
+                sessionStorage.setItem('isLoggedIn', 'true');
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('appContainer').classList.add('active');
                 showToast('مرحباً بك! 🎉', 'success');
@@ -1385,6 +1674,8 @@
 
         function logout() {
             if (confirm('هل تريد تسجيل الخروج؟')) {
+                // Clear login state
+                sessionStorage.removeItem('isLoggedIn');
                 document.getElementById('appContainer').classList.remove('active');
                 document.getElementById('loginScreen').classList.remove('hidden');
                 enteredPin = '';
@@ -1426,15 +1717,19 @@
 
         function renderProducts() {
             const grid = document.getElementById('productsGrid');
+            if (!appData.products.length) {
+                grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--gray-400);font-size:1.1rem;">📦 لا توجد منتجات بعد - اضغط "إضافة منتج جديد" لإضافة منتجاتك</p>';
+                return;
+            }
             grid.innerHTML = appData.products.map(product => `
                 <div class="product-card">
-                    <div class="product-image">${product.emoji}</div>
+                    <div class="product-image">📦</div>
                     <div class="product-info">
                         <div class="product-name">${product.name}</div>
-                        <div class="product-desc">منتج مميز</div>
+                        <div class="product-desc">${product.screenNumber ? `شاشة رقم ${product.screenNumber}` : 'منتج عام'}</div>
                         <div class="product-footer">
-                            <div class="product-price">${product.price} ج.م</div>
-                            <button class="add-btn" onclick="addToCart(${product.id})">+ إضافة</button>
+                            <div class="product-price">${parseFloat(product.price).toFixed(2)} EGP</div>
+                            <button class="add-btn" onclick="addToSessionCart(${product.id})">+ إضافة</button>
                         </div>
                     </div>
                 </div>
@@ -1462,7 +1757,7 @@
                             <div class="client-stat-label">زيارة</div>
                         </div>
                         <div class="client-stat">
-                            <div class="client-stat-value">${client.total || 0} ج.م</div>
+                            <div class="client-stat-value">${parseFloat(client.total || 0).toFixed(2)} EGP</div>
                             <div class="client-stat-label">إنفاق</div>
                         </div>
                     </div>
@@ -1480,10 +1775,27 @@
             document.getElementById('availableDevices').textContent = available;
             document.getElementById('activeSessions').textContent = inUse;
             document.getElementById('totalClients').textContent = appData.clients.length;
-            document.getElementById('todayRevenue').textContent = todayRevenue.toFixed(2) + ' ج.م';
-            document.getElementById('totalRevenue').textContent = appData.transactions.reduce((s,t)=>s+t.amount,0).toFixed(2)+' ج.م';
+            document.getElementById('todayRevenue').textContent = parseFloat(todayRevenue).toFixed(2) + ' EGP';
+            document.getElementById('totalRevenue').textContent = parseFloat(appData.transactions.reduce((s,t)=>s+t.amount,0)).toFixed(2)+' EGP';
             document.getElementById('completedSessions').textContent = appData.sessions.filter(s=>s.status==='completed').length;
             document.getElementById('totalProductsSold').textContent = appData.transactions.filter(t=>t.type==='product').length;
+        }
+
+        function formatTime12(date) {
+            let hours = date.getHours();
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            return `${hours.toString().padStart(2, '0')}:${minutes} ${ampm}`;
+        }
+
+        function formatDateISO(date) {
+            const d = new Date(date);
+            const year = d.getFullYear();
+            const month = (d.getMonth() + 1).toString().padStart(2, '0');
+            const day = d.getDate().toString().padStart(2, '0');
+            return `${year}-${month}-${day}`;
         }
 
         function renderSessions() {
@@ -1491,21 +1803,24 @@
             const activeSessions = appData.sessions.filter(s => s.status === 'active');
             
             if (!activeSessions.length) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--gray-400);padding:2rem;">لا توجد جلسات نشطة</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--gray-400);padding:2rem;">لا توجد جلسات نشطة</td></tr>';
                 return;
             }
             
             tbody.innerHTML = activeSessions.map(session => {
                 const device = appData.devices.find(d => d.id === session.deviceId);
+                const elapsed = Math.floor((new Date() - new Date(session.startTime)) / 1000 / 60);
+                const sessionTypeLabel = session.sessionType === 'open' ? 'مفتوح' : 'محدد';
                 return `<tr>
                     <td>${device ? device.number : '-'}</td>
+                    <td>${session.type}</td>
                     <td>${session.customerName || '-'}</td>
-                    <td>${session.type.toUpperCase()}</td>
-                    <td>${new Date(session.startTime).toLocaleTimeString('ar-EG')}</td>
-                    <td>${session.duration} دقيقة</td>
-                    <td>${session.price.toFixed(2)} ج.م</td>
+                    <td><span class="badge badge-${session.sessionType === 'open' ? 'info' : 'warning'}">${sessionTypeLabel}</span></td>
+                    <td>${formatTime12(new Date(session.startTime))}</td>
+                    <td>${elapsed} min</td>
+                    <td>${calculateCurrentSessionCost(session).toFixed(2)} EGP</td>
                     <td><span class="badge badge-success">نشطة</span></td>
-                    <td><button class="add-btn" style="background:var(--danger);font-size:0.8rem;padding:0.4rem 0.8rem;" onclick="endSession(${session.id})">إنهاء</button></td>
+                    <td><button class="add-btn" style="background:var(--primary);font-size:0.8rem;padding:0.4rem 0.8rem;" onclick="manageSession(${session.id})">إدارة</button></td>
                 </tr>`;
             }).join('');
         }
@@ -1513,17 +1828,20 @@
         function renderReports() {
             const tbody = document.getElementById('reportsTableBody');
             if (!appData.transactions.length) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--gray-400);padding:2rem;">لا توجد معاملات</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--gray-400);padding:2rem;">لا توجد معاملات</td></tr>';
                 return;
             }
-            tbody.innerHTML = appData.transactions.slice(-20).reverse().map(t => `
-                <tr>
-                    <td>${new Date(t.date).toLocaleDateString('ar-EG')}</td>
-                    <td>${t.type === 'session' ? 'جلسة' : 'منتج'}</td>
+            tbody.innerHTML = appData.transactions.slice(-30).reverse().map(t => {
+                const typeLabel = t.type === 'session' ? 'Session' : t.type === 'product' ? 'Product' : 'Other';
+                return `<tr>
+                    <td>${formatDateISO(t.date)}</td>
+                    <td>${formatTime12(new Date(t.date))}</td>
+                    <td><span class="badge badge-${t.type === 'session' ? 'success' : 'warning'}">${typeLabel}</span></td>
                     <td>${t.description}</td>
-                    <td>+${t.amount.toFixed(2)} ج.م</td>
-                </tr>
-            `).join('');
+                    <td>${t.screenNumber || '-'}</td>
+                    <td style="font-weight: 800; color: var(--success);">+${parseFloat(t.amount).toFixed(2)} EGP</td>
+                </tr>`;
+            }).join('');
         }
 
         // ===== SESSION MODAL =====
@@ -1537,8 +1855,9 @@
             currentDevice = deviceId;
             selectedType = device.type.toLowerCase();
             selectedPrice = selectedType === 'ps4' ? 50 : 80;
+            selectedSessionType = 'timed';
             
-            document.getElementById('modalDevice').value = `شاشة ${device.number} - ${device.type}`;
+            document.getElementById('modalDevice').value = `Screen ${device.number} - ${device.type}`;
             document.getElementById('sessionHours').value = 1;
             document.getElementById('sessionMinutes').value = 0;
             document.getElementById('customerName').value = '';
@@ -1546,6 +1865,14 @@
             document.querySelectorAll('.type-option').forEach(opt => {
                 opt.classList.toggle('selected', opt.dataset.type === selectedType);
             });
+            
+            document.querySelectorAll('.session-type-option').forEach(opt => {
+                opt.classList.toggle('selected', opt.dataset.sessiontype === 'timed');
+            });
+            
+            document.getElementById('timedSessionFields').style.display = 'block';
+            document.getElementById('openSessionInfo').style.display = 'none';
+            document.getElementById('hourlyRateDisplay').textContent = selectedPrice;
             
             calcPrice();
             document.getElementById('sessionModal').classList.add('active');
@@ -1561,7 +1888,22 @@
             element.classList.add('selected');
             selectedType = element.dataset.type;
             selectedPrice = parseInt(element.dataset.price);
+            document.getElementById('hourlyRateDisplay').textContent = selectedPrice;
             calcPrice();
+        }
+
+        function selectSessionType(element) {
+            document.querySelectorAll('.session-type-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedSessionType = element.dataset.sessiontype;
+            
+            if (selectedSessionType === 'timed') {
+                document.getElementById('timedSessionFields').style.display = 'block';
+                document.getElementById('openSessionInfo').style.display = 'none';
+            } else {
+                document.getElementById('timedSessionFields').style.display = 'none';
+                document.getElementById('openSessionInfo').style.display = 'block';
+            }
         }
 
         function calcPrice() {
@@ -1569,31 +1911,41 @@
             const minutes = parseInt(document.getElementById('sessionMinutes').value) || 0;
             const totalMinutes = (hours * 60) + minutes;
             const price = (totalMinutes / 60) * selectedPrice;
-            document.getElementById('sessionPrice').textContent = price.toFixed(2) + ' ج.م';
+            document.getElementById('sessionPrice').textContent = price.toFixed(2) + ' EGP';
         }
 
         function startSession() {
-            const hours = parseInt(document.getElementById('sessionHours').value) || 0;
-            const minutes = parseInt(document.getElementById('sessionMinutes').value) || 0;
             const customerName = document.getElementById('customerName').value.trim();
-            const totalMinutes = (hours * 60) + minutes;
+            let duration = 0;
+            let initialPrice = 0;
             
-            if (totalMinutes <= 0) {
-                showToast('يرجى إدخول مدة صحيحة', 'error');
-                return;
+            if (selectedSessionType === 'timed') {
+                const hours = parseInt(document.getElementById('sessionHours').value) || 0;
+                const minutes = parseInt(document.getElementById('sessionMinutes').value) || 0;
+                duration = (hours * 60) + minutes;
+                
+                if (duration <= 0) {
+                    showToast('يرجى إدخال مدة صحيحة', 'error');
+                    return;
+                }
+                
+                initialPrice = (duration / 60) * selectedPrice;
             }
-            
-            const price = (totalMinutes / 60) * selectedPrice;
             
             const session = {
                 id: Date.now(),
                 deviceId: currentDevice,
                 type: selectedType.toUpperCase(),
                 customerName: customerName || 'عميل بدون اسم',
-                duration: totalMinutes,
+                sessionType: selectedSessionType,
+                duration: duration,
                 startTime: new Date().toISOString(),
-                price: price,
-                status: 'active'
+                initialDuration: duration,
+                price: initialPrice,
+                hourlyRate: selectedPrice,
+                status: 'active',
+                products: [],
+                timeExtensions: []
             };
             
             appData.sessions.push(session);
@@ -1604,67 +1956,349 @@
                 appData.devices[deviceIndex].status = 'in-use';
             }
             
-            // Add transaction
+            saveData();
+            closeModal();
+            renderAll();
+            showToast(`✓ تم بدء جلسة ${selectedSessionType === 'open' ? 'مفتوحة' : 'محددة'} بنجاح!`, 'success');
+        }
+
+        function calculateCurrentSessionCost(session) {
+            const elapsedMinutes = Math.floor((new Date() - new Date(session.startTime)) / 1000 / 60);
+            let totalDuration = elapsedMinutes;
+            
+            // Add any time extensions
+            if (session.timeExtensions && session.timeExtensions.length > 0) {
+                totalDuration = session.initialDuration + session.timeExtensions.reduce((sum, ext) => sum + ext.minutes, 0);
+            } else if (session.sessionType === 'timed') {
+                totalDuration = Math.max(elapsedMinutes, session.duration);
+            }
+            
+            const cost = (totalDuration / 60) * session.hourlyRate;
+            
+            // Add product costs
+            let productsCost = 0;
+            if (session.products && session.products.length > 0) {
+                productsCost = session.products.reduce((sum, p) => sum + p.price, 0);
+            }
+            
+            return cost + productsCost;
+        }
+
+        function manageSession(sessionId) {
+            const session = appData.sessions.find(s => s.id === sessionId);
+            if (!session) return;
+            
+            currentManagingSessionId = sessionId;
+            const device = appData.devices.find(d => d.id === session.deviceId);
+            
+            document.getElementById('activeDeviceInfo').textContent = device ? `Screen ${device.number} (${device.type})` : '-';
+            document.getElementById('activeCustomerName').textContent = session.customerName;
+            document.getElementById('activeSessionType').textContent = session.sessionType === 'open' ? '⏳ وقت مفتوح' : '⏰ محدد بوقت';
+            
+            // Update timer and details
+            updateActiveSessionDisplay(session);
+            
+            // Start live timer
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                updateActiveSessionDisplay(session);
+            }, 1000);
+            
+            document.getElementById('activeSessionModal').classList.add('active');
+        }
+
+        function updateActiveSessionDisplay(session) {
+            const elapsedMs = new Date() - new Date(session.startTime);
+            const elapsedSeconds = Math.floor(elapsedMs / 1000);
+            const hours = Math.floor(elapsedSeconds / 3600);
+            const minutes = Math.floor((elapsedSeconds % 3600) / 60);
+            const seconds = elapsedSeconds % 60;
+            
+            const timerStr = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('sessionTimerDisplay').textContent = timerStr;
+            
+            const elapsedMinutes = Math.floor(elapsedMs / 1000 / 60);
+            document.getElementById('activeElapsedTime').textContent = `${elapsedMinutes} min`;
+            
+            const currentCost = calculateCurrentSessionCost(session);
+            document.getElementById('activeCurrentCost').textContent = `${currentCost.toFixed(2)} EGP`;
+            
+            // Show remaining time for timed sessions
+            if (session.sessionType === 'timed') {
+                let totalAllowed = session.duration;
+                if (session.timeExtensions && session.timeExtensions.length > 0) {
+                    totalAllowed = session.initialDuration + session.timeExtensions.reduce((sum, ext) => sum + ext.minutes, 0);
+                }
+                const remaining = totalAllowed - elapsedMinutes;
+                
+                if (remaining <= 0) {
+                    document.getElementById('sessionTimerDisplay').classList.add('warning');
+                    document.getElementById('activeRemainingTime').textContent = '⚠️ انتهى الوقت!';
+                    document.getElementById('remainingTimeRow').style.display = 'flex';
+                    playAlertSound();
+                } else if (remaining <= 5) {
+                    document.getElementById('sessionTimerDisplay').classList.add('warning');
+                    document.getElementById('activeRemainingTime').textContent = `${remaining} min`;
+                    document.getElementById('remainingTimeRow').style.display = 'flex';
+                    if (remaining <= 2) playAlertSound();
+                } else {
+                    document.getElementById('sessionTimerDisplay').classList.remove('warning');
+                    document.getElementById('activeRemainingTime').textContent = `${remaining} min`;
+                    document.getElementById('remainingTimeRow').style.display = 'flex';
+                }
+            } else {
+                document.getElementById('remainingTimeRow').style.display = 'none';
+                document.getElementById('sessionTimerDisplay').classList.remove('warning');
+            }
+            
+            // Update products list
+            const productsDiv = document.getElementById('sessionProductsItems');
+            if (session.products && session.products.length > 0) {
+                productsDiv.innerHTML = session.products.map(p => 
+                    `<div style="padding: 0.5rem; background: var(--gray-50); border-radius: 0.5rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between;">
+                        <span>${p.name}</span>
+                        <strong style="direction: ltr;">${parseFloat(p.price).toFixed(2)} EGP</strong>
+                    </div>`
+                ).join('');
+            } else {
+                productsDiv.textContent = 'لا توجد منتجات';
+            }
+        }
+
+        function playAlertSound() {
+            try {
+                if (!alertAudio) {
+                    alertAudio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2teleQkAZrTh2q1zJAQArLzb4KpsFgEAH0A6O5RyGwAB+fU2PZlgDAAC6TjW3IZCAACwtzq+mmIAAK2/YPZoDgAAaLXN4qVSCABwmM7cmEUAAC+nzO2YTgAAKawxuRhFgAAprTG5GEXAACmsMbkYRcAAKazxuRhFwAAgrPH5GEXAACCtMblYRcAAKK0xuVhFwAAorTF5WEXAACisMTlYRcAAKKwxeVhFw==');
+                }
+                alertAudio.currentTime = 0;
+                alertAudio.play().catch(e => console.log('Audio play failed:', e));
+            } catch (e) {
+                console.log('Alert sound error:', e);
+            }
+        }
+
+        function closeActiveSessionModal() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            document.getElementById('activeSessionModal').classList.remove('active');
+            currentManagingSessionId = null;
+        }
+
+        function showExtendTimeOptions() {
+            document.getElementById('extendHours').value = 0;
+            document.getElementById('extendMinutes').value = 30;
+            calcExtendPrice();
+            document.getElementById('extendTimeModal').classList.add('active');
+        }
+
+        function calcExtendPrice() {
+            const session = appData.sessions.find(s => s.id === currentManagingSessionId);
+            if (!session) return;
+            
+            const hours = parseInt(document.getElementById('extendHours').value) || 0;
+            const minutes = parseInt(document.getElementById('extendMinutes').value) || 0;
+            const totalMinutes = (hours * 60) + minutes;
+            const price = (totalMinutes / 60) * session.hourlyRate;
+            document.getElementById('extendPriceDisplay').textContent = price.toFixed(2) + ' EGP';
+        }
+
+        document.getElementById('extendHours').addEventListener('input', calcExtendPrice);
+        document.getElementById('extendMinutes').addEventListener('input', calcExtendPrice);
+
+        function confirmExtendTime() {
+            const session = appData.sessions.find(s => s.id === currentManagingSessionId);
+            if (!session) return;
+            
+            const hours = parseInt(document.getElementById('extendHours').value) || 0;
+            const minutes = parseInt(document.getElementById('extendMinutes').value) || 0;
+            const totalMinutes = (hours * 60) + minutes;
+            
+            if (totalMinutes <= 0) {
+                showToast('يرجى إدخال وقت صالح', 'error');
+                return;
+            }
+            
+            const extensionCost = (totalMinutes / 60) * session.hourlyRate;
+            
+            // Record the extension
+            if (!session.timeExtensions) session.timeExtensions = [];
+            session.timeExtensions.push({
+                timestamp: new Date().toISOString(),
+                minutes: totalMinutes,
+                cost: extensionCost
+            });
+            
+            // Update duration for timed sessions
+            if (session.sessionType === 'timed') {
+                session.duration = (session.duration || 0) + totalMinutes;
+            }
+            
+            saveData();
+            closeExtendTimeModal();
+            updateActiveSessionDisplay(session);
+            showToast(`✓ تمت إضافة ${totalMinutes} دقيقة (+${extensionCost.toFixed(2)} EGP)`, 'success');
+        }
+
+        function closeExtendTimeModal() {
+            document.getElementById('extendTimeModal').classList.remove('active');
+        }
+
+        function endActiveSession() {
+            const session = appData.sessions.find(s => s.id === currentManagingSessionId);
+            if (!session) return;
+            
+            const finalCost = calculateCurrentSessionCost(session);
+            const elapsedMinutes = Math.floor((new Date() - new Date(session.startTime)) / 1000 / 60);
+            const device = appData.devices.find(d => d.id === session.deviceId);
+            
+            // Update session status
+            session.status = 'completed';
+            session.endTime = new Date().toISOString();
+            session.finalCost = finalCost;
+            session.totalMinutes = elapsedMinutes;
+            
+            // Free the device
+            const deviceIndex = appData.devices.findIndex(d => d.id === session.deviceId);
+            if (deviceIndex !== -1) {
+                appData.devices[deviceIndex].status = 'available';
+            }
+            
+            // Add transaction for session
             appData.transactions.push({
                 date: new Date().toISOString(),
                 type: 'session',
-                description: `جلسة ${selectedType.toUpperCase()} - ${hours}س ${minutes}د`,
-                amount: price
+                description: `${session.type} Session - ${elapsedMinutes} min`,
+                amount: finalCost,
+                screenNumber: device ? device.number : null
             });
             
+            // Add transactions for products
+            if (session.products && session.products.length > 0) {
+                session.products.forEach(product => {
+                    appData.transactions.push({
+                        date: new Date().toISOString(),
+                        type: 'product',
+                        description: product.name,
+                        amount: product.price,
+                        screenNumber: device ? device.number : null
+                    });
+                });
+            }
+            
             // Add or update client
-            if (customerName) {
-                const clientIndex = appData.clients.findIndex(c => c.name === customerName);
+            if (session.customerName && session.customerName !== 'عميل بدون اسم') {
+                const clientIndex = appData.clients.findIndex(c => c.name === session.customerName);
                 if (clientIndex !== -1) {
                     appData.clients[clientIndex].visits++;
-                    appData.clients[clientIndex].total += price;
+                    appData.clients[clientIndex].total += finalCost;
                 } else {
                     appData.clients.push({
-                        name: customerName,
+                        name: session.customerName,
                         phone: '',
                         visits: 1,
-                        total: price
+                        total: finalCost
                     });
                 }
             }
             
             saveData();
-            closeModal();
+            closeActiveSessionModal();
             renderAll();
-            showToast('✓ تم بدء الجلسة بنجاح!', 'success');
+            
+            showToast(`✓ تم إنهاء الجلسة - الإجمالي: ${finalCost.toFixed(2)} EGP`, 'success');
         }
 
-        function endSession(sessionId) {
-            const sessionIndex = appData.sessions.findIndex(s => s.id === sessionId);
-            if (sessionIndex !== -1) {
-                appData.sessions[sessionIndex].status = 'completed';
-                
-                // Free the device
-                const deviceIndex = appData.devices.findIndex(d => d.id === appData.sessions[sessionIndex].deviceId);
-                if (deviceIndex !== -1) {
-                    appData.devices[deviceIndex].status = 'available';
-                }
-                
-                saveData();
-                renderAll();
-                showToast('✓ تم إنهاء الجلسة', 'success');
+        // ===== PRODUCTS MANAGEMENT =====
+        function openAddProductModal() {
+            document.getElementById('productName').value = '';
+            document.getElementById('productPrice').value = '';
+            
+            // Populate screen select with available screens
+            const select = document.getElementById('productScreenSelect');
+            select.innerHTML = '<option value="">-- بدون ربط بشاشة --</option>' +
+                appData.devices.map(d => `<option value="${d.number}">شاشة ${d.number} (${d.type})</option>`).join('');
+            
+            document.getElementById('addProductModal').classList.add('active');
+        }
+
+        function closeAddProductModal() {
+            document.getElementById('addProductModal').classList.remove('active');
+        }
+
+        function addNewProduct() {
+            const name = document.getElementById('productName').value.trim();
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const screenNumber = document.getElementById('productScreenSelect').value;
+            
+            if (!name) {
+                showToast('يرجى إدخال اسم المنتج', 'error');
+                return;
             }
+            
+            if (!price || price <= 0) {
+                showToast('يرجى إدخال سعر صحيح', 'error');
+                return;
+            }
+            
+            const product = {
+                id: Date.now(),
+                name: name,
+                price: price,
+                screenNumber: screenNumber ? parseInt(screenNumber) : null,
+                createdAt: new Date().toISOString()
+            };
+            
+            appData.products.push(product);
+            saveData();
+            closeAddProductModal();
+            renderProducts();
+            showToast(`✓ تمت إضافة "${name}" بنجاح`, 'success');
         }
 
-        function addToCart(productId) {
+        function addToSessionCart(productId) {
             const product = appData.products.find(p => p.id === productId);
-            if (product) {
-                appData.transactions.push({
-                    date: new Date().toISOString(),
-                    type: 'product',
-                    description: product.name,
-                    amount: product.price
-                });
-                saveData();
-                renderReports();
-                updateStats();
-                showToast(`✓ تمت إضافة ${product.name}`, 'success');
+            if (!product) return;
+            
+            // Find active sessions to add product to
+            const activeSessions = appData.sessions.filter(s => s.status === 'active');
+            
+            if (activeSessions.length === 0) {
+                showToast('لا توجد جلسات نشطة - ابدأ جلسة أولاً', 'warning');
+                return;
             }
+            
+            // If product is linked to a specific screen, find that session
+            let targetSession = null;
+            if (product.screenNumber) {
+                targetSession = activeSessions.find(s => {
+                    const device = appData.devices.find(d => d.id === s.deviceId);
+                    return device && device.number === product.screenNumber;
+                });
+            }
+            
+            // If no specific session found or product not linked, ask which session
+            if (!targetSession) {
+                if (activeSessions.length === 1) {
+                    targetSession = activeSessions[0];
+                } else {
+                    // For simplicity, add to first active session or show message
+                    targetSession = activeSessions[0];
+                }
+            }
+            
+            if (!targetSession.products) targetSession.products = [];
+            targetSession.products.push({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                addedAt: new Date().toISOString()
+            });
+            
+            saveData();
+            renderProducts();
+            showToast(`✓ تمت إضافة "${product.name}" إلى جلسة شاشة ${product.screenNumber || 'عامة'} (+${product.price} EGP)`, 'success');
         }
 
         // ===== SETTINGS =====
@@ -1705,6 +2339,15 @@
             }
         }
 
+        // ===== TIMER MANAGEMENT FOR ACTIVE SESSIONS =====
+        function startTimersForActiveSessions() {
+            // This function can be used to restart timers after page reload
+            const activeSessions = appData.sessions.filter(s => s.status === 'active');
+            if (activeSessions.length > 0) {
+                console.log(`Found ${activeSessions.length} active sessions`);
+            }
+        }
+
         // ===== TOAST NOTIFICATIONS =====
         function showToast(message, type = '') {
             const toast = document.getElementById('toast');
@@ -1716,9 +2359,21 @@
             }, 3000);
         }
 
-        // Close modal on outside click
+        // Close modals on outside click
         document.getElementById('sessionModal').addEventListener('click', (e) => {
             if (e.target.id === 'sessionModal') closeModal();
+        });
+
+        document.getElementById('activeSessionModal').addEventListener('click', (e) => {
+            if (e.target.id === 'activeSessionModal') closeActiveSessionModal();
+        });
+
+        document.getElementById('addProductModal').addEventListener('click', (e) => {
+            if (e.target.id === 'addProductModal') closeAddProductModal();
+        });
+
+        document.getElementById('extendTimeModal').addEventListener('click', (e) => {
+            if (e.target.id === 'extendTimeModal') closeExtendTimeModal();
         });
 
         // Initialize app
