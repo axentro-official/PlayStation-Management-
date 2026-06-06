@@ -4,63 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#2563EB">
-    
-    <!-- PWA Manifest - Inline Generated -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="محل البليستيشن">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="محل البليستيشن">
-    <meta name="msapplication-TileColor" content="#2563EB">
-    <meta name="msapplication-tap-highlight" content="no">
-    
-    <!-- Generate Icon Canvas for PWA -->
-    <script>
-        // Create app icon dynamically
-        function createAppIcon() {
-            const canvas = document.createElement('canvas');
-            canvas.width = 512;
-            canvas.height = 512;
-            const ctx = canvas.getContext('2d');
-            
-            // Background gradient
-            const gradient = ctx.createLinearGradient(0, 0, 512, 512);
-            gradient.addColorStop(0, '#2563EB');
-            gradient.addColorStop(1, '#1D4ED8');
-            ctx.fillStyle = gradient;
-            ctx.roundRect(0, 0, 512, 512, 100);
-            ctx.fill();
-            
-            // Controller icon
-            ctx.fillStyle = 'white';
-            ctx.font = 'bold 200px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('🎮', 256, 260);
-            
-            return canvas.toDataURL('image/png');
-        }
-        
-        // Set favicon
-        document.addEventListener('DOMContentLoaded', () => {
-            const iconData = createAppIcon();
-            
-            // Favicon
-            let link = document.querySelector('link[rel="icon"]') || document.createElement('link');
-            link.rel = 'icon';
-            link.href = iconData;
-            link.sizes = '512x512';
-            document.head.appendChild(link);
-            
-            // Apple touch icon
-            link = document.querySelector('link[rel="apple-touch-icon"]') || document.createElement('link');
-            link.rel = 'apple-touch-icon';
-            link.href = iconData;
-            document.head.appendChild(link);
-        });
-    </script>
-    
     <title>محل البليستيشن - PlayStation Lounge Manager</title>
+    
+    <!-- PWA Manifest with proper icons -->
+    <link rel="manifest" href="manifest.json">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1869,164 +1819,22 @@
             if (saved) appData = JSON.parse(saved);
         }
 
-        // ===== PWA INSTALL - COMPLETE SOLUTION =====
+        // ===== PWA INSTALL - IMPROVED =====
         function setupInstallPrompt() {
-            // Register Service Worker first for true PWA
-            registerServiceWorker();
-            
-            // Register manifest
-            registerManifest();
-            
-            // Show banner after 3 seconds
-            setTimeout(() => showInstallBanner(), 3000);
+            // Show banner after 2 seconds always
+            setTimeout(() => showInstallBanner(), 2000);
 
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
-                console.log('✅ beforeinstallprompt fired - Real PWA install available!');
-                
-                // Update banner to show real install is available
-                const btn = document.getElementById('installBtn');
-                if (btn) {
-                    btn.textContent = '📲 تثبت كتطبيق حقيقي';
-                    btn.style.background = 'linear-gradient(135deg, #10B981, #059669)';
-                    btn.style.color = 'white';
-                }
+                console.log('✅ beforeinstallprompt fired');
             });
 
             window.addEventListener('appinstalled', () => {
                 deferredPrompt = null;
                 hideInstallBanner();
-                showToast('success', '✅ تم التثبيت!', 'التطبيق مثبت الآن على هاتفك 🎉
-يمكنك فتحه مباشرة من الشاشة الرئيسية');
-                
-                // Track installation
-                if ('analytics' in window) {
-                    // You can add analytics here
-                }
+                showToast('success', 'تم التثبيت!', 'التطبيق مثبت بنجاح 🎉');
             });
-        }
-        
-        // ===== REGISTER SERVICE WORKER INLINE =====
-        async function registerServiceWorker() {
-            if ('serviceWorker' in navigator) {
-                try {
-                    // Create service worker code as a blob
-                    const swCode = `
-                        const CACHE_NAME = 'ps-lounge-v1';
-                        const urlsToCache = [
-                            '/',
-                            '/index.html'
-                        ];
-                        
-                        self.addEventListener('install', event => {
-                            event.waitUntil(
-                                caches.open(CACHE_NAME)
-                                    .then(cache => cache.addAll(urlsToCache))
-                            );
-                            self.skipWaiting();
-                        });
-                        
-                        self.addEventListener('activate', event => {
-                            event.waitUntil(
-                                caches.keys().then(cacheNames => {
-                                    return Promise.all(
-                                        cacheNames.filter(name => name !== CACHE_NAME).map(name => caches.delete(name))
-                                    );
-                                })
-                            );
-                            self.clients.claim();
-                        });
-                        
-                        self.addEventListener('fetch', event => {
-                            event.respondWith(
-                                caches.match(event.request)
-                                    .then(response => response || fetch(event.request))
-                            );
-                        });
-                    `;
-                    
-                    const blob = new Blob([swCode], { type: 'application/javascript' });
-                    const swUrl = URL.createObjectURL(blob);
-                    
-                    const registration = await navigator.serviceWorker.register(swUrl, { scope: '/' });
-                    console.log('✅ Service Worker registered:', registration.scope);
-                    
-                    // Clean up blob URL after registration
-                    // URL.revokeObjectURL(swUrl);
-                    
-                } catch (error) {
-                    console.log('⚠️ SW registration failed:', error);
-                }
-            } else {
-                console.log('⚠️ Service Workers not supported');
-            }
-        }
-        
-        // ===== REGISTER MANIFEST INLINE =====
-        function registerManifest() {
-            const manifest = {
-                "name": "محل البليستيشن - PlayStation Lounge Manager",
-                "short_name": "البليستيشن",
-                "description": "نظام إدارة محلات البليستيشن الاحترافي",
-                "start_url": ".",
-                "display": "standalone",
-                "background_color": "#0F172A",
-                "theme_color": "#2563EB",
-                "orientation": "portrait-primary",
-                "lang": "ar",
-                "dir": "rtl",
-                "icons": [
-                    {
-                        "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%232563EB'/><text x='256' y='300' font-size='250' text-anchor-middle' fill='white'>🎮</text></svg>",
-                        "sizes": "512x512",
-                        "type": "image/svg+xml",
-                        "purpose": "any maskable"
-                    },
-                    {
-                        "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='40' fill='%232563EB'/><text x='96' y='115' font-size='95' text-anchor-middle' fill='white'>🎮</text></svg>",
-                        "sizes": "192x192",
-                        "type": "image/svg+xml"
-                    },
-                    {
-                        "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%231D4ED8'/><text x='256' y='300' font-size='250' text-anchor-middle' fill='white'>🎮</text></svg>",
-                        "sizes": "512x512",
-                        "type": "image/svg+xml",
-                        "purpose": "maskable"
-                    }
-                ],
-                "categories": ["entertainment", "business", "productivity"],
-                "screenshots": [],
-                "shortcuts": [
-                    {
-                        "name": "لوحة التحكم",
-                        "short_name": "التحكم",
-                        "url": "#dashboard",
-                        "icons": [{"src":"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><text x='48' y='65' font-size='60' text-anchor-middle'>📊</text></svg>","sizes":"96x96"}]
-                    },
-                    {
-                        "name": "الجلسات النشطة",
-                        "short_name": "جلسات",
-                        "url": "#sessions",
-                        "icons": [{"src":"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><text x='48' y='65' font-size='60' text-anchor-middle'>⏱</text></svg>","sizes":"96x96"}]
-                    }
-                ],
-                "related_applications": [],
-                "prefer_related_applications": false
-            };
-            
-            const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-            const manifestUrl = URL.createObjectURL(blob);
-            
-            let link = document.querySelector('link[rel="manifest"]');
-            if (!link) {
-                link = document.createElement('link');
-                link.rel = 'manifest';
-                document.head.appendChild(link);
-            }
-            link.href = manifestUrl;
-            
-            console.log('✅ Manifest registered:', manifestUrl);
         }
 
         function showInstallBanner() {
@@ -2049,109 +1857,22 @@
         }
 
         async function installApp() {
-            // Check if already installed
-            if (window.matchMedia('(display-mode: standalone)').matches) {
-                showToast('info', 'مثبت بالفعل', 'التطبيق مثبت بالفعل على جهازك ✓');
+            if (!deferredPrompt) {
+                showToast('info', 'تنبيه', 'يمكنك تثبيت التطبيق من قائمة المتصفح');
                 return;
             }
             
-            if (deferredPrompt) {
-                // Real PWA Install
-                console.log('🚀 Starting real PWA installation...');
-                
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                
-                if (outcome === 'accepted') {
-                    showToast('success', '🎉 جاري التثبيت!', 'سيتم إغلاق المتصفت وفتح التطبيق كتطبيق مستقل');
-                } else {
-                    showToast('info', 'تم الإلغاء', 'يمكنك التثبيت لاحقاً من القائمة ☰');
-                }
-                
-                deferredPrompt = null;
-                hideInstallBanner();
-            } else {
-                // Fallback: Show manual instructions based on browser
-                const userAgent = navigator.userAgent.toLowerCase();
-                const isChrome = /chrome/.test(userAgent) && !/edge/.test(userAgent);
-                const isSamsung = /samsungbrowser/.test(userAgent);
-                const isFirefox = /firefox/.test(userAgent);
-                const isSafari = /safari/.test(userAgent) && !/chrome/.test(userArgs);
-                const isIOS = /iphone|ipad|ipod/.test(userAgent);
-                
-                let instructions = '';
-                
-                if (isIOS) {
-                    instructions = `📱 **على iPhone/iPad:**
-
-1. اضغط على زر **المشاركة** ⬆️ في أسفل الشاشة
-2. اختر **"إضافة إلى الشاشة الرئيسية"**
-3. اضغط **"إضافة"** في الأعلى
-
-✅ سيتم إضافة التطبيق للشاشة الرئيسية!`;
-                } else if (isChrome || isSamsung) {
-                    instructions = `🌐 **على Chrome/Samsung:**
-
-1. اضغط على **القائمة (٣ نقاط)** ☰ في أعلى اليمين
-2. اختر **"تثبيت التطبيق"** أو **"Add to Home screen"**
-3. اضغط **"تثبيت"**
-
-✅ سيتم تثبيت التطبيق كتطبيق مستقل!`;
-                } else if (isFirefox) {
-                    instructions = `🦊 **على Firefox:**
-
-1. اضغط على القائمة (٣ خطوط) ☰
-2. اختر **"Install"** أو **"تثبيت"**
-3. أكد التثبيت
-
-✅ جاهز!`;
-                } else {
-                    instructions = `📲 **خطوات عامة:**
-
-**على Android:**
-1. افتح القائمة ☰ في المتصفح
-2. ابحث عن "Add to Home screen" أو "تثبيت"
-
-**على iOS:**
-1. اضغط مشاركة ⬆️
-2. اختر "إضافة للشاشة الرئيسية"
-
-✅ سيتم إضافة الاختصار!`;
-                }
-                
-                // Show detailed modal with instructions
-                showInstallInstructions(instructions);
-            }
-        }
-        
-        // Show install instructions modal
-        function showInstallInstructions(text) {
-            // Create modal
-            const modal = document.createElement('div');
-            modal.className = 'modal-overlay active';
-            modal.id = 'installInstructionsModal';
-            modal.innerHTML = `
-                <div class="modal-content" style="max-width:450px;">
-                    <div class="modal-header">
-                        <h3 class="modal-title">📲 كيفية التثبيت</h3>
-                        <button class="modal-close" onclick="this.closest('.modal-overlay').remove()">✕</button>
-                    </div>
-                    <div class="modal-body" style="white-space: pre-line; line-height: 1.8; font-size: 0.92rem; color: var(--gray-700);">
-                        ${text}
-                    </div>
-                    <div style="padding: 0 1.35rem 1.35rem;">
-                        <button class="btn btn-primary" onclick="this.closest('.modal-overlay').remove()" style="width:100%;">
-                            ✓ فهمت
-                        </button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(modal);
+            deferredPrompt.prompt();
+            const result = await deferredPrompt.userChoice;
             
-            // Close on outside click
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) modal.remove();
-            });
+            if (result.outcome === 'accepted') {
+                showToast('success', 'تم التثبيت!', 'جاري تحميل التطبيق... ⬇️');
+            } else {
+                showToast('info', 'إلغاء', 'يمكنك التثبيت لاحقاً');
+            }
+            
+            deferredPrompt = null;
+            hideInstallBanner();
         }
 
         // ===== NOTIFICATIONS =====
@@ -3160,13 +2881,11 @@
         // Initialize
         init();
 
-        // Note: Service Worker and Manifest are now registered inline in setupInstallPrompt()
-        console.log('🎮 محل البليستيشن - PWA Ready');
-        
-        // Check if running as installed PWA
-        if (window.matchMedia('(display-mode: standalone)').matches) {
-            console.log('✅ Running as installed PWA App');
-            hideInstallBanner();
+        // Register SW for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(() => console.log('✅ SW registered'))
+                .catch(err => console.log('SW registration failed:', err));
         }
     </script>
 </body>
