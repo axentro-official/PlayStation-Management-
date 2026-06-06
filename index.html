@@ -129,13 +129,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: var(--primary);
             transition: all 0.3s ease;
             background: var(--gray-50);
             direction: ltr;
-            text-align: right;
         }
 
         .pin-dot.filled {
@@ -164,12 +163,14 @@
             40%, 80% { transform: translateX(10px); }
         }
 
+        /* Numpad with LTR layout (numbers from left) */
         .numpad {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
             max-width: 320px;
             margin: 0 auto;
+            direction: ltr;
         }
 
         .num-btn {
@@ -177,7 +178,7 @@
             border: 2px solid var(--gray-200);
             border-radius: var(--radius-lg);
             background: white;
-            font-size: 1.5rem;
+            font-size: 1.35rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -477,7 +478,7 @@
         .status-in-use { background: var(--primary-light); color: var(--primary); }
         .status-maintenance { background: #fee2e2; color: #991b1b; }
 
-        /* Modal */
+        /* Session Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -810,7 +811,7 @@
             transform: scale(1.05);
         }
 
-        /* Table */
+        /* Reports Table */
         .table-container {
             background: white;
             border-radius: var(--radius-xl);
@@ -1106,37 +1107,28 @@
             direction: ltr;
         }
 
-        /* Invoice Styles */
-        .invoice-container {
-            background: white;
-            border-radius: var(--radius-2xl);
-            max-width: 600px;
-            margin: 0 auto;
-            overflow: hidden;
-            box-shadow: var(--shadow-xl);
+        /* Invoice Modal Styles */
+        .invoice-modal .modal-content {
+            max-width: 650px;
         }
 
         .invoice-header {
-            background: linear-gradient(135deg, var(--dark), #334155);
-            color: white;
-            padding: 2rem;
             text-align: center;
-        }
-
-        .invoice-logo {
-            font-size: 3rem;
-            margin-bottom: 0.5rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--dark), #1e293b);
+            color: white;
+            border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
         }
 
         .invoice-title {
-            font-size: 1.5rem;
-            font-weight: 800;
-            margin-bottom: 0.25rem;
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
         }
 
         .invoice-subtitle {
-            font-size: 0.9rem;
-            opacity: 0.8;
+            font-size: 0.95rem;
+            opacity: 0.9;
         }
 
         .invoice-body {
@@ -1145,17 +1137,16 @@
 
         .invoice-section {
             margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
+            padding-bottom: 1rem;
             border-bottom: 2px dashed var(--gray-200);
         }
 
         .invoice-section:last-child {
             border-bottom: none;
-            margin-bottom: 0;
         }
 
         .invoice-section-title {
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 800;
             color: var(--primary);
             margin-bottom: 0.75rem;
@@ -1164,96 +1155,41 @@
             gap: 0.5rem;
         }
 
-        .invoice-info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
-        }
-
-        .invoice-info-item {
-            background: var(--gray-50);
-            padding: 0.75rem;
-            border-radius: var(--radius-md);
-        }
-
-        .invoice-info-label {
-            font-size: 0.78rem;
-            color: var(--gray-500);
-            margin-bottom: 0.25rem;
-        }
-
-        .invoice-info-value {
-            font-weight: 800;
-            font-size: 0.95rem;
-            direction: ltr;
-        }
-
-        .invoice-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1rem 0;
-        }
-
-        .invoice-table th,
-        .invoice-table td {
-            padding: 0.75rem;
-            text-align: right;
-            border-bottom: 1px solid var(--gray-200);
-            font-size: 0.9rem;
-        }
-
-        .invoice-table th {
-            background: var(--gray-100);
-            font-weight: 700;
-            color: var(--gray-700);
-        }
-
-        .invoice-totals {
-            margin-top: 1.5rem;
-            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
-            padding: 1.5rem;
-            border-radius: var(--radius-lg);
-            border: 2px solid var(--success);
-        }
-
-        .invoice-total-row {
+        .invoice-row {
             display: flex;
             justify-content: space-between;
-            align-items: center;
             padding: 0.5rem 0;
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
 
-        .invoice-total-row.grand-total {
-            font-size: 1.5rem;
+        .invoice-row.total {
+            font-size: 1.3rem;
             font-weight: 900;
             color: var(--success);
-            border-top: 2px dashed var(--success);
-            margin-top: 0.5rem;
+            margin-top: 1rem;
             padding-top: 1rem;
+            border-top: 3px solid var(--primary);
         }
 
-        .invoice-footer {
+        .invoice-products-table {
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .invoice-products-table th,
+        .invoice-products-table td {
+            padding: 0.65rem;
+            font-size: 0.88rem;
+            border: 1px solid var(--gray-200);
+        }
+
+        .invoice-products-table th {
             background: var(--gray-50);
-            padding: 1.5rem;
-            text-align: center;
-            border-top: 1px solid var(--gray-200);
-        }
-
-        .invoice-thank-you {
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
+            font-weight: 700;
         }
 
         /* Select Session Modal */
-        .session-select-list {
-            max-height: 350px;
-            overflow-y: auto;
-        }
-
-        .session-select-item {
+        .session-list-item {
             padding: 1rem;
             border: 2px solid var(--gray-200);
             border-radius: var(--radius-lg);
@@ -1265,40 +1201,15 @@
             align-items: center;
         }
 
-        .session-select-item:hover {
+        .session-list-item:hover {
             border-color: var(--primary);
             background: var(--primary-light);
-            transform: translateX(-5px);
+            transform: translateX(-4px);
         }
 
-        .session-select-item.selected {
+        .session-list-item.selected {
             border-color: var(--success);
             background: #d1fae5;
-        }
-
-        .session-select-info {
-            flex: 1;
-        }
-
-        .session-select-device {
-            font-weight: 800;
-            font-size: 1.1rem;
-            color: var(--gray-900);
-        }
-
-        .session-select-customer {
-            font-size: 0.88rem;
-            color: var(--gray-500);
-            margin-top: 0.25rem;
-        }
-
-        .session-select-type {
-            font-size: 0.78rem;
-            font-weight: 700;
-            padding: 0.3rem 0.6rem;
-            border-radius: 9999px;
-            background: var(--primary-light);
-            color: var(--primary);
         }
 
         /* Responsive */
@@ -1315,7 +1226,7 @@
             table { font-size: 0.85rem; }
             th, td { padding: 0.75rem 0.5rem; }
             .session-type-toggle { grid-template-columns: 1fr; }
-            .invoice-info-grid { grid-template-columns: 1fr; }
+            .invoice-modal .modal-content { max-width: 100%; margin: 0.5rem; }
         }
     </style>
 </head>
@@ -1336,6 +1247,7 @@
                 <div class="pin-dot"></div>
             </div>
             
+            <!-- Numpad with LTR layout (1,2,3 from LEFT) -->
             <div class="numpad">
                 <button class="num-btn" data-num="1">1</button>
                 <button class="num-btn" data-num="2">2</button>
@@ -1422,19 +1334,19 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Screen No.</th>
+                                <th>الجهاز</th>
                                 <th>Screen Type</th>
-                                <th>Customer Name</th>
-                                <th>Session Type</th>
-                                <th>Start Time</th>
-                                <th>Duration (min)</th>
-                                <th>Current Cost (EGP)</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th>العميل</th>
+                                <th>نوع الجلسة</th>
+                                <th>البداية</th>
+                                <th>المدة</th>
+                                <th>السعر</th>
+                                <th>الحالة</th>
+                                <th>إجراء</th>
                             </tr>
                         </thead>
                         <tbody id="sessionsTableBody">
-                            <tr><td colspan="9" style="text-align:center;color:var(--gray-400);padding:2rem;">No active sessions</td></tr>
+                            <tr><td colspan="9" style="text-align:center;color:var(--gray-400);padding:2rem;">لا توجد جلسات نشطة</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1443,8 +1355,8 @@
             <!-- Products -->
             <section class="view-section" id="products">
                 <div class="products-header">
-                    <h2 class="section-title">🛒 Products & Items</h2>
-                    <button class="add-product-btn" onclick="openAddProductModal()">➕ Add New Product</button>
+                    <h2 class="section-title">🛒 المنتجات والباقات</h2>
+                    <button class="add-product-btn" onclick="openAddProductModal()">➕ إضافة منتج جديد</button>
                 </div>
                 <div class="products-grid" id="productsGrid"></div>
             </section>
@@ -1452,23 +1364,23 @@
             <!-- Reports -->
             <section class="view-section" id="reports">
                 <div class="section-header">
-                    <h2 class="section-title">📈 Financial Reports</h2>
+                    <h2 class="section-title">📈 التقارير المالية</h2>
                 </div>
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-icon blue">💵</div>
                         <div class="stat-value" id="totalRevenue">0 EGP</div>
-                        <div class="stat-label">Total Revenue</div>
+                        <div class="stat-label">إجمالي الإيرادات</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon green">✅</div>
                         <div class="stat-value" id="completedSessions">0</div>
-                        <div class="stat-label">Completed Sessions</div>
+                        <div class="stat-label">جلسات مكتملة</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon orange">📦</div>
                         <div class="stat-value" id="totalProductsSold">0</div>
-                        <div class="stat-label">Products Sold</div>
+                        <div class="stat-label">منتجات مباعة</div>
                     </div>
                 </div>
                 <div class="table-container">
@@ -1478,14 +1390,14 @@
                                 <th>Date (YYYY-MM-DD)</th>
                                 <th>Time (HH:MM AM/PM)</th>
                                 <th>Type</th>
-                                <th>Description</th>
-                                <th>Customer</th>
+                                <th>Customer Name</th>
+                                <th>Details</th>
                                 <th>Screen No.</th>
                                 <th>Amount (EGP)</th>
                             </tr>
                         </thead>
                         <tbody id="reportsTableBody">
-                            <tr><td colspan="7" style="text-align:center;color:var(--gray-400);padding:2rem;">No transactions yet</td></tr>
+                            <tr><td colspan="7" style="text-align:center;color:var(--gray-400);padding:2rem;">لا توجد معاملات</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1494,7 +1406,7 @@
             <!-- Clients -->
             <section class="view-section" id="clients">
                 <div class="section-header">
-                    <h2 class="section-title">👥 Client Management</h2>
+                    <h2 class="section-title">👥 إدارة العملاء</h2>
                 </div>
                 <div class="clients-grid" id="clientsGrid"></div>
             </section>
@@ -1502,19 +1414,19 @@
             <!-- Settings -->
             <section class="view-section" id="settings">
                 <div class="section-header">
-                    <h2 class="section-title">⚙ Settings</h2>
+                    <h2 class="section-title">⚙ الإعدادات</h2>
                 </div>
                 <div class="settings-grid">
                     <div class="setting-card">
                         <div class="setting-header">
                             <div class="setting-icon" style="background:#dbeafe;color:var(--primary)">💾</div>
                             <div>
-                                <div class="setting-title">Backup Data</div>
-                                <div class="setting-desc">Export all data as JSON file</div>
+                                <div class="setting-title">نسخ احتياطي</div>
+                                <div class="setting-desc">تصدير جميع البيانات كملف JSON</div>
                             </div>
                         </div>
                         <div class="setting-actions">
-                            <button class="add-btn" onclick="backupData()">📥 Export Data</button>
+                            <button class="add-btn" onclick="backupData()">📥 تصدير البيانات</button>
                         </div>
                     </div>
                     
@@ -1522,14 +1434,14 @@
                         <div class="setting-header">
                             <div class="setting-icon" style="background:#d1fae5;color:var(--success)">📤</div>
                             <div>
-                                <div class="setting-title">Restore Data</div>
-                                <div class="setting-desc">Import data from JSON file</div>
+                                <div class="setting-title">استعادة البيانات</div>
+                                <div class="setting-desc">استيراد البيانات من ملف JSON</div>
                             </div>
                         </div>
                         <div class="setting-actions">
                             <label style="cursor:pointer;">
                                 <input type="file" accept=".json" onchange="restoreData(event)" style="display:none" id="restoreInput">
-                                <button class="add-btn" onclick="document.getElementById('restoreInput').click()">📂 Choose File</button>
+                                <button class="add-btn" onclick="document.getElementById('restoreInput').click()">📂 اختيار ملف</button>
                             </label>
                         </div>
                     </div>
@@ -1538,12 +1450,12 @@
                         <div class="setting-header">
                             <div class="setting-icon" style="background:#fef3c7;color:var(--warning)">⚠</div>
                             <div>
-                                <div class="setting-title">Reset All Data</div>
-                                <div class="setting-desc">Delete all data and reset system</div>
+                                <div class="setting-title">مسح البيانات</div>
+                                <div class="setting-desc">حذف جميع البيانات وإعادة التعيين</div>
                             </div>
                         </div>
                         <div class="setting-actions">
-                            <button class="add-btn" style="background:var(--danger);" onclick="resetData()">🗑 Reset Data</button>
+                            <button class="add-btn" style="background:var(--danger);" onclick="resetData()">🗑 مسح البيانات</button>
                         </div>
                     </div>
                 </div>
@@ -1560,21 +1472,21 @@
         </footer>
     </div>
 
-    <!-- Session Start Modal -->
+    <!-- Session Modal -->
     <div class="modal-overlay" id="sessionModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">🎮 Start New Session</h3>
+                <h3 class="modal-title">🎮 بدء جلسة جديدة</h3>
                 <button class="modal-close" onclick="closeModal()">✕</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="form-label">Device</label>
+                    <label class="form-label">الجهاز</label>
                     <input type="text" class="form-input" id="modalDevice" readonly>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Device Type</label>
+                    <label class="form-label">نوع الجهاز</label>
                     <div class="type-toggle">
                         <div class="type-option selected" data-type="ps4" data-price="50" onclick="selectType(this)">PS4 - 50 EGP/hr</div>
                         <div class="type-option" data-type="ps5" data-price="80" onclick="selectType(this)">PS5 - 80 EGP/hr</div>
@@ -1582,20 +1494,20 @@
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Session Type</label>
+                    <label class="form-label">نوع الجلسة</label>
                     <div class="session-type-toggle">
                         <div class="session-type-option selected" data-sessiontype="timed" onclick="selectSessionType(this)">
-                            ⏰ Timed Session
+                            ⏰ محددة بوقت
                         </div>
                         <div class="session-type-option" data-sessiontype="open" onclick="selectSessionType(this)">
-                            ⏳ Open Time
+                            ⏳ وقت مفتوح
                         </div>
                     </div>
                 </div>
                 
                 <div id="timedSessionFields">
                     <div class="form-group">
-                        <label class="form-label">Duration</label>
+                        <label class="form-label">مدة الجلسة</label>
                         <div class="duration-row">
                             <input type="number" class="form-input" id="sessionHours" placeholder="Hours" value="1" min="0" oninput="calcPrice()">
                             <input type="number" class="form-input" id="sessionMinutes" placeholder="Minutes" value="0" min="0" max="59" oninput="calcPrice()">
@@ -1609,19 +1521,19 @@
                 
                 <div id="openSessionInfo" style="display:none;">
                     <div class="price-calc" style="background: linear-gradient(135deg, #dbeafe, #bfdbfe);">
-                        <div style="font-weight: 700; color: #1e40af; margin-bottom: 0.5rem;">Will be calculated by actual time</div>
-                        <div style="font-size: 0.9rem; color: #3b82f6;">Rate: <span id="hourlyRateDisplay">50</span> EGP / hour</div>
+                        <div style="font-weight: 700; color: #1e40af; margin-bottom: 0.5rem;">سيتم الحساب حسب الوقت الفعلي</div>
+                        <div style="font-size: 0.9rem; color: #3b82f6;">السعر: <span id="hourlyRateDisplay">50</span> EGP / ساعة</div>
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Customer Name (Optional)</label>
+                    <label class="form-label">اسم العميل (اختياري)</label>
                     <input type="text" class="form-input" id="customerName" placeholder="Customer Name">
                 </div>
                 
                 <div class="btn-group">
-                    <button class="btn btn-cancel" onclick="closeModal()">Cancel</button>
-                    <button class="btn btn-primary" onclick="startSession()">✓ Start Session</button>
+                    <button class="btn btn-cancel" onclick="closeModal()">إلغاء</button>
+                    <button class="btn btn-primary" onclick="startSession()">✓ بدء الجلسة</button>
                 </div>
             </div>
         </div>
@@ -1631,7 +1543,7 @@
     <div class="modal-overlay" id="activeSessionModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">⏱ Active Session Management</h3>
+                <h3 class="modal-title">⏱ إدارة الجلسة النشطة</h3>
                 <button class="modal-close" onclick="closeActiveSessionModal()">✕</button>
             </div>
             <div class="modal-body">
@@ -1639,48 +1551,48 @@
                 
                 <div class="session-details">
                     <div class="session-detail-row">
-                        <span class="detail-label">Device:</span>
+                        <span class="detail-label">الجهاز:</span>
                         <span class="detail-value" id="activeDeviceInfo">-</span>
                     </div>
                     <div class="session-detail-row">
-                        <span class="detail-label">Customer:</span>
+                        <span class="detail-label">العميل:</span>
                         <span class="detail-value" id="activeCustomerName">-</span>
                     </div>
                     <div class="session-detail-row">
-                        <span class="detail-label">Session Type:</span>
+                        <span class="detail-label">نوع الجلسة:</span>
                         <span class="detail-value" id="activeSessionType">-</span>
                     </div>
                     <div class="session-detail-row">
-                        <span class="detail-label">Elapsed Time:</span>
+                        <span class="detail-label">الوقت المستخدم:</span>
                         <span class="detail-value" id="activeElapsedTime">0 min</span>
                     </div>
                     <div class="session-detail-row">
-                        <span class="detail-label">Current Cost:</span>
+                        <span class="detail-label">التكلفة الحالية:</span>
                         <span class="detail-value" id="activeCurrentCost">0.00 EGP</span>
                     </div>
                     <div class="session-detail-row" id="remainingTimeRow" style="display:none;">
-                        <span class="detail-label">Remaining Time:</span>
+                        <span class="detail-label">الوقت المتبقي:</span>
                         <span class="detail-value" id="activeRemainingTime" style="color: var(--danger);">0 min</span>
                     </div>
                 </div>
 
                 <div id="sessionProductsList" style="margin: 1rem 0;">
-                    <h4 style="font-weight: 700; margin-bottom: 0.75rem; color: var(--gray-700);">🛒 Products added to this session:</h4>
-                    <div id="sessionProductsItems" style="color: var(--gray-500); font-size: 0.9rem;">No products</div>
+                    <h4 style="font-weight: 700; margin-bottom: 0.75rem; color: var(--gray-700);">🛒 منتجات مضافة لهذه الجلسة:</h4>
+                    <div id="sessionProductsItems" style="color: var(--gray-500); font-size: 0.9rem;">لا توجد منتجات</div>
                 </div>
                 
                 <div class="btn-group" style="grid-template-columns: 1fr;">
-                    <button class="btn btn-primary" onclick="endActiveSession()" style="background: linear-gradient(135deg, var(--success), #059669);">
-                        ✓ End Session & Generate Invoice
+                    <button class="btn btn-primary" onclick="endActiveSessionAndShowInvoice()" style="background: linear-gradient(135deg, var(--success), #059669);">
+                        ✓ إنهاء الجلسة وعرض الفاتورة
                     </button>
                 </div>
                 
                 <div class="btn-group" style="margin-top: 0.75rem;" id="extendTimeBtnGroup">
                     <button class="btn" onclick="showExtendTimeOptions()" style="background: var(--warning); color: var(--dark);">
-                        ➕ Add Extra Time
+                        ➕ إضافة وقت إضافي
                     </button>
                     <button class="btn btn-cancel" onclick="closeActiveSessionModal()">
-                        Close
+                        إغلاق
                     </button>
                 </div>
             </div>
@@ -1691,23 +1603,23 @@
     <div class="modal-overlay" id="addProductModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">🛒 Add New Product</h3>
+                <h3 class="modal-title">🛒 إضافة منتج جديد</h3>
                 <button class="modal-close" onclick="closeAddProductModal()">✕</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="form-label">Product Name</label>
+                    <label class="form-label">اسم المنتج</label>
                     <input type="text" class="form-input" id="productName" placeholder="Product Name">
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Price (EGP)</label>
+                    <label class="form-label">سعر المنتج (EGP)</label>
                     <input type="number" class="form-input" id="productPrice" placeholder="Price in EGP" min="0" step="0.01">
                 </div>
                 
                 <div class="btn-group">
-                    <button class="btn btn-cancel" onclick="closeAddProductModal()">Cancel</button>
-                    <button class="btn btn-primary" onclick="addNewProduct()">✓ Add Product</button>
+                    <button class="btn btn-cancel" onclick="closeAddProductModal()">إلغاء</button>
+                    <button class="btn btn-primary" onclick="addNewProduct()">✓ إضافة المنتج</button>
                 </div>
             </div>
         </div>
@@ -1717,14 +1629,12 @@
     <div class="modal-overlay" id="selectSessionModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">🎮 Select Screen / Session</h3>
+                <h3 class="modal-title">🎯 اختيار الجلسة</h3>
                 <button class="modal-close" onclick="closeSelectSessionModal()">✕</button>
             </div>
             <div class="modal-body">
-                <p style="color: var(--gray-600); margin-bottom: 1rem; font-weight: 600;" id="selectSessionProductName"></p>
-                <div class="session-select-list" id="sessionSelectList">
-                    <!-- Sessions will be populated here -->
-                </div>
+                <p style="margin-bottom: 1rem; color: var(--gray-600); font-weight: 600;">اختر الجلسة التي تريد إضافة المنتج عليها:</p>
+                <div id="activeSessionsList"></div>
             </div>
         </div>
     </div>
@@ -1733,12 +1643,12 @@
     <div class="modal-overlay" id="extendTimeModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">⏰ Add Extra Time</h3>
+                <h3 class="modal-title">⏰ إضافة وقت إضافي</h3>
                 <button class="modal-close" onclick="closeExtendTimeModal()">✕</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="form-label">Extra Duration</label>
+                    <label class="form-label">الوقت الإضافي</label>
                     <div class="duration-row">
                         <input type="number" class="form-input" id="extendHours" placeholder="Hours" value="0" min="0">
                         <input type="number" class="form-input" id="extendMinutes" placeholder="Minutes" value="30" min="0" max="59">
@@ -1746,14 +1656,14 @@
                 </div>
                 
                 <div class="price-calc">
-                    <div style="font-weight: 700; color: #92400e; margin-bottom: 0.5rem;">Additional Cost:</div>
+                    <div style="font-weight: 700; color: #92400e; margin-bottom: 0.5rem;">التكلفة الإضافية:</div>
                     <div class="price-value" id="extendPriceDisplay">0.00 EGP</div>
                 </div>
                 
                 <div class="btn-group">
-                    <button class="btn btn-cancel" onclick="closeExtendTimeModal()">Cancel</button>
+                    <button class="btn btn-cancel" onclick="closeExtendTimeModal()">إلغاء</button>
                     <button class="btn btn-primary" onclick="confirmExtendTime()" style="background: linear-gradient(135deg, var(--warning), #d97706);">
-                        ✓ Confirm Extension
+                        ✓ تأكيد إضافة الوقت
                     </button>
                 </div>
             </div>
@@ -1761,17 +1671,18 @@
     </div>
 
     <!-- Invoice Modal -->
-    <div class="modal-overlay" id="invoiceModal">
-        <div class="modal-content" style="max-width: 650px;">
-            <div class="invoice-container" id="invoiceContent">
-                <!-- Invoice will be generated here -->
+    <div class="modal-overlay invoice-modal" id="invoiceModal">
+        <div class="modal-content">
+            <div class="invoice-header">
+                <div class="invoice-title">🧾 فاتورة محلية البليستيشن</div>
+                <div class="invoice-subtitle">PlayStation Lounge Invoice</div>
             </div>
-            <div style="padding: 1rem; text-align: center; background: white; border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);">
-                <button class="btn btn-primary" onclick="printInvoice()" style="width: 100%; justify-content: center;">
-                    🖨️ Print Invoice
-                </button>
-                <button class="btn btn-cancel" onclick="closeInvoiceModal()" style="width: 100%; justify-content: center; margin-top: 0.5rem;">
-                    Close
+            <div class="invoice-body" id="invoiceBody">
+                <!-- Invoice content will be generated dynamically -->
+            </div>
+            <div style="padding: 0 2rem 2rem;">
+                <button class="btn btn-primary" onclick="closeInvoiceModal()" style="width: 100%;">
+                    ✕ إغلاق الفاتورة
                 </button>
             </div>
         </div>
@@ -1802,6 +1713,7 @@
         let currentManagingSessionId = null;
         let timerInterval = null;
         let pendingProductId = null;
+        let alertInterval = null;
 
         // Audio Context for alerts
         let audioContext = null;
@@ -1810,12 +1722,14 @@
         function init() {
             loadData();
             
+            // Check if user is already logged in (using sessionStorage)
             if (sessionStorage.getItem('isLoggedIn') === 'true') {
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('appContainer').classList.add('active');
             }
             
             if (!appData.devices.length) {
+                // Initialize devices if first time
                 for (let i = 1; i <= 16; i++) {
                     appData.devices.push({
                         id: i,
@@ -1883,9 +1797,9 @@
                 sessionStorage.setItem('isLoggedIn', 'true');
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('appContainer').classList.add('active');
-                showToast('Welcome! 🎉', 'success');
+                showToast('مرحباً بك! 🎉', 'success');
             } else {
-                document.getElementById('errorMsg').textContent = '❌ Incorrect PIN';
+                document.getElementById('errorMsg').textContent = '❌ رمز غير صحيح';
                 document.getElementById('errorMsg').classList.add('show');
                 setTimeout(() => {
                     enteredPin = '';
@@ -1895,7 +1809,7 @@
         }
 
         function logout() {
-            if (confirm('Are you sure you want to logout?')) {
+            if (confirm('هل تريد تسجيل الخروج؟')) {
                 sessionStorage.removeItem('isLoggedIn');
                 document.getElementById('appContainer').classList.remove('active');
                 document.getElementById('loginScreen').classList.remove('hidden');
@@ -1927,10 +1841,10 @@
             const grid = document.getElementById('devicesGrid');
             grid.innerHTML = appData.devices.map(device => `
                 <div class="device-card ${device.status}" onclick="openSessionModal(${device.id})">
-                    <div class="device-number">Screen ${device.number}</div>
+                    <div class="device-number">شاشة ${device.number}</div>
                     <div class="device-type">${device.type}</div>
                     <div class="device-status status-${device.status}">
-                        ${device.status === 'available' ? '✓ Available' : device.status === 'in-use' ? '▶ In Use' : '🔧 Maintenance'}
+                        ${device.status === 'available' ? '✓ متاح' : device.status === 'in-use' ? '▶ مشغل' : '🔧 صيانة'}
                     </div>
                 </div>
             `).join('');
@@ -1939,7 +1853,7 @@
         function renderProducts() {
             const grid = document.getElementById('productsGrid');
             if (!appData.products.length) {
-                grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--gray-400);font-size:1.1rem;">📦 No products yet - Click "Add New Product" to add your items</p>';
+                grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--gray-400);font-size:1.1rem;">📦 لا توجد منتجات بعد - اضغط "إضافة منتج جديد" لإضافة منتجاتك</p>';
                 return;
             }
             grid.innerHTML = appData.products.map(product => `
@@ -1947,10 +1861,10 @@
                     <div class="product-image">📦</div>
                     <div class="product-info">
                         <div class="product-name">${product.name}</div>
-                        <div class="product-desc">Click to add to any active session</div>
+                        <div class="product-desc">منتج عام - يمكن إضافته لأي جلسة</div>
                         <div class="product-footer">
                             <div class="product-price">${parseFloat(product.price).toFixed(2)} EGP</div>
-                            <button class="add-btn" onclick="openSelectSessionForProduct(${product.id})">+ Add</button>
+                            <button class="add-btn" onclick="openSelectSessionModal(${product.id})">+ إضافة</button>
                         </div>
                     </div>
                 </div>
@@ -1960,7 +1874,7 @@
         function renderClients() {
             const grid = document.getElementById('clientsGrid');
             if (!appData.clients.length) {
-                grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--gray-400);">No clients yet</p>';
+                grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--gray-400);">لا يوجد عملاء بعد</p>';
                 return;
             }
             grid.innerHTML = appData.clients.map(client => `
@@ -1969,17 +1883,17 @@
                         <div class="client-avatar">${client.name.charAt(0)}</div>
                         <div>
                             <div class="client-name">${client.name}</div>
-                            <div class="client-phone">${client.phone || 'No phone'}</div>
+                            <div class="client-phone">${client.phone || 'لا يوجد رقم'}</div>
                         </div>
                     </div>
                     <div class="client-stats">
                         <div class="client-stat">
                             <div class="client-stat-value">${client.visits || 0}</div>
-                            <div class="client-stat-label">Visits</div>
+                            <div class="client-stat-label">زيارة</div>
                         </div>
                         <div class="client-stat">
                             <div class="client-stat-value">${parseFloat(client.total || 0).toFixed(2)} EGP</div>
-                            <div class="client-stat-label">Total Spent</div>
+                            <div class="client-stat-label">إنفاق</div>
                         </div>
                     </div>
                 </div>
@@ -2019,37 +1933,32 @@
             return `${year}-${month}-${day}`;
         }
 
-        function formatDuration(minutes) {
-            const h = Math.floor(minutes / 60);
-            const m = Math.round(minutes % 60);
-            if (h > 0 && m > 0) return `${h}h ${m}m`;
-            if (h > 0) return `${h}h`;
-            return `${m}m`;
-        }
-
         function renderSessions() {
             const tbody = document.getElementById('sessionsTableBody');
             const activeSessions = appData.sessions.filter(s => s.status === 'active');
             
             if (!activeSessions.length) {
-                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--gray-400);padding:2rem;">No active sessions</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--gray-400);padding:2rem;">لا توجد جلسات نشطة</td></tr>';
                 return;
             }
             
             tbody.innerHTML = activeSessions.map(session => {
                 const device = appData.devices.find(d => d.id === session.deviceId);
-                const elapsed = Math.max(1, Math.floor((new Date() - new Date(session.startTime)) / 1000 / 60));
-                const sessionTypeLabel = session.sessionType === 'open' ? 'Open' : 'Timed';
+                const now = new Date();
+                const start = new Date(session.startTime);
+                const elapsedMs = now - start;
+                const elapsedMinutes = Math.floor(elapsedMs / 1000 / 60);
+                const sessionTypeLabel = session.sessionType === 'open' ? 'مفتوح' : 'محدد';
                 return `<tr>
                     <td>${device ? device.number : '-'}</td>
                     <td>${session.type}</td>
                     <td>${session.customerName || '-'}</td>
                     <td><span class="badge badge-${session.sessionType === 'open' ? 'info' : 'warning'}">${sessionTypeLabel}</span></td>
                     <td>${formatTime12(new Date(session.startTime))}</td>
-                    <td><strong>${elapsed} min</strong></td>
-                    <td><strong>${calculateCurrentSessionCost(session).toFixed(2)} EGP</strong></td>
-                    <td><span class="badge badge-success">Active</span></td>
-                    <td><button class="add-btn" style="background:var(--primary);font-size:0.8rem;padding:0.4rem 0.8rem;" onclick="manageSession(${session.id})">Manage</button></td>
+                    <td><strong style="color: var(--primary);">${elapsedMinutes} min</strong></td>
+                    <td>${calculateCurrentSessionCost(session).toFixed(2)} EGP</td>
+                    <td><span class="badge badge-success">نشطة</span></td>
+                    <td><button class="add-btn" style="background:var(--primary);font-size:0.8rem;padding:0.4rem 0.8rem;" onclick="manageSession(${session.id})">إدارة</button></td>
                 </tr>`;
             }).join('');
         }
@@ -2057,17 +1966,17 @@
         function renderReports() {
             const tbody = document.getElementById('reportsTableBody');
             if (!appData.transactions.length) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--gray-400);padding:2rem;">No transactions yet</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--gray-400);padding:2rem;">لا توجد معاملات</td></tr>';
                 return;
             }
-            tbody.innerHTML = appData.transactions.slice(-50).reverse().map(t => {
+            tbody.innerHTML = appData.transactions.slice(-30).reverse().map(t => {
                 const typeLabel = t.type === 'session' ? 'Session' : t.type === 'product' ? 'Product' : 'Other';
                 return `<tr>
                     <td>${formatDateISO(t.date)}</td>
                     <td>${formatTime12(new Date(t.date))}</td>
                     <td><span class="badge badge-${t.type === 'session' ? 'success' : 'warning'}">${typeLabel}</span></td>
-                    <td>${t.description}</td>
                     <td>${t.customerName || '-'}</td>
+                    <td>${t.description}</td>
                     <td>${t.screenNumber || '-'}</td>
                     <td style="font-weight: 800; color: var(--success);">+${parseFloat(t.amount).toFixed(2)} EGP</td>
                 </tr>`;
@@ -2078,7 +1987,7 @@
         function openSessionModal(deviceId) {
             const device = appData.devices.find(d => d.id === deviceId);
             if (!device || device.status !== 'available') {
-                showToast('This device is not available!', 'error');
+                showToast('هذا الجهاز غير متاح!', 'error');
                 return;
             }
             
@@ -2155,7 +2064,7 @@
                 duration = (hours * 60) + minutes;
                 
                 if (duration <= 0) {
-                    showToast('Please enter a valid duration', 'error');
+                    showToast('يرجى إدخال مدة صحيحة', 'error');
                     return;
                 }
                 
@@ -2166,7 +2075,7 @@
                 id: Date.now(),
                 deviceId: currentDevice,
                 type: selectedType.toUpperCase(),
-                customerName: customerName || 'Walk-in Customer',
+                customerName: customerName || 'عميل بدون اسم',
                 sessionType: selectedSessionType,
                 duration: duration,
                 startTime: new Date().toISOString(),
@@ -2180,6 +2089,7 @@
             
             appData.sessions.push(session);
             
+            // Update device status
             const deviceIndex = appData.devices.findIndex(d => d.id === currentDevice);
             if (deviceIndex !== -1) {
                 appData.devices[deviceIndex].status = 'in-use';
@@ -2188,13 +2098,14 @@
             saveData();
             closeModal();
             renderAll();
-            showToast(`✓ ${selectedSessionType === 'open' ? 'Open' : 'Timed'} session started successfully!`, 'success');
+            showToast(`✓ تم بدء جلسة ${selectedSessionType === 'open' ? 'مفتوحة' : 'محددة'} بنجاح!`, 'success');
         }
 
         function calculateCurrentSessionCost(session) {
-            const elapsedMinutes = Math.max(1, Math.floor((new Date() - new Date(session.startTime)) / 1000 / 60));
+            const elapsedMinutes = Math.floor((new Date() - new Date(session.startTime)) / 1000 / 60);
             let totalDuration = elapsedMinutes;
             
+            // Add any time extensions
             if (session.timeExtensions && session.timeExtensions.length > 0) {
                 totalDuration = session.initialDuration + session.timeExtensions.reduce((sum, ext) => sum + ext.minutes, 0);
             } else if (session.sessionType === 'timed') {
@@ -2203,6 +2114,7 @@
             
             const cost = (totalDuration / 60) * session.hourlyRate;
             
+            // Add product costs
             let productsCost = 0;
             if (session.products && session.products.length > 0) {
                 productsCost = session.products.reduce((sum, p) => sum + p.price, 0);
@@ -2220,10 +2132,12 @@
             
             document.getElementById('activeDeviceInfo').textContent = device ? `Screen ${device.number} (${device.type})` : '-';
             document.getElementById('activeCustomerName').textContent = session.customerName;
-            document.getElementById('activeSessionType').textContent = session.sessionType === 'open' ? '⏳ Open Time' : '⏰ Timed';
+            document.getElementById('activeSessionType').textContent = session.sessionType === 'open' ? '⏳ وقت مفتوح' : '⏰ محدد بوقت';
             
+            // Update timer and details
             updateActiveSessionDisplay(session);
             
+            // Start live timer
             if (timerInterval) clearInterval(timerInterval);
             timerInterval = setInterval(() => {
                 updateActiveSessionDisplay(session);
@@ -2231,9 +2145,6 @@
             
             document.getElementById('activeSessionModal').classList.add('active');
         }
-
-        let lastAlertMinute = -1;
-        let alertCooldown = false;
 
         function updateActiveSessionDisplay(session) {
             const elapsedMs = new Date() - new Date(session.startTime);
@@ -2245,13 +2156,13 @@
             const timerStr = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             document.getElementById('sessionTimerDisplay').textContent = timerStr;
             
-            const elapsedMinutes = Math.max(1, Math.floor(elapsedMs / 1000 / 60));
+            const elapsedMinutes = Math.floor(elapsedMs / 1000 / 60);
             document.getElementById('activeElapsedTime').textContent = `${elapsedMinutes} min`;
             
             const currentCost = calculateCurrentSessionCost(session);
             document.getElementById('activeCurrentCost').textContent = `${currentCost.toFixed(2)} EGP`;
             
-            // Alert logic for timed sessions
+            // Show remaining time for timed sessions
             if (session.sessionType === 'timed') {
                 let totalAllowed = session.duration;
                 if (session.timeExtensions && session.timeExtensions.length > 0) {
@@ -2261,35 +2172,25 @@
                 
                 if (remaining <= 0) {
                     document.getElementById('sessionTimerDisplay').classList.add('warning');
-                    document.getElementById('activeRemainingTime').textContent = '⚠️ TIME UP!';
+                    document.getElementById('activeRemainingTime').textContent = '⚠️ انتهى الوقت!';
                     document.getElementById('remainingTimeRow').style.display = 'flex';
-                    
-                    // Play alert every minute when time is up
-                    if (!alertCooldown && lastAlertMinute !== minutes) {
-                        playAlertSound();
-                        lastAlertMinute = minutes;
-                        alertCooldown = true;
-                        setTimeout(() => { alertCooldown = false; }, 30000); // 30 second cooldown
-                    }
+                    playAlertSound();
+                    startAlertInterval();
                 } else if (remaining <= 5) {
                     document.getElementById('sessionTimerDisplay').classList.add('warning');
-                    document.getElementById('activeRemainingTime').textContent = `${remaining} min remaining`;
+                    document.getElementById('activeRemainingTime').textContent = `${remaining} min`;
                     document.getElementById('remainingTimeRow').style.display = 'flex';
-                    
-                    // Play warning at 5, 3, 2, 1 minute marks
-                    if ([5, 3, 2, 1].includes(remaining) && !alertCooldown) {
-                        playWarningSound();
-                        alertCooldown = true;
-                        setTimeout(() => { alertCooldown = false; }, 30000);
-                    }
+                    if (remaining <= 2) playAlertSound();
                 } else {
                     document.getElementById('sessionTimerDisplay').classList.remove('warning');
-                    document.getElementById('activeRemainingTime').textContent = `${remaining} min remaining`;
+                    document.getElementById('activeRemainingTime').textContent = `${remaining} min`;
                     document.getElementById('remainingTimeRow').style.display = 'flex';
+                    stopAlertInterval();
                 }
             } else {
                 document.getElementById('remainingTimeRow').style.display = 'none';
                 document.getElementById('sessionTimerDisplay').classList.remove('warning');
+                stopAlertInterval();
             }
             
             // Update products list
@@ -2302,71 +2203,52 @@
                     </div>`
                 ).join('');
             } else {
-                productsDiv.textContent = 'No products added';
+                productsDiv.textContent = 'لا توجد منتجات';
             }
+        }
+
+        // ===== AUDIO ALERT SYSTEM =====
+        function initAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioContext;
         }
 
         function playAlertSound() {
             try {
-                if (!audioContext) {
-                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
+                const ctx = initAudioContext();
+                const oscillator = ctx.createOscillator();
+                const gainNode = ctx.createGain();
                 
                 oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
+                gainNode.connect(ctx.destination);
                 
                 oscillator.frequency.value = 800;
                 oscillator.type = 'sine';
-                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
                 
-                oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + 0.5);
+                gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
                 
-                // Second beep after short delay
-                setTimeout(() => {
-                    const osc2 = audioContext.createOscillator();
-                    const gain2 = audioContext.createGain();
-                    osc2.connect(gain2);
-                    gain2.connect(audioContext.destination);
-                    osc2.frequency.value = 1000;
-                    osc2.type = 'sine';
-                    gain2.gain.setValueAtTime(0.3, audioContext.currentTime);
-                    gain2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-                    osc2.start(audioContext.currentTime);
-                    osc2.stop(audioContext.currentTime + 0.5);
-                }, 200);
-                
+                oscillator.start(ctx.currentTime);
+                oscillator.stop(ctx.currentTime + 0.5);
             } catch (e) {
                 console.log('Audio error:', e);
             }
         }
 
-        function playWarningSound() {
-            try {
-                if (!audioContext) {
-                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                
-                oscillator.frequency.value = 600;
-                oscillator.type = 'triangle';
-                gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-                
-                oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + 0.3);
-                
-            } catch (e) {
-                console.log('Warning sound error:', e);
+        function startAlertInterval() {
+            if (!alertInterval) {
+                alertInterval = setInterval(() => {
+                    playAlertSound();
+                }, 3000); // Play every 3 seconds
+            }
+        }
+
+        function stopAlertInterval() {
+            if (alertInterval) {
+                clearInterval(alertInterval);
+                alertInterval = null;
             }
         }
 
@@ -2375,9 +2257,9 @@
                 clearInterval(timerInterval);
                 timerInterval = null;
             }
+            stopAlertInterval();
             document.getElementById('activeSessionModal').classList.remove('active');
             currentManagingSessionId = null;
-            lastAlertMinute = -1;
         }
 
         function showExtendTimeOptions() {
@@ -2410,12 +2292,13 @@
             const totalMinutes = (hours * 60) + minutes;
             
             if (totalMinutes <= 0) {
-                showToast('Please enter valid time', 'error');
+                showToast('يرجى إدخال وقت صالح', 'error');
                 return;
             }
             
             const extensionCost = (totalMinutes / 60) * session.hourlyRate;
             
+            // Record the extension
             if (!session.timeExtensions) session.timeExtensions = [];
             session.timeExtensions.push({
                 timestamp: new Date().toISOString(),
@@ -2423,6 +2306,7 @@
                 cost: extensionCost
             });
             
+            // Update duration for timed sessions
             if (session.sessionType === 'timed') {
                 session.duration = (session.duration || 0) + totalMinutes;
             }
@@ -2430,57 +2314,60 @@
             saveData();
             closeExtendTimeModal();
             updateActiveSessionDisplay(session);
-            showToast(`✓ Added ${totalMinutes} min (+${extensionCost.toFixed(2)} EGP)`, 'success');
+            showToast(`✓ تمت إضافة ${totalMinutes} دقيقة (+${extensionCost.toFixed(2)} EGP)`, 'success');
         }
 
         function closeExtendTimeModal() {
             document.getElementById('extendTimeModal').classList.remove('active');
         }
 
-        function endActiveSession() {
+        // ===== INVOICE SYSTEM =====
+        function endActiveSessionAndShowInvoice() {
             const session = appData.sessions.find(s => s.id === currentManagingSessionId);
             if (!session) return;
             
             const finalCost = calculateCurrentSessionCost(session);
-            const elapsedMinutes = Math.max(1, Math.floor((new Date() - new Date(session.startTime)) / 1000 / 60));
+            const elapsedMinutes = Math.floor((new Date() - new Date(session.startTime)) / 1000 / 60);
             const device = appData.devices.find(d => d.id === session.deviceId);
             
+            // Update session status
             session.status = 'completed';
             session.endTime = new Date().toISOString();
             session.finalCost = finalCost;
             session.totalMinutes = elapsedMinutes;
             
+            // Free the device
             const deviceIndex = appData.devices.findIndex(d => d.id === session.deviceId);
             if (deviceIndex !== -1) {
                 appData.devices[deviceIndex].status = 'available';
             }
             
-            // Session transaction
+            // Add transaction for session
             appData.transactions.push({
                 date: new Date().toISOString(),
                 type: 'session',
-                description: `${session.type} Session - ${formatDuration(elapsedMinutes)}`,
+                customerName: session.customerName,
+                description: `${session.type} Session - ${elapsedMinutes} min`,
                 amount: finalCost,
-                screenNumber: device ? device.number : null,
-                customerName: session.customerName
+                screenNumber: device ? device.number : null
             });
             
-            // Product transactions
+            // Add transactions for products
             if (session.products && session.products.length > 0) {
                 session.products.forEach(product => {
                     appData.transactions.push({
                         date: new Date().toISOString(),
                         type: 'product',
+                        customerName: session.customerName,
                         description: product.name,
                         amount: product.price,
-                        screenNumber: device ? device.number : null,
-                        customerName: session.customerName
+                        screenNumber: device ? device.number : null
                     });
                 });
             }
             
-            // Update client
-            if (session.customerName && session.customerName !== 'Walk-in Customer') {
+            // Add or update client
+            if (session.customerName && session.customerName !== 'عميل بدون اسم') {
                 const clientIndex = appData.clients.findIndex(c => c.name === session.customerName);
                 if (clientIndex !== -1) {
                     appData.clients[clientIndex].visits++;
@@ -2497,179 +2384,131 @@
             
             saveData();
             closeActiveSessionModal();
+            
+            // Show Invoice
             generateInvoice(session, device, finalCost, elapsedMinutes);
             renderAll();
         }
 
-        // ===== INVOICE GENERATION =====
         function generateInvoice(session, device, finalCost, elapsedMinutes) {
-            const sessionCost = (elapsedMinutes / 60) * session.hourlyRate;
-            let extensionCost = 0;
-            let extensionsList = [];
+            const startTime = new Date(session.startTime);
+            const endTime = new Date(session.endTime);
             
-            if (session.timeExtensions && session.timeExtensions.length > 0) {
-                extensionCost = session.timeExtensions.reduce((sum, ext) => sum + ext.cost, 0);
-                extensionsList = session.timeExtensions.map(ext => ({
-                    minutes: ext.minutes,
-                    cost: ext.cost
-                }));
-            }
+            // Calculate time cost
+            const timeCost = (elapsedMinutes / 60) * session.hourlyRate;
             
+            // Calculate products cost
             let productsCost = 0;
-            let productsList = [];
             if (session.products && session.products.length > 0) {
                 productsCost = session.products.reduce((sum, p) => sum + p.price, 0);
-                productsList = session.products.map(p => ({
-                    name: p.name,
-                    price: p.price
-                }));
+            }
+            
+            // Calculate extensions cost
+            let extensionsCost = 0;
+            let extensionsHTML = '';
+            if (session.timeExtensions && session.timeExtensions.length > 0) {
+                extensionsCost = session.timeExtensions.reduce((sum, ext) => sum + ext.cost, 0);
+                extensionsHTML = `
+                    <div class="invoice-section">
+                        <div class="invoice-section-title">⏰ الوقت الإضافي</div>
+                        ${session.timeExtensions.map(ext => `
+                            <div class="invoice-row">
+                                <span>+${ext.minutes} دقيقة</span>
+                                <span style="direction: ltr;">${ext.cost.toFixed(2)} EGP</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
             }
             
             const invoiceHTML = `
-                <div class="invoice-header">
-                    <div class="invoice-logo">🎮</div>
-                    <div class="invoice-title">INVOICE</div>
-                    <div class="invoice-subtitle">PlayStation Lounge Manager</div>
+                <div class="invoice-section">
+                    <div class="invoice-section-title">📋 معلومات الجلسة</div>
+                    <div class="invoice-row">
+                        <span>رقم الشاشة:</span>
+                        <strong>${device ? device.number : '-'}</strong>
+                    </div>
+                    <div class="invoice-row">
+                        <span>نوع الجهاز:</span>
+                        <strong>${session.type}</strong>
+                    </div>
+                    <div class="invoice-row">
+                        <span>اسم العميل:</span>
+                        <strong>${session.customerName}</strong>
+                    </div>
+                    <div class="invoice-row">
+                        <span>نوع الجلسة:</span>
+                        <strong>${session.sessionType === 'open' ? 'وقت مفتوح' : 'محدد بوقت'}</strong>
+                    </div>
                 </div>
                 
-                <div class="invoice-body">
-                    <div class="invoice-section">
-                        <div class="invoice-section-title">📋 Session Information</div>
-                        <div class="invoice-info-grid">
-                            <div class="invoice-info-item">
-                                <div class="invoice-info-label">Screen Number</div>
-                                <div class="invoice-info-value">${device ? device.number : '-'}</div>
-                            </div>
-                            <div class="invoice-info-item">
-                                <div class="invoice-info-label">Device Type</div>
-                                <div class="invoice-info-value">${session.type}</div>
-                            </div>
-                            <div class="invoice-info-item">
-                                <div class="invoice-info-label">Customer Name</div>
-                                <div class="invoice-info-value">${session.customerName}</div>
-                            </div>
-                            <div class="invoice-info-item">
-                                <div class="invoice-info-label">Session Type</div>
-                                <div class="invoice-info-value">${session.sessionType === 'open' ? 'Open Time' : 'Timed'}</div>
-                            </div>
-                            <div class="invoice-info-item">
-                                <div class="invoice-info-label">Start Time</div>
-                                <div class="invoice-info-value">${formatTime12(new Date(session.startTime))}</div>
-                            </div>
-                            <div class="invoice-info-item">
-                                <div class="invoice-info-label">End Time</div>
-                                <div class="invoice-info-value">${formatTime12(new Date())}</div>
-                            </div>
-                            <div class="invoice-info-item">
-                                <div class="invoice-info-label">Total Duration</div>
-                                <div class="invoice-info-value">${formatDuration(elapsedMinutes)}</div>
-                            </div>
-                            <div class="invoice-info-item">
-                                <div class="invoice-info-label">Hourly Rate</div>
-                                <div class="invoice-info-value">${session.hourlyRate.toFixed(2)} EGP/hr</div>
-                            </div>
-                        </div>
+                <div class="invoice-section">
+                    <div class="invoice-section-title">⏱ تفاصيل الوقت</div>
+                    <div class="invoice-row">
+                        <span>وقت البداية:</span>
+                        <span style="direction: ltr;">${formatTime12(startTime)} - ${formatDateISO(startTime)}</span>
                     </div>
-                    
-                    <div class="invoice-section">
-                        <div class="invoice-section-title">💰 Cost Breakdown</div>
-                        <table class="invoice-table">
+                    <div class="invoice-row">
+                        <span>وقت النهاية:</span>
+                        <span style="direction: ltr;">${formatTime12(endTime)} - ${formatDateISO(endTime)}</span>
+                    </div>
+                    <div class="invoice-row">
+                        <span>المدة الإجمالية:</span>
+                        <strong>${elapsedMinutes} دقيقة (${(elapsedMinutes / 60).toFixed(1)} ساعة)</strong>
+                    </div>
+                    <div class="invoice-row">
+                        <span>سعر الساعة:</span>
+                        <span style="direction: ltr;">${session.hourlyRate} EGP</span>
+                    </div>
+                    <div class="invoice-row">
+                        <span>تكلفة الوقت:</span>
+                        <span style="direction: ltr; font-weight: 700;">${timeCost.toFixed(2)} EGP</span>
+                    </div>
+                </div>
+                
+                ${extensionsHTML}
+                
+                <div class="invoice-section">
+                    <div class="invoice-section-title">🛒 المنتجات</div>
+                    ${session.products && session.products.length > 0 ? `
+                        <table class="invoice-products-table">
                             <thead>
                                 <tr>
-                                    <th>Description</th>
-                                    <th>Details</th>
-                                    <th>Amount (EGP)</th>
+                                    <th>المنتج</th>
+                                    <th>السعر</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><strong>Session Cost</strong></td>
-                                    <td>${formatDuration(elapsedMinutes)} × ${session.hourlyRate} EGP/hr</td>
-                                    <td><strong>${sessionCost.toFixed(2)}</strong></td>
-                                </tr>
-                                ${extensionsList.length > 0 ? extensionsList.map(ext => `
+                                ${session.products.map(p => `
                                     <tr>
-                                        <td>Extra Time</td>
-                                        <td>+${ext.minutes} min</td>
-                                        <td>${ext.cost.toFixed(2)}</td>
+                                        <td>${p.name}</td>
+                                        <td style="direction: ltr; text-align: left;">${parseFloat(p.price).toFixed(2)} EGP</td>
                                     </tr>
-                                `).join('') : ''}
-                                ${productsList.length > 0 ? productsList.map(p => `
-                                    <tr>
-                                        <td>Product: ${p.name}</td>
-                                        <td>-</td>
-                                        <td>${p.price.toFixed(2)}</td>
-                                    </tr>
-                                `).join('') : ''}
+                                `).join('')}
                             </tbody>
+                            <tfoot>
+                                <tr style="font-weight: 800; background: var(--gray-50);">
+                                    <td>إجمالي المنتجات</td>
+                                    <td style="direction: ltr; text-align: left; color: var(--primary);">${productsCost.toFixed(2)} EGP</td>
+                                </tr>
+                            </tfoot>
                         </table>
-                        
-                        <div class="invoice-totals">
-                            <div class="invoice-total-row">
-                                <span>Session Subtotal:</span>
-                                <span style="direction: ltr;">${(sessionCost + extensionCost).toFixed(2)} EGP</span>
-                            </div>
-                            ${productsCost > 0 ? `
-                                <div class="invoice-total-row">
-                                    <span>Products Subtotal:</span>
-                                    <span style="direction: ltr;">${productsCost.toFixed(2)} EGP</span>
-                                </div>
-                            ` : ''}
-                            <div class="invoice-total-row grand-total">
-                                <span>TOTAL AMOUNT:</span>
-                                <span style="direction: ltr;">${finalCost.toFixed(2)} EGP</span>
-                            </div>
-                        </div>
-                    </div>
+                    ` : '<p style="color: var(--gray-500); text-align: center; padding: 1rem;">لا توجد منتجات</p>'}
                 </div>
                 
-                <div class="invoice-footer">
-                    <div class="invoice-thank-you">Thank you for your visit! 🎮</div>
-                    <div style="color: var(--gray-500); font-size: 0.85rem;">Date: ${formatDateISO(new Date())} | Time: ${formatTime12(new Date())}</div>
+                <div class="invoice-section" style="border: none;">
+                    <div class="invoice-row total">
+                        <span>💰 الإجمالي الكلي:</span>
+                        <span style="direction: ltr;">${finalCost.toFixed(2)} EGP</span>
+                    </div>
+                    <div style="text-align: center; margin-top: 1rem; padding: 1rem; background: #d1fae5; border-radius: var(--radius-lg); font-weight: 700; color: #065f46;">
+                        ✅ تم إنهاء الجلسة بنجاح - شكراً لزيارتك!
+                    </div>
                 </div>
             `;
             
-            document.getElementById('invoiceContent').innerHTML = invoiceHTML;
+            document.getElementById('invoiceBody').innerHTML = invoiceHTML;
             document.getElementById('invoiceModal').classList.add('active');
-        }
-
-        function printInvoice() {
-            const invoiceContent = document.getElementById('invoiceContent').innerHTML;
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write(`
-                <!DOCTYPE html>
-                <html dir="rtl">
-                <head>
-                    <title>Invoice - PlayStation Lounge</title>
-                    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-                    <style>
-                        body { font-family: 'Cairo', sans-serif; padding: 20px; }
-                        .invoice-container { max-width: 600px; margin: 0 auto; }
-                        .invoice-header { background: linear-gradient(135deg, #0F172A, #334155); color: white; padding: 2rem; text-align: center; border-radius: 1rem 1rem 0 0; }
-                        .invoice-body { padding: 2rem; background: white; }
-                        .invoice-section { margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 2px dashed #E2E8F0; }
-                        .invoice-section-title { font-size: 1rem; font-weight: 800; color: #2563EB; margin-bottom: 0.75rem; }
-                        .invoice-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-                        .invoice-info-item { background: #F8FAFC; padding: 0.75rem; border-radius: 0.5rem; }
-                        .invoice-info-label { font-size: 0.78rem; color: #64748B; margin-bottom: 0.25rem; }
-                        .invoice-info-value { font-weight: 800; font-size: 0.95rem; direction: ltr; }
-                        .invoice-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
-                        .invoice-table th, .invoice-table td { padding: 0.75rem; text-align: right; border-bottom: 1px solid #E2E8F0; }
-                        .invoice-table th { background: #F1F5F9; font-weight: 700; }
-                        .invoice-totals { background: #F0FDF4; padding: 1.5rem; border-radius: 0.75rem; border: 2px solid #10B981; }
-                        .invoice-total-row { display: flex; justify-content: space-between; padding: 0.5rem 0; }
-                        .invoice-total-row.grand-total { font-size: 1.5rem; font-weight: 900; color: #10B981; border-top: 2px dashed #10B981; margin-top: 0.5rem; padding-top: 1rem; }
-                        .invoice-footer { background: #F8FAFC; padding: 1.5rem; text-align: center; border-top: 1px solid #E2E8F0; border-radius: 0 0 1rem 1rem; }
-                        @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
-                    </style>
-                </head>
-                <body>
-                    <div class="invoice-container">${invoiceContent}</div>
-                    <script>window.onload = () => { window.print(); window.close(); }</script>
-                </body>
-                </html>
-            `);
-            printWindow.document.close();
         }
 
         function closeInvoiceModal() {
@@ -2692,12 +2531,12 @@
             const price = parseFloat(document.getElementById('productPrice').value);
             
             if (!name) {
-                showToast('Please enter product name', 'error');
+                showToast('يرجى إدخال اسم المنتج', 'error');
                 return;
             }
             
             if (!price || price <= 0) {
-                showToast('Please enter a valid price', 'error');
+                showToast('يرجى إدخال سعر صحيح', 'error');
                 return;
             }
             
@@ -2712,10 +2551,11 @@
             saveData();
             closeAddProductModal();
             renderProducts();
-            showToast(`✓ "${name}" added successfully`, 'success');
+            showToast(`✓ تمت إضافة "${name}" بنجاح`, 'success');
         }
 
-        function openSelectSessionForProduct(productId) {
+        // ===== SELECT SESSION FOR PRODUCT =====
+        function openSelectSessionModal(productId) {
             const product = appData.products.find(p => p.id === productId);
             if (!product) return;
             
@@ -2724,27 +2564,29 @@
             const activeSessions = appData.sessions.filter(s => s.status === 'active');
             
             if (activeSessions.length === 0) {
-                showToast('No active sessions - start a session first!', 'warning');
+                showToast('لا توجد جلسات نشطة - ابدأ جلسة أولاً', 'warning');
                 return;
             }
             
-            document.getElementById('selectSessionProductName').textContent = 
-                `Adding "${product.name}" (${parseFloat(product.price).toFixed(2)} EGP) to which session?`;
-            
-            const listHTML = activeSessions.map(session => {
+            const sessionsListDiv = document.getElementById('activeSessionsList');
+            sessionsListDiv.innerHTML = activeSessions.map(session => {
                 const device = appData.devices.find(d => d.id === session.deviceId);
+                const elapsed = Math.floor((new Date() - new Date(session.startTime)) / 1000 / 60);
                 return `
-                    <div class="session-select-item" onclick="confirmAddToSession(${session.id})">
-                        <div class="session-select-info">
-                            <div class="session-select-device">Screen ${device ? device.number : '?'} (${device ? device.type : '?'})</div>
-                            <div class="session-select-customer">${session.customerName}</div>
+                    <div class="session-list-item" onclick="addProductToSession(${session.id})">
+                        <div>
+                            <strong style="font-size: 1.1rem;">🖥 شاشة ${device ? device.number : '-'}</strong>
+                            <div style="color: var(--gray-600); font-size: 0.9rem; margin-top: 0.25rem;">
+                                ${device ? device.type : ''} | العميل: ${session.customerName} | ${elapsed} min
+                            </div>
                         </div>
-                        <span class="session-select-type">${session.sessionType === 'open' ? 'Open' : 'Timed'}</span>
+                        <div style="text-align: left; direction: ltr;">
+                            <span style="font-weight: 800; color: var(--primary);">${calculateCurrentSessionCost(session).toFixed(2)} EGP</span>
+                        </div>
                     </div>
                 `;
             }).join('');
             
-            document.getElementById('sessionSelectList').innerHTML = listHTML;
             document.getElementById('selectSessionModal').classList.add('active');
         }
 
@@ -2753,7 +2595,7 @@
             pendingProductId = null;
         }
 
-        function confirmAddToSession(sessionId) {
+        function addProductToSession(sessionId) {
             const product = appData.products.find(p => p.id === pendingProductId);
             const session = appData.sessions.find(s => s.id === sessionId);
             
@@ -2767,12 +2609,12 @@
                 addedAt: new Date().toISOString()
             });
             
-            const device = appData.devices.find(d => d.id === session.deviceId);
-            
             saveData();
             closeSelectSessionModal();
             renderProducts();
-            showToast(`✓ "${product.name}" added to Screen ${device ? device.number : '?'} (+${product.price} EGP)`, 'success');
+            
+            const device = appData.devices.find(d => d.id === session.deviceId);
+            showToast(`✓ تمت إضافة "${product.name}" إلى شاشة ${device ? device.number : sessionId} (+${product.price} EGP)`, 'success');
         }
 
         // ===== SETTINGS =====
@@ -2785,7 +2627,7 @@
             a.download = `backup_${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
-            showToast('✓ Data exported successfully', 'success');
+            showToast('✓ تم تصدير البيانات بنجاح', 'success');
         }
 
         function restoreData(event) {
@@ -2797,9 +2639,9 @@
                         appData = JSON.parse(e.target.result);
                         saveData();
                         renderAll();
-                        showToast('✓ Data restored successfully', 'success');
+                        showToast('✓ تم استعادة البيانات بنجاح', 'success');
                     } catch (err) {
-                        showToast('❌ Invalid file', 'error');
+                        showToast('❌ ملف غير صالح', 'error');
                     }
                 };
                 reader.readAsText(file);
@@ -2807,13 +2649,13 @@
         }
 
         function resetData() {
-            if (confirm('⚠ Are you sure? This will delete ALL data permanently!')) {
+            if (confirm('⚠ هل أنت متأكد؟ سيتم حذف جميع البيانات نهائياً!')) {
                 localStorage.removeItem('playstationLounge');
                 location.reload();
             }
         }
 
-        // ===== TIMER MANAGEMENT =====
+        // ===== TIMER MANAGEMENT FOR ACTIVE SESSIONS =====
         function startTimersForActiveSessions() {
             const activeSessions = appData.sessions.filter(s => s.status === 'active');
             if (activeSessions.length > 0) {
@@ -2845,12 +2687,12 @@
             if (e.target.id === 'addProductModal') closeAddProductModal();
         });
 
-        document.getElementById('selectSessionModal').addEventListener('click', (e) => {
-            if (e.target.id === 'selectSessionModal') closeSelectSessionModal();
-        });
-
         document.getElementById('extendTimeModal').addEventListener('click', (e) => {
             if (e.target.id === 'extendTimeModal') closeExtendTimeModal();
+        });
+
+        document.getElementById('selectSessionModal').addEventListener('click', (e) => {
+            if (e.target.id === 'selectSessionModal') closeSelectSessionModal();
         });
 
         document.getElementById('invoiceModal').addEventListener('click', (e) => {
@@ -2859,11 +2701,6 @@
 
         // Initialize app
         init();
-
-        // Update sessions table every 30 seconds
-        setInterval(() => {
-            renderSessions();
-        }, 30000);
     </script>
 </body>
 </html>
