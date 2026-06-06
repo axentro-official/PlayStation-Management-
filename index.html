@@ -9,8 +9,8 @@
     <meta name="apple-mobile-web-app-title" content="محل البليستيشن">
     <title>محل البليستيشن - PlayStation Lounge Manager</title>
     
-    <!-- PWA Manifest with proper format -->
-    <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22%D9%85%D9%84%20%D8%A7%D9%84%D8%A8%D9%84%D8%B3%D8%B4%D8%B4%22%2C%22short_name%22%3A%22PS%20Lounge%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23F8FAFC%22%2C%22theme_color%22%3A%222563EB%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%2024824%27fill%3D%27none%27%3E%3Ccircle%20cx%3D%2712%27%20cy%3D%2712%27%20r%3D%2710%27%20fill%3D%27%232563EB%27%2F%3E%3C%2Fsvg%3E%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%5D%5D">
+    <!-- PWA Manifest with proper icons -->
+    <link rel="manifest" href="manifest.json">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,15 +37,6 @@
             --gray-700: #334155;
             --gray-800: #1E293B;
             --gray-900: #0F172A;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04);
-            --radius-sm: 0.375rem;
-            --radius-md: 0.5rem;
-            --radius-lg: 0.75rem;
-            --radius-xl: 1rem;
-            --radius-2xl: 1.5rem;
         }
 
         body {
@@ -56,8 +47,6 @@
             min-height: 100vh;
             line-height: 1.6;
             overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
         /* ===== INSTALL BANNER - ALWAYS VISIBLE ===== */
@@ -66,9 +55,9 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
             color: white;
-            padding: 1rem 1.5rem;
+            padding: 1rem 1.25rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -78,9 +67,7 @@
             animation: slideUpBanner 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .install-banner.hidden {
-            display: none !important;
-        }
+        .install-banner.hidden { display: none !important; }
 
         @keyframes slideUpBanner {
             from { transform: translateY(100%); opacity: 0; }
@@ -90,90 +77,71 @@
         .install-banner-content {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.9rem;
             flex: 1;
         }
 
         .install-icon {
-            font-size: 2.8rem;
-            animation: installBounce 2s infinite ease-in-out;
-            filter: drop-shadow(0 4px 12px rgba(255,255,255,0.3));
+            font-size: 2.2rem;
+            animation: installPulse 2s ease-in-out infinite;
         }
 
-        @keyframes installBounce {
-            0%, 100% { transform: translateY(0) scale(1); }
-            25% { transform: translateY(-8px) scale(1.05); }
-            50% { transform: translateY(0) scale(1); }
-            75% { transform: translateY(-4px) scale(1.02); }
+        @keyframes installPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
         }
 
         .install-text h3 {
-            font-size: 1.15rem;
-            font-weight: 900;
-            margin-bottom: 0.3rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            font-size: 1rem;
+            font-weight: 800;
+            margin-bottom: 0.15rem;
         }
 
         .install-text p {
-            font-size: 0.88rem;
+            font-size: 0.8rem;
             opacity: 0.95;
-            font-weight: 500;
         }
 
         .install-btn {
             background: white;
             color: #1e40af;
             border: none;
-            padding: 0.85rem 1.8rem;
-            border-radius: 50px;
+            padding: 0.7rem 1.4rem;
+            border-radius: 12px;
             font-family: inherit;
-            font-weight: 900;
-            font-size: 1rem;
+            font-weight: 800;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            white-space: nowrap;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         .install-btn:hover {
-            transform: translateY(-3px) scale(1.08);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.35);
-        }
-
-        .install-btn:active {
-            transform: scale(0.95);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
         }
 
         .install-dismiss {
             background: rgba(255,255,255,0.2);
-            border: 2px solid rgba(255,255,255,0.4);
+            border: none;
             color: white;
-            width: 38px;
-            height: 38px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             cursor: pointer;
-            transition: all 0.2s;
+            font-size: 1.2rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-            line-height: 1;
+            transition: all 0.2s;
         }
 
-        .install-dismiss:hover {
-            background: rgba(255,255,255,0.3);
-            transform: rotate(90deg);
-        }
+        .install-dismiss:hover { background: rgba(255,255,255,0.35); }
 
         /* ===== LOGIN SCREEN ===== */
         .login-screen {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            inset: 0;
             background: linear-gradient(135deg, var(--dark) 0%, #1e293b 100%);
             display: flex;
             align-items: center;
@@ -191,115 +159,102 @@
 
         .login-box {
             background: white;
-            padding: 3rem 2.5rem;
-            border-radius: var(--radius-2xl);
-            box-shadow: var(--shadow-xl);
-            width: 90%;
-            max-width: 420px;
+            padding: 2.5rem 2rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 92%;
+            max-width: 400px;
             text-align: center;
-            animation: slideUp 0.6s ease;
+            animation: loginSlideUp 0.6s ease;
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes loginSlideUp {
+            from { opacity: 0; transform: translateY(40px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .login-logo {
-            width: 85px;
-            height: 85px;
-            background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 100%);
-            border-radius: var(--radius-xl);
-            margin: 0 auto 1.5rem;
+            width: 75px;
+            height: 75px;
+            background: linear-gradient(135deg, var(--primary), #3b82f6);
+            border-radius: 20px;
+            margin: 0 auto 1.25rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.8rem;
+            font-size: 2.2rem;
             color: white;
-            box-shadow: 0 12px 35px rgba(37, 99, 235, 0.35);
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.4);
         }
 
-        .login-title {
-            font-size: 1.85rem;
-            font-weight: 900;
-            color: var(--gray-900);
-            margin-bottom: 0.5rem;
-        }
-
-        .login-subtitle {
-            color: var(--gray-500);
-            font-size: 0.92rem;
-            margin-bottom: 2rem;
-        }
+        .login-title { font-size: 1.6rem; font-weight: 800; color: var(--gray-900); margin-bottom: 0.4rem; }
+        .login-subtitle { color: var(--gray-500); font-size: 0.85rem; margin-bottom: 1.75rem; }
 
         .pin-display {
             display: flex;
             justify-content: center;
-            gap: 14px;
-            margin-bottom: 1.5rem;
+            gap: 10px;
+            margin-bottom: 1.25rem;
             direction: ltr;
         }
 
         .pin-dot {
-            width: 58px;
-            height: 58px;
+            width: 52px;
+            height: 52px;
             border: 3px solid var(--gray-200);
-            border-radius: var(--radius-lg);
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             font-weight: 700;
             color: var(--primary);
-            transition: all 0.3s ease;
             background: var(--gray-50);
             direction: ltr;
+            transition: all 0.3s ease;
         }
 
         .pin-dot.filled {
             border-color: var(--primary);
             background: var(--primary-light);
-            transform: scale(1.08);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+            transform: scale(1.05);
         }
 
         .error-msg {
-            background: linear-gradient(135deg, #fef2f2, #fecaca);
+            background: #fef2f2;
             color: var(--danger);
-            padding: 0.9rem 1.2rem;
-            border-radius: var(--radius-md);
-            margin-bottom: 1rem;
-            font-size: 0.92rem;
-            font-weight: 700;
+            padding: 0.7rem 0.9rem;
+            border-radius: 10px;
+            margin-bottom: 0.9rem;
+            font-size: 0.88rem;
+            font-weight: 600;
             display: none;
             animation: shake 0.5s ease;
-            border: 1px solid #fecaca;
         }
 
         .error-msg.show { display: block; }
 
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-12px); }
-            40%, 80% { transform: translateX(12px); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
         }
 
-        /* Numpad */
         .numpad {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            max-width: 330px;
+            gap: 8px;
+            max-width: 300px;
             margin: 0 auto;
             direction: ltr;
         }
 
         .num-btn {
-            padding: 20px;
+            padding: 16px;
             border: 2px solid var(--gray-200);
-            border-radius: var(--radius-lg);
+            border-radius: 14px;
             background: white;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -311,32 +266,12 @@
         .num-btn:hover {
             border-color: var(--primary);
             background: var(--primary-light);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.15);
+            transform: translateY(-2px);
         }
 
-        .num-btn:active {
-            transform: scale(0.93);
-        }
-
-        .num-btn.delete {
-            background: linear-gradient(135deg, #fee2f2, #fecaca);
-            border-color: #fca5a5;
-            color: var(--danger);
-        }
-
-        .num-btn.submit {
-            background: linear-gradient(135deg, var(--primary), #3b82f6);
-            color: white;
-            border-color: var(--primary);
-            grid-column: span 3;
-            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
-        }
-
-        .num-btn.submit:hover {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
-        }
+        .num-btn:active { transform: scale(0.95); }
+        .num-btn.delete { background: #fef2f2; border-color: #fecaca; color: var(--danger); }
+        .num-btn.submit { background: var(--primary); color: white; border-color: var(--primary); grid-column: span 3; }
 
         /* ===== MAIN APP ===== */
         .app-container {
@@ -345,22 +280,19 @@
             flex-direction: column;
             opacity: 0;
             transition: opacity 0.5s ease;
-            padding-bottom: 90px;
+            padding-bottom: 70px;
         }
 
-        .app-container.active {
-            opacity: 1;
-        }
+        .app-container.active { opacity: 1; }
 
-        /* Header */
         .app-header {
             background: white;
             border-bottom: 1px solid var(--gray-200);
-            padding: 1rem;
+            padding: 0.9rem 1rem;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: var(--shadow-sm);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
         }
 
         .header-content {
@@ -374,170 +306,124 @@
         .brand {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 1.3rem;
-            font-weight: 900;
+            gap: 10px;
+            font-size: 1.2rem;
+            font-weight: 800;
             color: var(--primary);
         }
 
         .brand-icon {
-            width: 42px;
-            height: 42px;
+            width: 38px;
+            height: 38px;
             background: linear-gradient(135deg, var(--primary), #3b82f6);
-            border-radius: var(--radius-lg);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.3rem;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+            font-size: 1.15rem;
         }
 
         .logout-btn {
-            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            background: #fee2e2;
             color: var(--danger);
             border: 1px solid #fecaca;
-            padding: 0.65rem 1.3rem;
-            border-radius: 50px;
+            padding: 0.55rem 1.1rem;
+            border-radius: 10px;
             font-family: inherit;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.25s ease;
-            font-size: 0.92rem;
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
         }
 
-        .logout-btn:hover {
-            background: linear-gradient(135deg, #fecaca, #fee2e2);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
-        }
+        .logout-btn:hover { background: #fecaca; transform: translateY(-1px); }
 
-        /* Navigation */
         .nav-tabs {
             max-width: 1400px;
-            margin: 1rem auto 0;
+            margin: 0.85rem auto 0;
             display: flex;
-            gap: 0.5rem;
+            gap: 0.45rem;
             overflow-x: auto;
-            padding-bottom: 0.5rem;
+            padding-bottom: 0.4rem;
             scrollbar-width: none;
         }
 
         .nav-tabs::-webkit-scrollbar { display: none; }
 
         .nav-tab {
-            padding: 0.72rem 1.1rem;
+            padding: 0.65rem 0.9rem;
             border: none;
             background: transparent;
             color: var(--gray-500);
             font-family: inherit;
-            font-size: 0.87rem;
+            font-size: 0.82rem;
             font-weight: 600;
             cursor: pointer;
-            border-radius: 50px;
-            transition: all 0.25s ease;
+            border-radius: 10px;
+            transition: all 0.2s ease;
             white-space: nowrap;
             -webkit-tap-highlight-color: transparent;
             flex-shrink: 0;
         }
 
-        .nav-tab:hover {
-            background: var(--gray-100);
-            color: var(--primary);
-            transform: translateY(-2px);
-        }
+        .nav-tab:hover { background: var(--gray-100); color: var(--primary); }
+        .nav-tab.active { background: var(--primary); color: white; }
 
-        .nav-tab.active {
-            background: linear-gradient(135deg, var(--primary), #3b82f6);
-            color: white;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-        }
-
-        /* Main Content */
         .main-content {
             flex: 1;
-            padding: 1.5rem 1rem;
+            padding: 1.25rem 0.9rem;
             max-width: 1400px;
             margin: 0 auto;
             width: 100%;
         }
 
-        .view-section {
-            display: none;
-            animation: fadeIn 0.4s ease;
-        }
-
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
         .view-section.active { display: block; }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Section Headers */
         .section-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 0.85rem;
         }
 
-        .section-title {
-            font-size: 1.4rem;
-            font-weight: 900;
-            color: var(--gray-900);
-        }
+        .section-title { font-size: 1.28rem; font-weight: 800; color: var(--gray-900); }
 
-        /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-            gap: 1.1rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 0.85rem;
+            margin-bottom: 1.75rem;
         }
 
         .stat-card {
             background: white;
-            padding: 1.4rem;
-            border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-sm);
+            padding: 1.15rem;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             border: 1px solid var(--gray-200);
-            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 5px;
-            height: 100%;
-            border-radius: 0 var(--radius-xl) var(--radius-xl) 0 0;
-        }
-
-        .stat-card:nth-child(1)::before { background: linear-gradient(180deg, var(--primary), #60a5fa); }
-        .stat-card:nth-child(2)::before { background: linear-gradient(180deg, var(--success), #34d399); }
-        .stat-card:nth-child(3)::before { background: linear-gradient(180deg, var(--warning), #fbbf24); }
-        .stat-card:nth-child(4)::before { background: linear-gradient(180deg, var(--danger), #f87171); }
-
-        .stat-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-lg);
-        }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.1); }
 
         .stat-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: var(--radius-lg);
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.45rem;
-            margin-bottom: 0.8rem;
+            font-size: 1.25rem;
+            margin-bottom: 0.65rem;
         }
 
         .stat-icon.blue { background: var(--primary-light); color: var(--primary); }
@@ -545,37 +431,24 @@
         .stat-icon.orange { background: #fef3c7; color: var(--warning); }
         .stat-icon.red { background: #fee2e2; color: var(--danger); }
 
-        .stat-value {
-            font-size: 1.65rem;
-            font-weight: 900;
-            color: var(--gray-900);
-            margin-bottom: 0.25rem;
-            direction: ltr;
-            display: inline-block;
-        }
+        .stat-value { font-size: 1.4rem; font-weight: 800; color: var(--gray-900); direction: ltr; display: inline-block; }
+        .stat-label { color: var(--gray-500); font-size: 0.82rem; }
 
-        .stat-label {
-            color: var(--gray-500);
-            font-size: 0.88rem;
-            font-weight: 600;
-        }
-
-        /* Devices Grid */
         .devices-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 1.1rem;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 0.85rem;
         }
 
         .device-card {
             background: white;
-            border-radius: var(--radius-xl);
-            padding: 1.3rem;
+            border-radius: 16px;
+            padding: 1.15rem;
             text-align: center;
-            box-shadow: var(--shadow-sm);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             border: 2px solid var(--gray-200);
             cursor: pointer;
-            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
             overflow: hidden;
             -webkit-tap-highlight-color: transparent;
@@ -584,60 +457,42 @@
         .device-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            right: 0;
-            left: 0;
-            height: 5px;
+            top: 0; right: 0; left: 0;
+            height: 4px;
             transition: height 0.3s ease;
         }
 
-        .device-card.available::before { background: linear-gradient(90deg, var(--success), #34d399); height: 5px; }
-        .device-card.in-use::before { background: linear-gradient(90deg, var(--primary), #60a5fa); height: 5px; }
-        .device-card.maintenance::before { background: linear-gradient(90deg, var(--danger), #f87171); height: 5px; }
+        .device-card.available::before { background: var(--success); }
+        .device-card.in-use::before { background: var(--primary); }
+        .device-card.maintenance::before { background: var(--danger); }
 
         .device-card:hover {
-            transform: translateY(-8px) scale(1.03);
-            box-shadow: var(--shadow-lg);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
             border-color: var(--primary);
         }
 
-        .device-card:hover::before { height: 7px; }
-
-        .device-number {
-            font-size: 1.2rem;
-            font-weight: 900;
-            color: var(--gray-900);
-            margin-bottom: 0.55rem;
-        }
-
-        .device-type {
-            color: var(--gray-500);
-            font-size: 0.83rem;
-            font-weight: 600;
-            margin-bottom: 0.8rem;
-        }
+        .device-number { font-size: 1.1rem; font-weight: 800; color: var(--gray-900); margin-bottom: 0.4rem; }
+        .device-type { color: var(--gray-500); font-size: 0.78rem; font-weight: 600; margin-bottom: 0.65rem; }
 
         .device-status {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 0.4rem 0.9rem;
-            border-radius: 50px;
-            font-size: 0.78rem;
+            gap: 5px;
+            padding: 0.3rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.72rem;
             font-weight: 700;
         }
 
-        .status-available { background: linear-gradient(135deg, #d1fae5, #a7f3d0); color: #065f46; }
-        .status-in-use { background: linear-gradient(135deg, var(--primary-light), #bfdbfe); color: var(--primary); }
-        .status-maintenance { background: linear-gradient(135deg, #fee2e2, #fecaca); color: #991b1b; }
+        .status-available { background: #d1fae5; color: #065f46; }
+        .status-in-use { background: var(--primary-light); color: var(--primary); }
+        .status-maintenance { background: #fee2e2; color: #991b1b; }
 
-        /* Session Modal */
+        /* Modal */
         .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            inset: 0;
             background: rgba(15, 23, 42, 0.75);
             backdrop-filter: blur(8px);
             display: flex;
@@ -646,684 +501,541 @@
             z-index: 10000;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.35s ease;
+            transition: all 0.3s ease;
             padding: 1rem;
         }
 
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
 
         .modal-content {
             background: white;
-            border-radius: var(--radius-2xl);
+            border-radius: 20px;
             width: 100%;
-            max-width: 540px;
+            max-width: 500px;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            transform: scale(0.9) translateY(30px) rotateX(-2deg);
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            -webkit-overflow-scrolling: touch;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .modal-overlay.active .modal-content {
-            transform: scale(1) translateY(0) rotateX(0);
-        }
+        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
 
         .modal-header {
             background: linear-gradient(135deg, var(--primary), #3b82f6);
             color: white;
-            padding: 1.35rem 1.6rem;
-            border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+            padding: 1.15rem 1.35rem;
+            border-radius: 20px 20px 0 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        .modal-title {
-            font-size: 1.28rem;
-            font-weight: 900;
-        }
+        .modal-title { font-size: 1.15rem; font-weight: 800; }
 
         .modal-close {
-            background: rgba(255,255,255,0.25);
+            background: rgba(255,255,255,0.2);
             border: none;
             color: white;
-            width: 38px;
-            height: 38px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
+            font-size: 1.1rem;
         }
 
-        .modal-close:hover {
-            background: rgba(255,255,255,0.4);
-            transform: rotate(90deg) scale(1.1);
-        }
+        .modal-close:hover { background: rgba(255,255,255,0.35); transform: rotate(90deg); }
 
-        .modal-body { padding: 1.6rem; }
+        .modal-body { padding: 1.35rem; }
 
-        .form-group { margin-bottom: 1.35rem; }
+        .form-group { margin-bottom: 1.15rem; }
 
         .form-label {
             display: block;
-            font-weight: 800;
-            margin-bottom: 0.55rem;
+            font-weight: 700;
+            margin-bottom: 0.45rem;
             color: var(--gray-700);
-            font-size: 0.94rem;
+            font-size: 0.88rem;
         }
 
         .form-input {
             width: 100%;
-            padding: 0.9rem 1.1rem;
+            padding: 0.8rem 0.95rem;
             border: 2px solid var(--gray-200);
-            border-radius: var(--radius-md);
+            border-radius: 10px;
             font-family: inherit;
-            font-size: 1.02rem;
-            transition: all 0.25s ease;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
             direction: ltr;
         }
 
         .form-input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px var(--primary-light), 0 0 20px rgba(37, 99, 235, 0.1);
+            box-shadow: 0 0 0 3px var(--primary-light);
         }
 
-        .type-toggle {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
+        .type-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
 
         .type-option {
-            padding: 1.1rem;
+            padding: 0.9rem;
             border: 2px solid var(--gray-200);
-            border-radius: var(--radius-lg);
+            border-radius: 12px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
             font-weight: 700;
-            font-size: 0.94rem;
+            font-size: 0.88rem;
         }
 
-        .type-option:hover {
-            border-color: var(--primary);
-            background: var(--primary-light);
-            transform: translateY(-3px);
-        }
+        .type-option:hover { border-color: var(--primary); background: var(--primary-light); }
+        .type-option.selected { border-color: var(--primary); background: var(--primary); color: white; }
 
-        .type-option.selected {
-            border-color: var(--primary);
-            background: linear-gradient(135deg, var(--primary), #3b82f6);
-            color: white;
-            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
-        }
-
-        .session-type-toggle {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1.35rem;
-        }
+        .session-type-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-bottom: 1.15rem; }
 
         .session-type-option {
-            padding: 1.15rem;
+            padding: 1rem;
             border: 2px solid var(--gray-200);
-            border-radius: var(--radius-lg);
+            border-radius: 12px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
             font-weight: 700;
-            font-size: 0.94rem;
+            font-size: 0.88rem;
         }
 
-        .session-type-option:hover {
-            border-color: var(--success);
-            background: #ecfdf5;
-        }
+        .session-type-option:hover { border-color: var(--primary); background: var(--primary-light); }
+        .session-type-option.selected { border-color: var(--success); background: #d1fae5; color: #065f46; }
 
-        .session-type-option.selected {
-            border-color: var(--success);
-            background: linear-gradient(135deg, var(--success), #059669);
-            color: white;
-            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
-        }
-
-        .duration-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
+        .duration-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
 
         .price-calc {
             background: linear-gradient(135deg, #fef3c7, #fde68a);
-            padding: 1.35rem;
-            border-radius: var(--radius-lg);
+            padding: 1.15rem;
+            border-radius: 12px;
             text-align: center;
-            margin: 1.35rem 0;
-            border: 2px dashed #fcd34d;
+            margin: 1.15rem 0;
         }
 
-        .price-value {
-            font-size: 1.85rem;
-            font-weight: 900;
-            color: #92400e;
-            direction: ltr;
-            display: inline-block;
-        }
+        .price-value { font-size: 1.65rem; font-weight: 900; color: #92400e; direction: ltr; display: inline-block; }
 
-        .btn-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-top: 1.6rem;
-        }
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-top: 1.35rem; }
 
         .btn {
-            padding: 1.05rem;
+            padding: 0.9rem;
             border: none;
-            border-radius: var(--radius-lg);
+            border-radius: 12px;
             font-family: inherit;
-            font-size: 0.98rem;
+            font-size: 0.9rem;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.55rem;
+            gap: 0.45rem;
             -webkit-tap-highlight-color: transparent;
         }
 
-        .btn-cancel {
-            background: var(--gray-100);
-            color: var(--gray-600);
-        }
-
-        .btn-cancel:hover {
-            background: var(--gray-200);
-            transform: translateY(-3px);
-        }
+        .btn-cancel { background: var(--gray-100); color: var(--gray-600); }
+        .btn-cancel:hover { background: var(--gray-200); }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--success), #059669);
             color: white;
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
         }
 
         .btn-primary:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 28px rgba(16, 185, 129, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(16, 185, 129, 0.3);
         }
 
-        /* Products Section */
         .products-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.35rem;
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 0.85rem;
         }
 
         .add-product-btn {
             background: linear-gradient(135deg, var(--primary), #3b82f6);
             color: white;
             border: none;
-            padding: 0.8rem 1.35rem;
-            border-radius: 50px;
+            padding: 0.7rem 1.15rem;
+            border-radius: 12px;
             font-family: inherit;
-            font-weight: 800;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 0.55rem;
-            font-size: 0.94rem;
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+            gap: 0.45rem;
+            font-size: 0.85rem;
         }
 
         .add-product-btn:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 28px rgba(37, 99, 235, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.3);
         }
 
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 1.1rem;
-        }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.85rem; }
 
         .product-card {
             background: white;
-            border-radius: var(--radius-xl);
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: var(--shadow-sm);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             border: 1px solid var(--gray-200);
-            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.3s ease;
         }
 
-        .product-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-lg);
-        }
+        .product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
 
         .product-image {
-            height: 140px;
+            height: 120px;
             background: linear-gradient(135deg, var(--primary-light), #bfdbfe);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3.8rem;
+            font-size: 3.2rem;
         }
 
-        .product-info { padding: 1.15rem; }
-
-        .product-name {
-            font-weight: 800;
-            font-size: 1.05rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .product-desc {
-            color: var(--gray-500);
-            font-size: 0.87rem;
-            margin-bottom: 1rem;
-        }
+        .product-info { padding: 1rem; }
+        .product-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.4rem; }
+        .product-desc { color: var(--gray-500); font-size: 0.82rem; margin-bottom: 0.85rem; }
 
         .product-footer {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding-top: 1rem;
+            padding-top: 0.9rem;
             border-top: 1px dashed var(--gray-200);
         }
 
-        .product-price {
-            font-size: 1.3rem;
-            font-weight: 900;
-            color: var(--primary);
-            direction: ltr;
-            display: inline-block;
-        }
+        .product-price { font-size: 1.2rem; font-weight: 900; color: var(--primary); direction: ltr; display: inline-block; }
 
         .add-btn {
-            background: linear-gradient(135deg, var(--primary), #3b82f6);
+            background: var(--primary);
             color: white;
             border: none;
-            padding: 0.58rem 1.2rem;
-            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
             font-family: inherit;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.25s ease;
-            font-size: 0.87rem;
+            transition: all 0.2s ease;
+            font-size: 0.82rem;
         }
 
-        .add-btn:hover {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-            transform: scale(1.08);
-            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
-        }
+        .add-btn:hover { background: var(--primary-dark); transform: scale(1.05); }
 
-        /* Reports Table */
         .table-container {
             background: white;
-            border-radius: var(--radius-xl);
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: var(--shadow-sm);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             border: 1px solid var(--gray-200);
             overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 750px;
-        }
+        table { width: 100%; border-collapse: collapse; min-width: 650px; }
 
         th, td {
-            padding: 0.9rem;
+            padding: 0.75rem;
             text-align: right;
             border-bottom: 1px solid var(--gray-200);
             direction: ltr;
-            font-size: 0.9rem;
+            font-size: 0.84rem;
         }
 
-        th {
-            background: linear-gradient(135deg, var(--gray-50), #e2e8f0);
-            font-weight: 800;
-            color: var(--gray-700);
-            font-size: 0.85rem;
-        }
-
+        th { background: var(--gray-50); font-weight: 700; color: var(--gray-700); font-size: 0.8rem; }
         tr:hover { background: var(--gray-50); }
 
         .badge {
             display: inline-block;
-            padding: 0.32rem 0.7rem;
-            border-radius: 50px;
-            font-size: 0.74rem;
+            padding: 0.28rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
             font-weight: 700;
         }
 
-        .badge-success { background: linear-gradient(135deg, #d1fae5, #a7f3d0); color: #065f46; }
-        .badge-danger { background: linear-gradient(135deg, #fee2f2, #fecaca); color: #991b1b; }
-        .badge-warning { background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; }
-        .badge-info { background: linear-gradient(135deg, var(--primary-light), #bfdbfe); color: var(--primary); }
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-danger { background: #fee2e2; color: #991b1b; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-info { background: var(--primary-light); color: var(--primary); }
 
-        /* Clients List */
-        .clients-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-            gap: 1.1rem;
-        }
+        .clients-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0.85rem; }
 
         .client-card {
             background: white;
-            border-radius: var(--radius-xl);
-            padding: 1.4rem;
-            box-shadow: var(--shadow-sm);
+            border-radius: 16px;
+            padding: 1.25rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             border: 1px solid var(--gray-200);
             transition: all 0.3s ease;
         }
 
-        .client-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-md);
-        }
+        .client-card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.1); }
 
-        .client-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
+        .client-header { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 0.85rem; }
 
         .client-avatar {
-            width: 52px;
-            height: 52px;
+            width: 44px;
+            height: 44px;
             background: linear-gradient(135deg, var(--primary), #3b82f6);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: 900;
-            font-size: 1.25rem;
+            font-weight: 800;
+            font-size: 1.15rem;
         }
 
-        .client-name { font-weight: 800; font-size: 1.08rem; }
+        .client-name { font-weight: 700; font-size: 1rem; }
+        .client-phone { color: var(--gray-500); font-size: 0.82rem; direction: ltr; display: inline-block; }
 
-        .client-phone {
-            color: var(--gray-500);
-            font-size: 0.87rem;
-            direction: ltr;
-            display: inline-block;
-        }
-
-        .client-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
-        }
+        .client-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
 
         .client-stat {
             background: var(--gray-50);
-            padding: 0.75rem;
-            border-radius: var(--radius-md);
+            padding: 0.6rem;
+            border-radius: 10px;
             text-align: center;
         }
 
-        .client-stat-value {
-            font-weight: 900;
-            font-size: 1.08rem;
-            color: var(--primary);
-            direction: ltr;
-            display: inline-block;
-        }
+        .client-stat-value { font-weight: 800; font-size: 1rem; color: var(--primary); direction: ltr; display: inline-block; }
+        .client-stat-label { font-size: 0.72rem; color: var(--gray-500); }
 
-        .client-stat-label { font-size: 0.77rem; color: var(--gray-500); }
-
-        /* Settings Cards */
-        .settings-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-            gap: 1.1rem;
-        }
+        .settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 0.85rem; }
 
         .setting-card {
             background: white;
-            border-radius: var(--radius-xl);
-            padding: 1.55rem;
-            box-shadow: var(--shadow-sm);
+            border-radius: 16px;
+            padding: 1.35rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             border: 1px solid var(--gray-200);
-            transition: all 0.3s ease;
         }
 
-        .setting-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .setting-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--gray-200);
-        }
+        .setting-header { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 0.85rem; padding-bottom: 0.85rem; border-bottom: 1px solid var(--gray-200); }
 
         .setting-icon {
-            width: 46px;
-            height: 46px;
-            border-radius: var(--radius-lg);
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.15rem;
         }
 
-        .setting-title { font-weight: 800; font-size: 1.04rem; }
+        .setting-title { font-weight: 700; font-size: 0.95rem; }
+        .setting-desc { color: var(--gray-500); font-size: 0.82rem; margin-bottom: 0.85rem; }
+        .setting-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
 
-        .setting-desc { color: var(--gray-500); font-size: 0.87rem; margin-bottom: 1rem; }
-
-        .setting-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-
-        /* Footer */
         .app-footer {
             background: white;
             border-top: 1px solid var(--gray-200);
-            padding: 1.6rem;
+            padding: 1.25rem;
             text-align: center;
             margin-top: auto;
         }
 
-        .footer-text { color: var(--gray-500); font-size: 0.87rem; margin-bottom: 0.5rem; font-weight: 600; }
-
-        .footer-team { color: var(--gray-400); font-size: 0.82rem; margin-bottom: 1rem; }
+        .footer-text { color: var(--gray-500); font-size: 0.82rem; margin-bottom: 0.4rem; font-weight: 600; }
+        .footer-team { color: var(--gray-400); font-size: 0.78rem; margin-bottom: 0.85rem; }
 
         .qr-link { display: inline-block; transition: transform 0.3s ease; }
-
         .qr-link:hover { transform: scale(1.08); }
+        .qr-link img { height: 55px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
 
-        .qr-link img { height: 62px; border-radius: var(--radius-md); box-shadow: var(--shadow-md); }
-
-        /* ===== ✨ PROFESSIONAL TOAST NOTIFICATION SYSTEM - GLASSMORPHISM STYLE ===== */
+        /* ===== PROFESSIONAL TOAST NOTIFICATION SYSTEM - COMPLETELY REDESIGNED ===== */
         .toast-container {
             position: fixed;
             top: 1.5rem;
             left: 1.5rem;
             right: 1.5rem;
-            z-index: 1000000;
+            z-index: 999999;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.7rem;
             pointer-events: none;
         }
 
         .toast-notification {
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
             border-radius: 18px;
-            padding: 1.2rem 1.4rem;
+            padding: 1.1rem 1.35rem;
             box-shadow: 
-                0 8px 32px rgba(0, 0, 0, 0.12),
-                0 0 0 1px rgba(255, 255, 255, 0.1),
+                0 10px 40px rgba(0, 0, 0, 0.12),
+                0 2px 8px rgba(0, 0, 0, 0.04),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
-            gap: 1rem;
-            animation: toastSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            gap: 0.85rem;
+            animation: toastSlideIn 0.5s cubic-bezier(0.22, 1, 0.36, 1);
             pointer-events: all;
             position: relative;
             overflow: hidden;
-            max-width: 480px;
+            max-width: 420px;
             margin: 0 auto;
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-left: 5px solid var(--primary);
+            backdrop-filter: blur(10px);
         }
 
         .toast-notification.removing {
-            animation: toastSlideOut 0.35s ease forwards;
+            animation: toastSlideOut 0.4s cubic-bezier(0.55, 0, 1, 0.45) forwards;
         }
 
         @keyframes toastSlideIn {
             from {
                 opacity: 0;
-                transform: translateY(-30px) scale(0.85) rotateX(-8deg);
+                transform: translateX(-120%) scale(0.8) rotate(-3deg);
             }
             to {
                 opacity: 1;
-                transform: translateY(0) scale(1) rotateX(0);
+                transform: translateX(0) scale(1) rotate(0deg);
             }
         }
 
         @keyframes toastSlideOut {
             to {
                 opacity: 0;
-                transform: translateY(-20px) scale(0.9) rotateX(5deg);
+                transform: translateX(120%) scale(0.8) rotate(3deg);
             }
         }
 
         .toast-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.35rem;
             flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .toast-notification.success {
+            border-left-color: var(--success);
+            background: linear-gradient(145deg, #ecfdf5 0%, #ffffff 100%);
         }
 
         .toast-notification.success .toast-icon {
-            background: linear-gradient(135deg, #10b981, #34d399);
+            background: linear-gradient(135deg, #10b981, #059669);
             color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .toast-notification.error {
+            border-left-color: var(--danger);
+            background: linear-gradient(145deg, #fef2f2 0%, #ffffff 100%);
         }
 
         .toast-notification.error .toast-icon {
-            background: linear-gradient(135deg, #ef4444, #f87171);
+            background: linear-gradient(135deg, #ef4444, #dc2626);
             color: white;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+        }
+
+        .toast-notification.warning {
+            border-left-color: var(--warning);
+            background: linear-gradient(145deg, #fffbeb 0%, #ffffff 100%);
         }
 
         .toast-notification.warning .toast-icon {
-            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            background: linear-gradient(135deg, #f59e0b, #d97706);
             color: white;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+        }
+
+        .toast-notification.info {
+            border-left-color: var(--primary);
+            background: linear-gradient(145deg, #eff6ff 0%, #ffffff 100%);
         }
 
         .toast-notification.info .toast-icon {
-            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            background: linear-gradient(135deg, var(--primary), #3b82f6);
             color: white;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
         }
 
         .toast-notification.alert-critical {
-            background: rgba(220, 38, 38, 0.95);
-            backdrop-filter: blur(20px) saturate(200%);
-            -webkit-backdrop-filter: blur(20px) saturate(200%);
+            background: linear-gradient(145deg, #dc2626 0%, #b91c1c 100%);
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-left: 5px solid #fff;
             box-shadow: 
-                0 0 40px rgba(220, 38, 38, 0.4),
-                0 0 80px rgba(220, 38, 38, 0.2),
-                inset 0 0 30px rgba(220, 38, 38, 0.1);
-            animation: toastPulse 1.2s infinite, toastSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+                0 15px 50px rgba(220, 38, 38, 0.4),
+                0 5px 20px rgba(220, 38, 38, 0.2);
+            animation: criticalToastPulse 1.5s infinite, toastSlideIn 0.5s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        @keyframes toastPulse {
+        @keyframes criticalToastPulse {
             0%, 100% { 
                 box-shadow: 
-                    0 0 0 0 rgba(220, 38, 38, 0.6),
-                    0 0 0 15px rgba(220, 38, 38, 0.2);
+                    0 0 0 0 rgba(255, 255, 255, 0.5),
+                    0 0 20px 30px rgba(220, 38, 38, 0.4);
             }
             50% { 
                 box-shadow: 
-                    0 0 0 25px rgba(220, 38, 38, 0.4),
-                    0 0 0 35px rgba(220, 38, 38, 0.15);
+                    0 0 0 10px rgba(255, 255, 255, 0.8),
+                    0 0 40px 60px rgba(220, 38, 38, 0.2);
             }
         }
 
         .toast-notification.alert-critical .toast-icon {
             background: rgba(255, 255, 255, 0.25);
             color: white;
-            animation: iconShake 0.5s infinite;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            animation: iconShake 0.5s ease-in-out infinite;
         }
 
         @keyframes iconShake {
             0%, 100% { transform: rotate(0); }
-            25% { transform: rotate(-15deg); }
-            75% { transform: rotate(15deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
         }
 
-        .toast-content {
-            flex: 1;
-            min-width: 0;
-        }
+        .toast-content { flex: 1; min-width: 0; }
 
         .toast-title {
-            font-weight: 900;
-            font-size: 1.02rem;
+            font-weight: 800;
+            font-size: 1rem;
             margin-bottom: 0.25rem;
-            letter-spacing: 0.02em;
+            letter-spacing: -0.02em;
         }
 
         .toast-message {
-            font-size: 0.86rem;
-            opacity: 0.92;
+            font-size: 0.84rem;
+            opacity: 0.9;
             line-height: 1.5;
         }
 
         .toast-close {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.06);
             border: none;
             color: inherit;
-            font-size: 1.4rem;
+            font-size: 1.25rem;
             cursor: pointer;
-            padding: 0.3rem;
-            border-radius: 50%;
-            opacity: 0.6;
+            padding: 0.2rem 0.35rem;
+            border-radius: 8px;
             transition: all 0.2s;
             line-height: 1;
-            width: 28px;
-            height: 28px;
+            min-width: 28px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .toast-close:hover {
-            opacity: 1;
-            background: rgba(255, 255, 255, 0.3);
-            transform: rotate(90deg) scale(1.1);
+            background: rgba(0, 0, 0, 0.15);
+            transform: scale(1.1);
         }
 
         .toast-progress {
@@ -1332,7 +1044,7 @@
             left: 0;
             height: 3px;
             background: currentColor;
-            opacity: 0.4;
+            opacity: 0.25;
             border-radius: 0 0 3px 3px;
             animation: toastProgress linear forwards;
         }
@@ -1342,188 +1054,157 @@
             to { width: 0%; }
         }
 
-        /* Session Timer Display */
+        /* Session Timer */
         .session-timer {
             background: linear-gradient(135deg, #1e293b, #334155);
             color: white;
-            padding: 1.6rem;
-            border-radius: var(--radius-lg);
+            padding: 1.35rem;
+            border-radius: 14px;
             text-align: center;
-            margin: 1rem 0;
-            font-size: 2.4rem;
+            margin: 0.9rem 0;
+            font-size: 2rem;
             font-weight: 900;
             font-family: 'Courier New', monospace;
             direction: ltr;
             letter-spacing: 3px;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
         }
 
         .session-timer.warning {
             background: linear-gradient(135deg, #dc2626, #ef4444);
-            animation: timerPulse 0.8s infinite;
+            animation: timerPulse 1s infinite;
             box-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
         }
 
         @keyframes timerPulse {
             0%, 100% { opacity: 1; box-shadow: 0 0 30px rgba(239, 68, 68, 0.5); }
-            50% { opacity: 0.85; box-shadow: 0 0 50px rgba(239, 68, 68, 0.3); }
+            50% { opacity: 0.85; box-shadow: 0 0 50px rgba(239, 68, 68, 0.8); }
         }
 
         .session-details {
             background: var(--gray-50);
-            padding: 1.1rem;
-            border-radius: var(--radius-md);
-            margin: 1rem 0;
-            font-size: 0.9rem;
+            padding: 0.9rem;
+            border-radius: 12px;
+            margin: 0.9rem 0;
+            font-size: 0.86rem;
         }
 
         .session-detail-row {
             display: flex;
             justify-content: space-between;
-            padding: 0.55rem 0;
+            padding: 0.45rem 0;
             border-bottom: 1px dashed var(--gray-200);
         }
 
         .session-detail-row:last-child { border-bottom: none; }
+        .detail-label { color: var(--gray-600); font-weight: 600; }
+        .detail-value { font-weight: 800; color: var(--gray-900); direction: ltr; }
 
-        .detail-label { color: var(--gray-600); font-weight: 700; }
-
-        .detail-value { font-weight: 900; color: var(--gray-900); direction: ltr; }
-
-        /* Invoice Modal Styles */
-        .invoice-modal .modal-content { max-width: 680px; }
+        /* Invoice */
+        .invoice-modal .modal-content { max-width: 620px; }
 
         .invoice-header {
             text-align: center;
-            padding: 1.85rem 1.6rem;
+            padding: 1.5rem 1.35rem;
             background: linear-gradient(135deg, var(--dark), #1e293b);
             color: white;
-            border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+            border-radius: 20px 20px 0 0;
         }
 
-        .invoice-title { font-size: 1.7rem; font-weight: 900; margin-bottom: 0.4rem; }
+        .invoice-title { font-size: 1.5rem; font-weight: 900; margin-bottom: 0.35rem; }
+        .invoice-subtitle { font-size: 0.85rem; opacity: 0.9; }
 
-        .invoice-subtitle { font-size: 0.94rem; opacity: 0.92; }
+        .invoice-body { padding: 1.35rem; }
 
-        .invoice-body { padding: 1.6rem; }
-
-        .invoice-section { margin-bottom: 1.3rem; padding-bottom: 1.1rem; border-bottom: 2px dashed var(--gray-200); }
+        .invoice-section {
+            margin-bottom: 1.15rem;
+            padding-bottom: 0.9rem;
+            border-bottom: 2px dashed var(--gray-200);
+        }
 
         .invoice-section:last-child { border-bottom: none; }
 
         .invoice-section-title {
-            font-size: 1.08rem;
+            font-size: 1rem;
             font-weight: 800;
             color: var(--primary);
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.6rem;
             display: flex;
             align-items: center;
-            gap: 0.55rem;
+            gap: 0.45rem;
         }
 
         .invoice-row {
             display: flex;
             justify-content: space-between;
-            padding: 0.5rem 0;
-            font-size: 0.94rem;
+            padding: 0.4rem 0;
+            font-size: 0.88rem;
             flex-wrap: wrap;
-            gap: 0.55rem;
+            gap: 0.45rem;
         }
 
         .invoice-row.total {
-            font-size: 1.28rem;
+            font-size: 1.15rem;
             font-weight: 900;
             color: var(--success);
-            margin-top: 1.1rem;
-            padding-top: 1.1rem;
+            margin-top: 0.9rem;
+            padding-top: 0.9rem;
             border-top: 3px solid var(--primary);
         }
 
         .invoice-products-container {
-            margin-top: 0.6rem;
+            margin-top: 0.45rem;
             overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
         }
 
         .invoice-products-table {
             width: 100%;
-            min-width: 320px;
+            min-width: 280px;
             border-collapse: collapse;
         }
 
         .invoice-products-table th,
         .invoice-products-table td {
-            padding: 0.65rem 0.8rem;
-            font-size: 0.87rem;
+            padding: 0.55rem 0.65rem;
+            font-size: 0.82rem;
             border: 1px solid var(--gray-200);
             text-align: right;
         }
 
         .invoice-products-table th {
-            background: linear-gradient(135deg, var(--gray-50), #e2e8f0);
-            font-weight: 800;
+            background: var(--gray-50);
+            font-weight: 700;
             white-space: nowrap;
         }
 
-        .invoice-products-table td:first-child { word-break: break-word; max-width: 190px; }
-
         .invoice-products-table tfoot tr { font-weight: 800; background: var(--gray-50); }
 
-        /* Select Session Modal */
-        .session-list-item {
-            padding: 1.1rem;
-            border: 2px solid var(--gray-200);
-            border-radius: var(--radius-lg);
-            margin-bottom: 0.75rem;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.55rem;
-        }
-
-        .session-list-item:hover {
-            border-color: var(--primary);
-            background: var(--primary-light);
-            transform: translateX(-5px);
-        }
-
-        .session-list-item.selected {
-            border-color: var(--success);
-            background: #d1fae5;
-        }
-
-        /* ===== RESPONSIVE DESIGN ===== */
+        /* Responsive */
         @media (max-width: 1024px) {
-            .main-content { padding: 1.3rem 0.8rem; }
-            .stats-grid { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
-            .devices-grid { grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); }
-            .products-grid { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+            .main-content { padding: 1.15rem 0.75rem; }
+            .stats-grid { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+            .devices-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+            .products-grid { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); }
         }
 
         @media (max-width: 768px) {
-            .app-header { padding: 0.9rem; }
-            .main-content { padding: 1.1rem 0.55rem; }
+            .app-header { padding: 0.8rem; }
+            .main-content { padding: 0.9rem 0.5rem; }
             
-            .brand { font-size: 1.15rem; }
-            .brand-icon { width: 38px; height: 38px; font-size: 1.15rem; }
+            .brand { font-size: 1.05rem; }
+            .brand-icon { width: 34px; height: 34px; font-size: 1.05rem; }
+            .logout-btn { padding: 0.5rem 0.85rem; font-size: 0.8rem; }
+            .nav-tab { padding: 0.55rem 0.8rem; font-size: 0.78rem; }
+            .section-title { font-size: 1.15rem; }
             
-            .logout-btn { padding: 0.55rem 1.1rem; font-size: 0.85rem; }
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+            .stat-card { padding: 0.9rem; }
+            .stat-value { font-size: 1.25rem; }
             
-            .nav-tab { padding: 0.63rem 0.9rem; font-size: 0.82rem; }
-            
-            .section-title { font-size: 1.25rem; }
-            
-            .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; }
-            .stat-card { padding: 1.1rem; }
-            .stat-value { font-size: 1.38rem; }
-            
-            .devices-grid { grid-template-columns: repeat(auto-fill, minmax(125px, 1fr)); gap: 0.8rem; }
-            .device-card { padding: 1.1rem; }
-            .device-number { font-size: 1.05rem; }
-            .device-status { font-size: 0.73rem; padding: 0.33rem 0.7rem; }
+            .devices-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 0.7rem; }
+            .device-card { padding: 0.9rem; }
+            .device-number { font-size: 0.95rem; }
+            .device-status { font-size: 0.68rem; padding: 0.28rem 0.6rem; }
             
             .products-grid { grid-template-columns: 1fr; }
             .clients-grid { grid-template-columns: 1fr; }
@@ -1532,99 +1213,94 @@
             .btn-group { grid-template-columns: 1fr; }
             .duration-row { grid-template-columns: 1fr; }
             
-            table { font-size: 0.82rem; min-width: 650px; }
-            th, td { padding: 0.7rem 0.5rem; }
-            
+            table { font-size: 0.78rem; min-width: 550px; }
+            th, td { padding: 0.6rem 0.45rem; }
             .session-type-toggle { grid-template-columns: 1fr; }
             
-            .modal-content { max-width: 100%; margin: 0.55rem; max-height: 95vh; }
-            .modal-body { padding: 1.3rem; }
-            .modal-title { font-size: 1.15rem; }
+            .modal-content { max-width: 100%; margin: 0.4rem; max-height: 93vh; }
+            .modal-body { padding: 1.15rem; }
+            .modal-title { font-size: 1.05rem; }
             
-            .login-box { padding: 2.2rem 1.6rem; width: 95%; }
-            .pin-dot { width: 50px; height: 50px; font-size: 1.35rem; }
-            .num-btn { padding: 17px; font-size: 1.25rem; }
-            .session-timer { font-size: 1.9rem; padding: 1.3rem; }
+            .login-box { padding: 1.8rem 1.5rem; width: 94%; }
+            .pin-dot { width: 46px; height: 46px; font-size: 1.25rem; }
+            .num-btn { padding: 15px; font-size: 1.15rem; }
+            .session-timer { font-size: 1.65rem; padding: 1.15rem; }
             
-            .invoice-modal .modal-content { max-width: 100%; margin: 0.3rem; }
-            .invoice-body { padding: 1.3rem; }
-            .invoice-title { font-size: 1.4rem; }
+            .invoice-modal .modal-content { max-width: 100%; margin: 0.2rem; }
+            .invoice-body { padding: 1.15rem; }
+            .invoice-title { font-size: 1.28rem; }
             
-            .toast-notification { max-width: 100%; font-size: 0.86rem; }
-            .toast-icon { width: 36px; height: 36px; font-size: 1.15rem; }
+            .toast-notification { max-width: 100%; font-size: 0.84rem; padding: 0.95rem 1.15rem; }
+            .toast-icon { width: 38px; height: 38px; font-size: 1.15rem; }
 
-            /* Install banner mobile */
             .install-banner {
-                padding: 0.9rem 1rem;
+                padding: 0.8rem 1rem;
                 flex-direction: column;
-                gap: 0.8rem;
+                gap: 0.65rem;
                 text-align: center;
             }
 
-            .install-banner-content { flex-direction: column; text-align: center; gap: 0.6rem; }
-            .install-btn { width: 100%; font-size: 0.92rem; }
+            .install-btn { width: 100%; padding: 0.65rem; }
         }
 
         @media (max-width: 480px) {
-            .header-content { flex-direction: column; gap: 0.8rem; }
+            .header-content { flex-direction: column; gap: 0.65rem; }
             .brand { width: 100%; justify-content: center; }
             .logout-btn { width: 100%; text-align: center; }
             .nav-tabs { justify-content: flex-start; }
-            .nav-tab { padding: 0.53rem 0.78rem; font-size: 0.76rem; }
+            .nav-tab { padding: 0.5rem 0.7rem; font-size: 0.76rem; }
             
-            .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.65rem; }
-            .stat-card { padding: 0.95rem; }
-            .stat-value { font-size: 1.25rem; }
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+            .stat-card { padding: 0.8rem; }
+            .stat-value { font-size: 1.15rem; }
             .stat-label { font-size: 0.76rem; }
             
-            .devices-grid { grid-template-columns: repeat(2, 1fr); gap: 0.65rem; }
-            .device-card { padding: 0.95rem; }
-            .device-number { font-size: 0.97rem; }
-            .device-type { font-size: 0.73rem; }
+            .devices-grid { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
+            .device-card { padding: 0.8rem; }
+            .device-number { font-size: 0.9rem; }
+            .device-type { font-size: 0.72rem; }
             
-            .product-image { height: 115px; font-size: 2.8rem; }
-            .product-info { padding: 0.95rem; }
-            .product-name { font-size: 0.92rem; }
+            .product-image { height: 105px; font-size: 2.8rem; }
+            .product-info { padding: 0.9rem; }
+            .product-name { font-size: 0.9rem; }
             
-            .session-timer { font-size: 1.7rem; padding: 1.1rem; }
+            .session-timer { font-size: 1.45rem; padding: 1rem; }
             
-            .toast-container { left: 0.6rem; right: 0.6rem; top: 0.6rem; }
-            .toast-notification { padding: 0.95rem 1.1rem; }
-            .toast-title { font-size: 0.92rem; }
-            .toast-message { font-size: 0.8rem; }
+            .toast-container { left: 0.5rem; right: 0.5rem; top: 0.5rem; }
+            .toast-notification { padding: 0.85rem 1rem; }
+            .toast-title { font-size: 0.84rem; }
+            .toast-message { font-size: 0.76rem; }
         }
 
-        /* Print Styles for Invoice */
         @media print {
             body * { visibility: hidden; }
             .invoice-modal, .invoice-modal * { visibility: visible; }
             .invoice-modal { position: absolute; left: 0; top: 0; width: 100%; background: white; }
         }
 
-        /* Safe area insets */
         @supports (padding-top: env(safe-area-inset-top)) {
-            .app-header { padding-top: calc(1rem + env(safe-area-inset-top)); }
-            .app-footer { padding-bottom: calc(1.6rem + env(safe-area-inset-bottom)); }
-            .toast-container { top: calc(1.5rem + env(safe-area-inset-top)); }
-            .install-banner { padding-bottom: calc(1rem + env(safe-area-inset-bottom)); }
+            .app-header { padding-top: calc(0.9rem + env(safe-area-inset-top)); }
+            .app-footer { padding-bottom: calc(1.25rem + env(safe-area-inset-bottom)); }
+            .toast-container { top: calc(1rem + env(safe-area-inset-top)); }
+            .install-banner { padding-bottom: calc(0.9rem + env(safe-area-inset-bottom)); }
         }
     </style>
 </head>
 <body>
-    <!-- Install PWA Banner -->
+    <!-- Install Banner -->
     <div class="install-banner" id="installBanner">
         <div class="install-banner-content">
             <div class="install-icon">📱</div>
             <div class="install-text">
-                <h3>ثبت التطبيق الآن!</h3>
-                <p>احصل على تجربة سريعة مثل التطبيقات الحقيقية</p>
+                <h3>ثبت تطبيق محل البليستيشن</h3>
+                <p>تجربة سريعة مثل التطبيقات الحقيقية</p>
             </div>
         </div>
-        <button class="install-btn" id="installBtn" onclick="installApp()">⬇️ تثبيت مجاني</button>
+        <button class="install-btn" id="installBtn" onclick="installApp()">⬇️ تثبيت الآن</button>
         <button class="install-dismiss" onclick="dismissInstall()">✕</button>
     </div>
 
-    <!-- Professional Toast Container -->
+    <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
 
     <!-- Login Screen -->
@@ -1662,7 +1338,6 @@
 
     <!-- Main App -->
     <div class="app-container" id="appContainer">
-        <!-- Header -->
         <header class="app-header">
             <div class="header-content">
                 <div class="brand">
@@ -1682,7 +1357,6 @@
             </nav>
         </header>
 
-        <!-- Main Content -->
         <main class="main-content">
             <!-- Dashboard -->
             <section class="view-section active" id="dashboard">
@@ -1724,7 +1398,7 @@
                 <div class="section-header">
                     <h2 class="section-title">⏱ إدارة الجلسات</h2>
                 </div>
-                <p style="color: var(--gray-500); margin-bottom: 1.5rem; font-size: 0.92rem;">اضغط على أي جهاز متاح لبدء جلسة جديدة</p>
+                <p style="color: var(--gray-500); margin-bottom: 1.35rem; font-size: 0.88rem;">اضغط على أي جهاز متاح لبدء جلسة جديدة</p>
                 <div class="table-container">
                     <table>
                         <thead>
@@ -1734,14 +1408,14 @@
                                 <th>العميل</th>
                                 <th>نوع الجلسة</th>
                                 <th>البداية</th>
-                                <th>⏱ المدة</th>
+                                <th>⏰ المدة</th>
                                 <th>السعر</th>
                                 <th>الحالة</th>
                                 <th>إجراء</th>
                             </tr>
                         </thead>
                         <tbody id="sessionsTableBody">
-                            <tr><td colspan="9" style="text-align:center;color:var(--gray-400);padding:2.2rem;">لا توجد جلسات نشطة</td></tr>
+                            <tr><td colspan="9" style="text-align:center;color:var(--gray-400);padding:1.8rem;">لا توجد جلسات نشطة</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1782,17 +1456,17 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Date (YYYY-MM-DD)</th>
-                                <th>Time (HH:MM AM/PM)</th>
+                                <th>Date</th>
+                                <th>Time</th>
                                 <th>Type</th>
-                                <th>Customer Name</th>
+                                <th>Customer</th>
                                 <th>Details</th>
-                                <th>Screen No.</th>
-                                <th>Amount (EGP)</th>
+                                <th>Device</th>
+                                <th>Amount</th>
                             </tr>
                         </thead>
                         <tbody id="reportsTableBody">
-                            <tr><td colspan="7" style="text-align:center;color:var(--gray-400);padding:2.2rem;">لا توجد معاملات</td></tr>
+                            <tr><td colspan="7" style="text-align:center;color:var(--gray-400);padding:1.8rem;">لا توجد معاملات</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1817,11 +1491,11 @@
                             <div class="setting-icon" style="background:#dbeafe;color:var(--primary)">💾</div>
                             <div>
                                 <div class="setting-title">نسخ احتياطي</div>
-                                <div class="setting-desc">تصدير جميع البيانات كملف JSON</div>
+                                <div class="setting-desc">تصدير البيانات كملف JSON</div>
                             </div>
                         </div>
                         <div class="setting-actions">
-                            <button class="add-btn" onclick="backupData()">📥 تصدير البيانات</button>
+                            <button class="add-btn" onclick="backupData()">📥 تصدير</button>
                         </div>
                     </div>
                     
@@ -1830,13 +1504,13 @@
                             <div class="setting-icon" style="background:#d1fae5;color:var(--success)">📤</div>
                             <div>
                                 <div class="setting-title">استعادة البيانات</div>
-                                <div class="setting-desc">استيراد البيانات من ملف JSON</div>
+                                <div class="setting-desc">استيراد من ملف JSON</div>
                             </div>
                         </div>
                         <div class="setting-actions">
                             <label style="cursor:pointer;">
                                 <input type="file" accept=".json" onchange="restoreData(event)" style="display:none" id="restoreInput">
-                                    <button class="add-btn" onclick="document.getElementById('restoreInput').click()">📂 اختيار ملف</button>
+                                    <button class="add-btn" onclick="document.getElementById('restoreInput').click()">📂 اختيار</button>
                                 </label>
                         </div>
                     </div>
@@ -1846,11 +1520,11 @@
                             <div class="setting-icon" style="background:#fef3c7;color:var(--warning)">⚠</div>
                             <div>
                                 <div class="setting-title">مسح البيانات</div>
-                                <div class="setting-desc">حذف جميع البيانات وإعادة التعيين</div>
+                                <div class="setting-desc">حذف وإعادة التعيين</div>
                             </div>
                         </div>
                         <div class="setting-actions">
-                            <button class="add-btn" style="background:linear-gradient(135deg, #ef4444, #dc2626);" onclick="resetData()">🗑 مسح البيانات</button>
+                            <button class="add-btn" style="background:var(--danger);" onclick="resetData()">🗑 مسح</button>
                         </div>
                     </div>
                     
@@ -1858,8 +1532,8 @@
                         <div class="setting-header">
                             <div class="setting-icon" style="background:#dbeafe;color:var(--primary)">🔔</div>
                             <div>
-                                <div class="setting-title">إعدادات التنبيهات</div>
-                                <div class="setting-desc">تفعيل الإشعارات الفورية عند انتهاء الوقت</div>
+                                <div class="setting-title">إشعارات التنبيه</div>
+                                <div class="setting-desc">تنبيهات عند انتهاء الوقت</div>
                             </div>
                         </div>
                         <div class="setting-actions">
@@ -1870,7 +1544,6 @@
             </section>
         </main>
 
-        <!-- Footer -->
         <footer class="app-footer">
             <p class="footer-text">© 2024 Axentro – All Rights Reserved</p>
             <p class="footer-team">By Axentro Team</p>
@@ -1917,8 +1590,8 @@
                     <div class="form-group">
                         <label class="form-label">مدة الجلسة</label>
                         <div class="duration-row">
-                            <input type="number" class="form-input" id="sessionHours" placeholder="Hours" value="1" min="0" oninput="calcPrice()">
-                            <input type="number" class="form="form-input" id="sessionMinutes" placeholder="Minutes" value="0" min="0" max="59" oninput="calcPrice()">
+                            <input type="number" class="form-input" id="sessionHours" placeholder="ساعات" value="1" min="0" oninput="calcPrice()">
+                            <input type="number" class="form-input" id="sessionMinutes" placeholder="دقائق" value="0" min="0" max="59" oninput="calcPrice()">
                         </div>
                     </div>
                     
@@ -1929,14 +1602,14 @@
                 
                 <div id="openSessionInfo" style="display:none;">
                     <div class="price-calc" style="background: linear-gradient(135deg, #dbeafe, #bfdbfe);">
-                        <div style="font-weight: 800; color: #1e40af; margin-bottom: 0.5rem;">سيتم الحساب حسب الوقت الفعلي</div>
-                        <div style="font-size: 0.92rem; color: #3b82f6;">السعر: <span id="hourlyRateDisplay">50</span> EGP / ساعة</div>
+                        <div style="font-weight: 700; color: #1e40af; margin-bottom: 0.4rem;">سيتم الحساب حسب الوقت الفعلي</div>
+                        <div style="font-size: 0.88rem; color: #3b82f6;">السعر: <span id="hourlyRateDisplay">50</span> EGP / ساعة</div>
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label">اسم العميل (اختياري)</label>
-                    <input type="text" class="form-input" id="customerName" placeholder="Customer Name">
+                    <input type="text" class="form-input" id="customerName" placeholder="اسم العميل">
                 </div>
                 
                 <div class="btn-group">
@@ -1947,7 +1620,7 @@
         </div>
     </div>
 
-    <!-- Active Session Management Modal -->
+    <!-- Active Session Modal -->
     <div class="modal-overlay" id="activeSessionModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1958,50 +1631,33 @@
                 <div class="session-timer" id="sessionTimerDisplay">00:00:00</div>
                 
                 <div class="session-details">
-                    <div class="session-detail-row">
-                        <span class="detail-label">الجهاز:</span>
-                        <span class="detail-value" id="activeDeviceInfo">-</span>
-                    </div>
-                    <div class="session-detail-row">
-                        <span class="detail-label">العميل:</span>
-                        <span class="detail-value" id="activeCustomerName">-</span>
-                    </div>
-                    <div class="session-detail-row">
-                        <span class="detail-label">نوع الجلسة:</span>
-                        <span class="detail-value" id="activeSessionType">-</span>
-                    </div>
-                    <div class="session-detail-row">
-                        <span class="detail-label">الوقت المستخدم:</span>
-                        <span class="detail-value" id="activeElapsedTime">0 min</span>
-                    </div>
-                    <div class="session-detail-row">
-                        <span class="detail-label">التكلفة الحالية:</span>
-                        <span class="detail-value" id="activeCurrentCost">0.00 EGP</span>
-                    </div>
+                    <div class="session-detail-row"><span class="detail-label">الجهاز:</span><span class="detail-value" id="activeDeviceInfo">-</span></div>
+                    <div class="session-detail-row"><span class="detail-label">العميل:</span><span class="detail-value" id="activeCustomerName">-</span></div>
+                    <div class="session-detail-row"><span class="detail-label">نوع الجلسة:</span><span class="detail-value" id="activeSessionType">-</span></div>
+                    <div class="session-detail-row"><span class="detail-label">الوقت المستخدم:</span><span class="detail-value" id="activeElapsedTime">0 دقيقة</span></div>
+                    <div class="session-detail-row"><span class="detail-label">التكلفة:</span><span class="detail-value" id="activeCurrentCost">0.00 EGP</span></div>
                     <div class="session-detail-row" id="remainingTimeRow" style="display:none;">
                         <span class="detail-label">الوقت المتبقي:</span>
-                        <span class="detail-value" id="activeRemainingTime" style="color: var(--danger);">0 min</span>
+                        <span class="detail-value" id="activeRemainingTime" style="color: var(--danger);">0 دقيقة</span>
                     </div>
                 </div>
 
-                <div id="sessionProductsList" style="margin: 1rem 0;">
-                    <h4 style="font-weight: 800; margin-bottom: 0.75rem; color: var(--gray-700); font-size: 0.96rem;">🛒 منتجات مضافة لهذه الجلسة:</h4>
-                    <div id="sessionProductsItems" style="color: var(--gray-500); font-size: 0.9rem;">لا توجد منتجات</div>
+                <div id="sessionProductsList" style="margin: 0.9rem 0;">
+                    <h4 style="font-weight: 700; margin-bottom: 0.65rem; color: var(--gray-700); font-size: 0.92rem;">🛒 منتجات مضافة لهذه الجلسة:</h4>
+                    <div id="sessionProductsItems" style="color: var(--gray-500); font-size: 0.86rem;">لا توجد منتجات</div>
                 </div>
                 
                 <div class="btn-group" style="grid-template-columns: 1fr;">
                     <button class="btn btn-primary" onclick="endActiveSessionAndShowInvoice()" style="background: linear-gradient(135deg, var(--success), #059669);">
-                        ✓ إنهاء الجلسة وعرض الفاتورة
+                        ✓ إنهاء الجلسة والفاتورة
                     </button>
                 </div>
                 
-                <div class="btn-group" style="margin-top: 0.8rem;" id="extendTimeBtnGroup">
-                    <button class="btn" onclick="showExtendTimeOptions()" style="background: linear-gradient(135deg, var(--warning), #d97706); color: var(--dark);">
-                        ➕ إضافة وقت إضافي
+                <div class="btn-group" style="margin-top: 0.65rem;" id="extendTimeBtnGroup">
+                    <button class="btn" onclick="showExtendTimeOptions()" style="background: var(--warning); color: var(--dark);">
+                        ➕ وقت إضافي
                     </button>
-                    <button class="btn btn-cancel" onclick="closeActiveSessionModal()">
-                        إغلاق
-                    </button>
+                    <button class="btn btn-cancel" onclick="closeActiveSessionModal()">إغلاق</button>
                 </div>
             </div>
         </div>
@@ -2011,29 +1667,29 @@
     <div class="modal-overlay" id="addProductModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">🛒 إضافة منتج جديد</h3>
+                <h3 class="modal-title">🛒 إضافة منتج</h3>
                 <button class="modal-close" onclick="closeAddProductModal()">✕</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
                     <label class="form-label">اسم المنتج</label>
-                    <input type="text" class="form-input" id="productName" placeholder="Product Name">
+                    <input type="text" class="form-input" id="productName" placeholder="اسم المنتج">
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">سعر المنتج (EGP)</label>
-                    <input type="number" class="form-input" id="productPrice" placeholder="Price in EGP" min="0" step="0.01">
+                    <label class="form-label">السعر (EGP)</label>
+                    <input type="number" class="form-input" id="productPrice" placeholder="السعر" min="0" step="0.01">
                 </div>
                 
                 <div class="btn-group">
                     <button class="btn btn-cancel" onclick="closeAddProductModal()">إلغاء</button>
-                    <button class="btn btn-primary" onclick="addNewProduct()">✓ إضافة المنتج</button>
+                    <button class="btn btn-primary" onclick="addNewProduct()">✓ إضافة</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Select Session for Product Modal -->
+    <!-- Select Session Modal -->
     <div class="modal-overlay" id="selectSessionModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -2041,7 +1697,7 @@
                 <button class="modal-close" onclick="closeSelectSessionModal()">✕</button>
             </div>
             <div class="modal-body">
-                <p style="margin-bottom: 1rem; color: var(--gray-600); font-weight: 700; font-size: 0.94rem;">اختر الجلسة التي تريد إضافة المنتج عليها:</p>
+                <p style="margin-bottom: 0.9rem; color: var(--gray-600); font-weight: 600; font-size: 0.88rem;">اختر الجلسة لإضافة المنتج:</p>
                 <div id="activeSessionsList"></div>
             </div>
         </div>
@@ -2051,27 +1707,27 @@
     <div class="modal-overlay" id="extendTimeModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">⏰ إضافة وقت إضافي</h3>
+                <h3 class="modal-title">⏰ وقت إضافي</h3>
                 <button class="modal-close" onclick="closeExtendTimeModal()">✕</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
                     <label class="form-label">الوقت الإضافي</label>
                     <div class="duration-row">
-                        <input type="number" class="form-input" id="extendHours" placeholder="Hours" value="0" min="0">
-                        <input type="number" class="form-input" id="extendMinutes" placeholder="Minutes" value="30" min="0" max="59">
+                        <input type="number" class="form-input" id="extendHours" placeholder="ساعات" value="0" min="0">
+                        <input type="number" class="form-input" id="extendMinutes" placeholder="دقائق" value="30" min="0" max="59">
                     </div>
                 </div>
                 
                 <div class="price-calc">
-                    <div style="font-weight: 800; color: #92400e; margin-bottom: 0.5rem;">التكلفة الإضافية:</div>
+                    <div style="font-weight: 700; color: #92400e; margin-bottom: 0.4rem;">التكلفة الإضافية:</div>
                     <div class="price-value" id="extendPriceDisplay">0.00 EGP</div>
                 </div>
                 
                 <div class="btn-group">
                     <button class="btn btn-cancel" onclick="closeExtendTimeModal()">إلغاء</button>
                     <button class="btn btn-primary" onclick="confirmExtendTime()" style="background: linear-gradient(135deg, var(--warning), #d97706);">
-                        ✓ تأكيد إضافة الوقت
+                        ✓ تأكيد
                     </button>
                 </div>
             </div>
@@ -2082,14 +1738,12 @@
     <div class="modal-overlay invoice-modal" id="invoiceModal">
         <div class="modal-content">
             <div class="invoice-header">
-                <div class="invoice-title">🧾 فاتورة محلية البليستيشن</div>
+                <div class="invoice-title">🧾 فاتورة محل البليستيشن</div>
                 <div class="invoice-subtitle">PlayStation Lounge Invoice</div>
             </div>
             <div class="invoice-body" id="invoiceBody"></div>
-            <div style="padding: 0 1.6rem 1.6rem;">
-                <button class="btn btn-primary" onclick="closeInvoiceModal()" style="width: 100%;">
-                    ✕ إغلاق الفاتورة
-                </button>
+            <div style="padding: 0 1.35rem 1.35rem;">
+                <button class="btn btn-primary" onclick="closeInvoiceModal()" style="width: 100%;">✕ إغلاق</button>
             </div>
         </div>
     </div>
@@ -2102,11 +1756,7 @@
             products: [],
             clients: [],
             transactions: [],
-            settings: {
-                ps4Price: 50,
-                ps5Price: 80,
-                storeName: 'محل البليستيشن'
-            }
+            settings: { ps4Price: 50, ps5Price: 80, storeName: 'محل البليستيشن' }
         };
 
         let currentDevice = null;
@@ -2118,20 +1768,14 @@
         let pendingProductId = null;
         let alertInterval = null;
 
-        // Audio Context for alerts
+        // Audio Context
         let audioContext = null;
 
-        // Background tracking variables
-        let notificationPermissionGranted = false;
-
-        // PWA Install Prompt
+        // Background tracking
         let deferredPrompt = null;
-
-        // Global alert check interval
         let globalAlertInterval = null;
-
-        // Track which sessions have been alerted
         let alertedSessions = new Set();
+        let notificationPermissionGranted = false;
 
         // ===== INITIALIZATION =====
         function init() {
@@ -2155,100 +1799,84 @@
             }
             
             renderAll();
-            startTimersForActiveSessions();
             checkNotificationPermission();
-            setupVisibilityHandler();
-            
-            // Start global alert checker
             startGlobalAlertChecker();
-            
-            // Setup PWA install prompt - show banner after delay
-            setTimeout(() => {
-                showInstallBanner();
-            }, 2500);
+            setupInstallPrompt();
         }
 
-        // ===== LOCAL STORAGE =====
         function saveData() {
             localStorage.setItem('playstationLounge', JSON.stringify(appData));
         }
 
         function loadData() {
             const saved = localStorage.getItem('playstationLounge');
-            if (saved) {
-                appData = JSON.parse(saved);
-            }
+            if (saved) appData = JSON.parse(saved);
         }
 
-        // ===== PWA INSTALL PROMPT - ALWAYS SHOW BANNER =====
+        // ===== PWA INSTALL - IMPROVED =====
         function setupInstallPrompt() {
+            // Show banner after 2 seconds always
+            setTimeout(() => showInstallBanner(), 2000);
+
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
-                console.log('✅ beforeinstallprompt fired - can install!');
+                console.log('✅ beforeinstallprompt fired');
             });
 
             window.addEventListener('appinstalled', () => {
                 deferredPrompt = null;
                 hideInstallBanner();
-                showProfessionalToast('success', 'تم التثبيت! 🎉', 'تم تثبيت التطبيق بنجاح - استمتع به الآن!');
+                showToast('success', 'تم التثبيت!', 'التطبيق مثبت بنجاح 🎉');
             });
         }
 
         function showInstallBanner() {
-            // Always show the banner unless dismissed recently or already installed
-            const dismissed = localStorage.getItem('pwaInstallDismissed');
-            if (dismissed) {
-                const dismissedTime = parseInt(dismissed);
-                const threeDays = 3 * 24 * 60 * 60 * 1000;
-                if (Date.now() - dismissedTime < threeDays) return;
+            const banner = document.getElementById('installBanner');
+            if (banner && !banner.classList.contains('hidden')) {
+                // Don't show if already installed
+                if (!window.matchMedia('(display-mode: standalone)').matches) {
+                    banner.classList.remove('hidden');
+                }
             }
-            
-            // Check if already installed as standalone app
-            if (window.matchMedia('(display-mode: standalone)').matches) {
-                return;
-            }
-            
-            document.getElementById('installBanner').classList.remove('hidden');
         }
 
         function hideInstallBanner() {
-            document.getElementById('installBanner').classList.add('hidden');
+            document.getElementById('installBanner')?.classList.add('hidden');
+            localStorage.setItem('installDismissed', Date.now().toString());
         }
 
         function dismissInstall() {
             hideInstallBanner();
-            localStorage.setItem('pwaInstallDismissed', Date.now().toString());
         }
 
         async function installApp() {
             if (!deferredPrompt) {
-                // If no prompt, try manual installation instructions
-                showProfessionalToast('info', 'التثبيت اليدوي', 'من القائمة اختر "إضافة إلى الشاشة الرئيسية" ثم "تثبيت تطبيق"', 8000);
+                showToast('info', 'تنبيه', 'يمكنك تثبيت التطبيق من قائمة المتصفح');
                 return;
             }
             
             deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
+            const result = await deferredPrompt.userChoice;
             
-            if (outcome === 'accepted') {
-                console.log('User accepted install');
+            if (result.outcome === 'accepted') {
+                showToast('success', 'تم التثبيت!', 'جاري تحميل التطبيق... ⬇️');
             } else {
-                console.log('User dismissed install');
+                showToast('info', 'إلغاء', 'يمكنك التثبيت لاحقاً');
             }
             
             deferredPrompt = null;
             hideInstallBanner();
         }
 
-        // ===== NOTIFICATION PERMISSION & BACKGROUND ALERTS =====
+        // ===== NOTIFICATIONS =====
         async function checkNotificationPermission() {
             if ('Notification' in window) {
                 const permission = Notification.permission;
-                updateNotifButton(permission === 'granted');
+                updateNotifBtn(permission === 'granted');
                 notificationPermissionGranted = permission === 'granted';
             } else {
-                document.getElementById('notifBtn').textContent = '❌ المتصفح لا يدعم';
+                document.getElementById('notifBtn').textContent = '❌ غير مدعوم';
                 document.getElementById('notifBtn').disabled = true;
             }
         }
@@ -2256,32 +1884,31 @@
         function updateNotifButton(granted) {
             const btn = document.getElementById('notifBtn');
             if (granted) {
-                btn.textContent = '✅ الإشعارات مفعلة';
-                btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                btn.textContent = '✅ مفعل';
+                btn.style.background = 'var(--success)';
                 btn.style.color = 'white';
             }
         }
 
         async function requestNotificationPermission() {
             if (!('Notification' in window) {
-                showProfessionalToast('error', 'خطأ', 'متصفحك لا يدعم الإشعارات');
+                showToast('error', 'خطأ', 'المصفح لا يدعم الإشعارات');
                 return;
             }
 
-            const permission = await Notification.requestPermission();
-            if (permission === 'granted') {
+            const perm = await Notification.requestPermission();
+            if (perm === 'granted') {
                 notificationPermissionGranted = true;
                 updateNotifButton(true);
-                showProfessionalToast('success', 'تم التفعيل! 🔔', 'سيصلك إشعار عند انتهاء وقت أي جلسة');
+                showToast('success', 'تم التفعيل', 'سيصلك إشعار عند انتهاء الوقت 🔔');
                 
                 new Notification('🎮 محل البليستيشن', {
-                    body: 'تم تفعيل الإشعارات بنجاح!',
+                    body: 'تم تفعيل الإشعارات! ✅',
                     icon: '🎮',
-                    badge: '🔔',
                     tag: 'test'
                 });
             } else {
-                showProfessionalToast('warning', 'لم يتم التفعيل', 'يرجى السماح بالإشعادات من إعدادات المتصفح');
+                showToast('warning', 'لم يتم', 'يرجى السماح بالإشعارات');
             }
         }
 
@@ -2292,13 +1919,10 @@
             globalAlertInterval = setInterval(() => {
                 checkAllSessionsForExpiration();
             }, 1000);
-            
-            console.log('✅ Global alert checker started');
         }
 
         function checkAllSessionsForExpiration() {
             const activeSessions = appData.sessions.filter(s => s.status === 'active' && s.sessionType === 'timed');
-            
             if (activeSessions.length === 0) return;
             
             const now = Date.now();
@@ -2307,98 +1931,56 @@
                 const startTime = new Date(session.startTime).getTime();
                 let totalDuration = session.duration || 0;
                 
-                if (session.timeExtensions && session.timeExtensions.length > 0) {
+                if (session.timeExtensions?.length > 0) {
                     totalDuration = session.initialDuration + session.timeExtensions.reduce((sum, ext) => sum + ext.minutes, 0);
                 }
                 
-                const endTime = startTime + (totalDuration * 60 * 1000);
                 const elapsedMs = now - startTime;
                 const elapsedMinutes = Math.floor(elapsedMs / 1000 / 60);
                 
+                // Check expiration
                 if (elapsedMinutes >= totalDuration && !alertedSessions.has(session.id)) {
                     alertedSessions.add(session.id);
-                    triggerExpiredSessionAlert(session, elapsedMinutes, totalDuration);
+                    triggerExpiredAlert(session, elapsedMinutes, totalDuration);
                 } else if (elapsedMinutes >= totalDuration - 1 && !alertedSessions.has(`warn-${session.id}`)) {
                     alertedSessions.add(`warn-${session.id}`);
-                    playAlertSound();
-                    showProfessionalToast(
-                        'warning',
-                        '⚠️ تنبيه!',
-                        `جلسة ${session.customerName} - دقيقة واحدة متبقية`,
-                        8000
-                    );
+                    showToast('warning', '⚠️ تنبيه', `جلسة ${session.customerName} - دقيقة واحدة`);
+                    playProfessionalSound('warning');
                 }
             });
         }
 
-        function triggerExpiredSessionAlert(session, elapsedMinutes, totalDuration) {
+        function triggerExpiredAlert(session, elapsedMinutes, totalDuration) {
             const device = appData.devices.find(d => d.id === session.deviceId);
-            const deviceInfo = device ? `شاشة ${device.number} (${device.type})` : 'جهاز';
-            const overMinutes = elapsedMinutes - totalDuration;
+            const deviceInfo = device ? `شاشة ${device.number}` : '';
+            const overMin = elapsedMinutes - totalDuration;
             
-            sendBrowserNotification(session, deviceInfo, overMinutes);
-            playAlertSound(); // ✅ PROFESSIONAL SOUND
-            startAlertInterval();
+            sendBrowserNotif(session, deviceInfo, overMin);
+            playProfessionalSound('critical');
+            startAlertLoop();
             
             if (document.visibilityState === 'visible') {
-                showProfessionalToast(
-                    'alert-critical',
-                    '🚨 انتهاء الوقت!',
-                    `جلسة ${session.customerName} على ${deviceInfo}\nانتهى منذ ${overMinutes} دقيقة!\nيرجى إبلاغ العميل فوراً`,
-                    20000,
-                    true
-                );
+                showToast('alert-critical', '🚨 انتهاء الوقت!', `جلسة ${session.customerName} على ${deviceInfo}\nانتهى منذ ${overMin} دقيقة`, 25000, true);
             }
         }
 
-        function sendBrowserNotification(session, deviceInfo, overMinutes) {
+        function sendBrowserNotif(session, deviceInfo, overMin) {
             if (notificationPermissionGranted && 'Notification' in window) {
                 try {
-                    const notif = new Notification('🚨 انتهاء وقت الجلسة - محل البليستيشن', {
-                        body: `⚠️ العميل: ${session.customerName}\n📍 الجهاز: ${deviceInfo}\n\n⏰️ انتهى الوقت منذ ${overMinutes} دقيقة\n\n⚠️ يرجى إبلاغ العميل فوراً!`,
+                    new Notification('🚨 انتهاء الوقت!', {
+                        body: `العميل: ${session.customerName}\nالجهاز: ${deviceInfo}\n\n⚠️ انتهى منذ ${overMin} دقيقة`,
                         icon: '🎮',
                         badge: '🚨',
-                        tag: `session-expired-${session.id}`,
+                        tag: `expired-${session.id}`,
                         requireInteraction: true,
-                        renotify: true,
-                        vibrate: [200, 100, 200]
+                        renotify: true
                     });
-
-                    notif.onclick = () => {
-                        window.focus();
-                        manageSession(session.id);
-                        notif.close();
-                    };
-                } catch (e) {
-                    console.error('Notification error:', e);
-                }
+                } catch(e) { console.error('Notif error:', e); }
             }
         }
 
-        // ===== VISIBILITY HANDLER =====
-        function setupVisibilityHandler() {
-            document.addEventListener('visibilitychange', () => {
-                if (document.visibilityState === 'visible') {
-                    checkAllSessionsForExpiration();
-                    
-                    if (currentManagingSessionId) {
-                        const session = appData.sessions.find(s => s.id === currentManagingSessionId);
-                        if (session && session.status === 'active') {
-                            updateActiveSessionDisplay(session);
-                        }
-                    }
-                } else {
-                    console.log('Page went to background');
-                }
-            });
-
-            window.addEventListener('focus', () => {
-                checkAllSessionsForExpiration();
-            });
-        }
-
-        // ===== ✨ PROFESSIONAL TOAST NOTIFICATION SYSTEM - GLASSMORPHISM =====
-        function showProfessionalToast(type, title, message, duration = 5000, persistent = false) {
+        // ===== PROFESSIONAL TOAST - REDESIGNED =====
+        function showToast(type, title, message, duration = 5000, persistent = false) {
             const container = document.getElementById('toastContainer');
             
             const icons = {
@@ -2418,35 +2000,28 @@
                     <div class="toast-message">${message}</div>
                 </div>
                 <button class="toast-close" onclick="removeToast(this.parentElement)">✕</button>
-                ${!persistent ? '<div class="toast-progress" style="animation-duration: ' + duration + 'ms;"></div>' : ''}
+                ${!persistent ? `<div class="toast-progress" style="animation-duration: ${duration}ms;"></div>` : ''}
             `;
 
             container.appendChild(toast);
 
             if (!persistent) {
-                setTimeout(() => {
-                    removeToast(toast);
-                }, duration);
+                setTimeout(() => removeToast(toast), duration);
             }
         }
 
-        function removeToast(toastElement) {
-            if (!toastElement || !toastElement.parentElement) return;
-            toastElement.classList.add('removing');
-            setTimeout(() => {
-                if (toastElement.parentElement) {
-                    toastElement.parentElement.removeChild(toastElement);
-                }
-            }, 350);
+        function removeToast(el) {
+            if (!el || !el.parentNode) return;
+            el.classList.add('removing');
+            setTimeout(() => el.remove(), 350);
         }
 
-        // Keep old showToast for backward compatibility
-        function showToast(message, type = '') {
-            const typeMap = { 'success': 'success', 'error': 'error', 'warning': 'warning' };
-            showProfessionalToast(typeMap[type] || 'info', message, '', message);
+        // Keep backward compatibility
+        function showProfessionalToast(type, title, message, duration, persistent) {
+            showToast(type, title, message, duration, persistent);
         }
 
-        // ===== LOGIN SYSTEM =====
+        // ===== LOGIN =====
         let enteredPin = '';
         const CORRECT_PIN = '1407';
 
@@ -2455,28 +2030,19 @@
                 const num = btn.dataset.num;
                 const action = btn.dataset.action;
                 
-                if (action === 'delete') {
-                    enteredPin = enteredPin.slice(0, -1);
-                } else if (action === 'submit') {
-                    validatePin();
-                    return;
-                } else if (num && enteredPin.length < 4) {
-                    enteredPin += num;
-                }
+                if (action === 'delete') enteredPin = enteredPin.slice(0, -1);
+                else if (action === 'submit') { validatePin(); return; }
+                else if (num && enteredPin.length < 4) enteredPin += num;
                 
                 updatePinDisplay();
-                
-                if (enteredPin === 4) {
-                    setTimeout(validatePin, 200);
-                }
+                if (enteredPin.length === 4) setTimeout(validatePin, 180);
             });
         });
 
         function updatePinDisplay() {
-            const dots = document.querySelectorAll('.pin-dot');
-            dots.forEach((dot, index) => {
-                dot.textContent = index < enteredPin.length ? enteredPin[index] : '';
-                dot.classList.toggle('filled', index < enteredPin.length);
+            document.querySelectorAll('.pin-dot').forEach((dot, i) => {
+                dot.textContent = i < enteredPin.length ? enteredPin[i] : '';
+                dot.classList.toggle('filled', i < enteredPin.length);
             });
             document.getElementById('errorMsg').classList.remove('show');
         }
@@ -2486,22 +2052,19 @@
                 sessionStorage.setItem('isLoggedIn', 'true');
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('appContainer').classList.add('active');
-                showProfessionalToast('success', 'مرحباً بك!', 'تم تسجيل الدخول بنجاح 🎉');
+                showToast('success', 'مرحباً بك!', 'تم تسجيل الدخول 🎉');
                 initAudioContext();
             } else {
                 document.getElementById('errorMsg').textContent = '❌ رمز غير صحيح';
                 document.getElementById('errorMsg').classList.add('show');
-                setTimeout(() => {
-                    enteredPin = '';
-                    updatePinDisplay();
-                }, 1000);
+                setTimeout(() => { enteredPin = ''; updatePinDisplay(); }, 1000);
             }
         }
 
         function logout() {
-            if (confirm('هل تريد تسجيل الخروج؟')) {
+            if (confirm('هل تريد الخروج؟')) {
                 sessionStorage.removeItem('isLoggedIn');
-                document.getElementById('appContainer').remove('active');
+                document.getElementById('appContainer').classList.remove('active');
                 document.getElementById('loginScreen').classList.remove('hidden');
                 enteredPin = '';
                 updatePinDisplay();
@@ -2509,11 +2072,10 @@
         }
 
         // ===== NAVIGATION =====
-        function showSection(sectionId) {
+        function showSection(id) {
             document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-            
-            document.getElementById(sectionId).classList.add('active');
+            document.getElementById(id).classList.add('active');
             event.target.classList.add('active');
         }
 
@@ -2528,13 +2090,12 @@
         }
 
         function renderDevices() {
-            const grid = document.getElementById('devicesGrid');
-            grid.innerHTML = appData.devices.map(device => `
-                <div class="device-card ${device.status}" onclick="openSessionModal(${device.id})">
-                    <div class="device-number">شاشة ${device.number}</div>
-                    <div class="device-type">${device.type}</div>
-                    <div class="device-status status-${device.status}">
-                        ${device.status === 'available' ? '✓ متاح' : device.status === 'in-use' ? '▶ مشغل' : '🔧 صيانة'}
+            document.getElementById('devicesGrid').innerHTML = appData.devices.map(d => `
+                <div class="device-card ${d.status}" onclick="openSessionModal(${d.id})">
+                    <div class="device-number">شاشة ${d.number}</div>
+                    <div class="device-type">${d.type}</div>
+                    <div class="device-status status-${d.status}">
+                        ${d.status === 'available' ? '✓ متاح' : d.status === 'in-use' ? '▶ مشغل' : '🔧 صيانة'}
                     </div>
                 </div>
             `).join('');
@@ -2543,18 +2104,18 @@
         function renderProducts() {
             const grid = document.getElementById('productsGrid');
             if (!appData.products.length) {
-                grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:2.5rem;color:var(--gray-400);font-size:1rem;">📦 لا توجد منتجات بعد - اضغط "إضافة منتج جديد" لإضافة منتجاتك</p>';
+                grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--gray-400);font-size:0.95rem;">📦 لا توجد منتجات بعد</p>';
                 return;
             }
-            grid.innerHTML = appData.products.map(product => `
+            grid.innerHTML = appData.products.map(p => `
                 <div class="product-card">
                     <div class="product-image">📦</div>
                     <div class="product-info">
-                        <div class="product-name">${product.name}</div>
-                        <div class="product-desc">منتج عام - يمكن إضافته لأي جلسة</div>
+                        <div class="product-name">${p.name}</div>
+                        <div class="product-desc">منتج عام</div>
                         <div class="product-footer">
-                            <div class="product-price">${parseFloat(product.price).toFixed(2)} EGP</div>
-                            <button class="add-btn" onclick="openSelectSessionModal(${product.id})">+ إضافة</button>
+                            <div class="product-price">${parseFloat(p.price).toFixed(2)} EGP</div>
+                            <button class="add-btn" onclick="openSelectSessionModal(${p.id})">+ إضافة</button>
                         </div>
                     </div>
                 </div>
@@ -2564,25 +2125,25 @@
         function renderClients() {
             const grid = document.getElementById('clientsGrid');
             if (!appData.clients.length) {
-                grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--gray-400);">لا يوجد عملاء بعد</p>';
+                grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:1.8rem;color:(var(--gray-400);">لا يوجد عملاء</p>';
                 return;
             }
-            grid.innerHTML = appData.clients.map(client => `
+            grid.innerHTML = appData.clients.map(c => `
                 <div class="client-card">
                     <div class="client-header">
-                        <div class="client-avatar">${client.name.charAt(0)}</div>
+                        <div class="client-avatar">${c.name.charAt(0)}</div>
                         <div>
-                            <div class="client-name">${client.name}</div>
-                            <div class="client-phone">${client.phone || 'لا يوجد رقم'}</div>
+                            <div class="client-name">${c.name}</div>
+                            <div class="client-phone">${c.phone || '-'}</div>
                         </div>
                     </div>
                     <div class="client-stats">
                         <div class="client-stat">
-                            <div class="client-stat-value">${client.visits || 0}</div>
+                            <div class="client-stat-value">${c.visits || 0}</div>
                             <div class="client-stat-label">زيارة</div>
                         </div>
                         <div class="client-stat">
-                            <div class="client-stat-value">${parseFloat(client.total || 0).toFixed(2)} EGP</div>
+                            <div class="client-stat-value">${parseFloat(c.total || 0).toFixed(2)} EGP</div>
                             <div class="client-stat-label">إنفاق</div>
                         </div>
                     </div>
@@ -2592,77 +2153,69 @@
 
         function updateStats() {
             const available = appData.devices.filter(d => d.status === 'available').length;
-            const inUse = appData.sessions.filter(s => s.status === 'active').length;
-            const todayRevenue = appData.transactions
+            const active = appData.sessions.filter(s => s.status === 'active').length;
+            const todayRev = appData.transactions
                 .filter(t => new Date(t.date).toDateString() === new Date().toDateString())
                 .reduce((sum, t) => sum + t.amount, 0);
             
             document.getElementById('availableDevices').textContent = available;
-            document.getElementById('activeSessions').textContent = inUse;
+            document.getElementById('activeSessions').textContent = active;
             document.getElementById('totalClients').textContent = appData.clients.length;
-            document.getElementById('todayRevenue').textContent = parseFloat(todayRevenue).toFixed(2) + ' EGP';
+            document.getElementById('todayRevenue').textContent = parseFloat(todayRev).toFixed(2) + ' EGP';
             document.getElementById('totalRevenue').textContent = parseFloat(appData.transactions.reduce((s,t)=>s+t.amount,0)).toFixed(2)+' EGP';
             document.getElementById('completedSessions').textContent = appData.sessions.filter(s=>s.status==='completed').length;
             document.getElementById('totalProductsSold').textContent = appData.transactions.filter(t=>t.type==='product').length;
         }
 
-        function formatTime12(date) {
-            let hours = date.getHours();
-            const minutes = date.getMinutes().toString().padStart(2, '0');
-            const ampm = hours >= 12 ? 'PM' : 'AM';
-            hours = hours % 12;
-            hours = hours ? hours : 12;
-            return `${hours.toString().padStart(2, '0')}:${minutes} ${ampm}`;
+        function formatTime(date) {
+            const h = date.getHours();
+            const m = date.getMinutes().toString().padStart(2,'0');
+            return `${h}:${m}`;
         }
 
-        function formatDateISO(date) {
-            const d = new Date(date);
-            const year = d.getFullYear();
-            const month = (d.getMonth() + 1).toString().padStart(2, '0');
-            const day = d.getDate().toString().padStart(2, '0');
-            return `${year}-${month}-${day}`;
+        function formatDate(date) {
+            return date.toISOString().split('T')[0];
         }
 
         // ✅ FIXED: Show duration properly in sessions table
         function renderSessions() {
             const tbody = document.getElementById('sessionsTableBody');
-            const activeSessions = appData.sessions.filter(s => s.status === 'active');
+            const active = appData.sessions.filter(s => s.status === 'active');
             
-            if (!activeSessions.length) {
-                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--gray-400);padding:2.2rem;">لا توجد جلسات نشطة</td></tr>';
+            if (!active.length) {
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--gray-400);padding:1.8rem;">لا توجد جلسات نشطة</td></tr>';
                 return;
             }
             
-            tbody.innerHTML = activeSessions.map(session => {
-                const device = appData.devices.find(d => d.id === session.deviceId);
+            tbody.innerHTML = active.map(s => {
+                const dev = appData.devices.find(d => d.id === s.deviceId);
+                const start = new Date(s.startTime);
                 const now = new Date();
-                const start = new Date(session.startTime);
-                const elapsedMs = now - start;
-                const elapsedMinutes = Math.floor(elapsedMs / 1000 / 60);
-                const sessionTypeLabel = session.sessionType === 'open' ? 'مفتوح' : 'محدد';
+                const elapsed = Math.floor((now - start) / 60000);
+                const typeLabel = s.sessionType === 'open' ? 'مفتوح' : 'محدد';
                 
                 // ✅ FIX: Calculate and display duration correctly
-                let durationDisplay = '-';
-                if (session.sessionType === 'timed') {
-                    let totalDuration = session.duration || 0;
-                    if (session.timeExtensions && session.timeExtensions.length > 0) {
-                        totalDuration = session.initialDuration + session.timeExtensions.reduce((sum, ext) => sum + ext.minutes, 0);
+                let durationText = '-';
+                if (s.sessionType === 'timed') {
+                    let dur = s.duration || 0;
+                    if (s.timeExtensions?.length > 0) {
+                        dur = s.initialDuration + s.timeExtensions.reduce((sum, e) => sum + e.minutes, 0);
                     }
-                    durationDisplay = `${totalDuration} min`;
+                    durationText = `${dur} دقيقة`;
                 } else {
-                    durationDisplay = 'مفتوح';
+                    durationText = `${elapsed} دقيقة`;
                 }
                 
                 return `<tr>
-                    <td>${device ? device.number : '-'}</td>
-                    <td>${session.type}</td>
-                    <td>${session.customerName || '-'}</td>
-                    <td><span class="badge badge-${session.sessionType === 'open' ? 'info' : 'warning'}">${sessionTypeLabel}</span></td>
-                    <td>${formatTime12(new Date(session.startTime))}</td>
-                    <td><strong style="color: var(--primary);">${durationDisplay}</strong></td>
-                    <td>${calculateCurrentSessionCost(session).toFixed(2)} EGP</td>
+                    <td>${dev?.number || '-'}</td>
+                    <td>${s.type}</td>
+                    <td>${s.customerName || '-'}</td>
+                    <td><span class="badge badge-${s.sessionType === 'open' ? 'info' : 'warning'}">${typeLabel}</span></td>
+                    <td>${formatTime(start)}</td>
+                    <td><strong style="color:var(--primary);">${durationText}</strong></td>
+                    <td>${calculateCurrentCost(s).toFixed(2)} EGP</td>
                     <td><span class="badge badge-success">نشطة</span></td>
-                    <td><button class="add-btn" style="background:var(--primary);font-size:0.82rem;padding:0.42rem 0.8rem;" onclick="manageSession(${session.id})">إدارة</button></td>
+                    <td><button class="add-btn" style="background:var(--primary);font-size:0.78rem;padding:0.38rem 0.75rem;" onclick="manageSession(${s.id})">إدارة</button></td>
                 </tr>`;
             }).join('');
         }
@@ -2670,19 +2223,20 @@
         function renderReports() {
             const tbody = document.getElementById('reportsTableBody');
             if (!appData.transactions.length) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--gray-400);padding:2.2rem;">لا توجد معاملات</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--gray-400);padding:1.8rem;">لا توجد معاملات</td></tr>';
                 return;
             }
+            
             tbody.innerHTML = appData.transactions.slice(-30).reverse().map(t => {
-                const typeLabel = t.type === 'session' ? 'Session' : t.type === 'product' ? 'Product' : 'Other';
+                const typeLabel = t.type === 'session' ? 'جلسة' : 'منتج';
                 return `<tr>
-                    <td>${formatDateISO(t.date)}</td>
-                    <td>${formatTime12(new Date(t.date))}</td>
+                    <td>${formatDate(new Date(t.date))}</td>
+                    <td>${formatTime(new Date(t.date))}</td>
                     <td><span class="badge badge-${t.type === 'session' ? 'success' : 'warning'}">${typeLabel}</span></td>
                     <td>${t.customerName || '-'}</td>
-                    <td>${t.description}</td>
+                    <td>${t.description || '-'}</td>
                     <td>${t.screenNumber || '-'}</td>
-                    <td style="font-weight: 800; color: var(--success);">+${parseFloat(t.amount).toFixed(2)} EGP</td>
+                    <td style="font-weight:800;color:var(--success);">+${parseFloat(t.amount).toFixed(2)} EGP</td>
                 </tr>`;
             }).join('');
         }
@@ -2691,27 +2245,22 @@
         function openSessionModal(deviceId) {
             const device = appData.devices.find(d => d.id === deviceId);
             if (!device || device.status !== 'available') {
-                showProfessionalToast('error', 'غير متاح', 'هذا الجهاز غير متاح!');
+                showToast('error', 'غير متاح', 'هذا الجهاز غير متاح!');
                 return;
             }
             
             currentDevice = deviceId;
             selectedType = device.type.toLowerCase();
-            selectedPrice = selectedType === 'ps4' ? 50 : 80;
+            selectedPrice = selectedType === 'ps5' ? 80 : 50;
             selectedSessionType = 'timed';
             
-            document.getElementById('modalDevice').value = `Screen ${device.number} - ${device.type}`;
+            document.getElementById('modalDevice').value = `شاشة ${device.number} - ${device.type}`;
             document.getElementById('sessionHours').value = 1;
             document.getElementById('sessionMinutes').value = 0;
             document.getElementById('customerName').value = '';
             
-            document.querySelectorAll('.type-option').forEach(opt => {
-                opt.classList.toggle('selected', opt.dataset.type === selectedType);
-            });
-            
-            document.querySelectorAll('.session-type-option').forEach(opt => {
-                opt.classList.toggle('selected', opt.dataset.sessiontype === 'timed');
-            });
+            document.querySelectorAll('.type-option').forEach(o => o.classList.toggle('selected', o.dataset.type === selectedType));
+            document.querySelectorAll('.session-type-option').forEach(o => o.classList.toggle('selected', o.dataset.sessiontype === 'timed'));
             
             document.getElementById('timedSessionFields').style.display = 'block';
             document.getElementById('openSessionInfo').style.display = 'none';
@@ -2726,19 +2275,19 @@
             currentDevice = null;
         }
 
-        function selectType(element) {
-            document.querySelectorAll('.type-option').forEach(opt => opt.classList.remove('selected'));
-            element.classList.add('selected');
-            selectedType = element.dataset.type;
-            selectedPrice = parseInt(element.dataset.price);
+        function selectType(el) {
+            document.querySelectorAll('.type-option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedType = el.dataset.type;
+            selectedPrice = parseInt(el.dataset.price);
             document.getElementById('hourlyRateDisplay').textContent = selectedPrice;
             calcPrice();
         }
 
-        function selectSessionType(element) {
-            document.querySelectorAll('.session-type-option').forEach(opt => opt.classList.remove('selected'));
-            element.classList.add('selected');
-            selectedSessionType = element.dataset.sessiontype;
+        function selectSessionType(el) {
+            document.querySelectorAll('.session-type-option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedSessionType = el.dataset.sessiontype;
             
             if (selectedSessionType === 'timed') {
                 document.getElementById('timedSessionFields').style.display = 'block';
@@ -2750,29 +2299,28 @@
         }
 
         function calcPrice() {
-            const hours = parseInt(document.getElementById('sessionHours').value) || 0;
-            const minutes = parseInt(document.getElementById('sessionMinutes').value) || 0;
-            const totalMinutes = (hours * 60) + minutes;
-            const price = (totalMinutes / 60) * selectedPrice;
+            const h = parseInt(document.getElementById('sessionHours').value) || 0;
+            const m = parseInt(document.getElementById('sessionMinutes').value) || 0;
+            const price = ((h * 60) + m) / 60 * selectedPrice;
             document.getElementById('sessionPrice').textContent = price.toFixed(2) + ' EGP';
         }
 
         function startSession() {
             const customerName = document.getElementById('customerName').value.trim();
             let duration = 0;
-            let initialPrice = 0;
+            let price = 0;
             
             if (selectedSessionType === 'timed') {
-                const hours = parseInt(document.getElementById('sessionHours').value) || 0;
-                const minutes = parseInt(document.getElementById('sessionMinutes').value) || 0;
-                duration = (hours * 60) + minutes;
+                const h = parseInt(document.getElementById('sessionHours').value) || 0;
+                const m = parseInt(document.getElementById('sessionMinutes').value) || 0;
+                duration = (h * 60) + m;
                 
                 if (duration <= 0) {
-                    showProfessionalToast('error', 'خطأ', 'يرجى إدخال مدة صحيحة');
+                    showToast('error', 'خطأ', 'يرجى إدخالمدة صحيحة');
                     return;
                 }
                 
-                initialPrice = (duration / 60) * selectedPrice;
+                price = (duration / 60) * selectedPrice;
             }
             
             const session = {
@@ -2784,7 +2332,7 @@
                 duration: duration,
                 startTime: new Date().toISOString(),
                 initialDuration: duration,
-                price: initialPrice,
+                price: price,
                 hourlyRate: selectedPrice,
                 status: 'active',
                 products: [],
@@ -2793,186 +2341,209 @@
             
             appData.sessions.push(session);
             
-            const deviceIndex = appData.devices.findIndex(d => d.id === currentDevice);
-            if (deviceIndex !== -1) {
-                appData.devices[deviceIndex].status = 'in-use';
-            }
+            const idx = appData.devices.findIndex(d => d.id === currentDevice);
+            if (idx !== -1) appData.devices[idx].status = 'in-use';
             
             saveData();
             closeModal();
             renderAll();
-            showProfessionalToast('success', 'تم بنجاح!', `✓ تم بدء جلسة ${selectedSessionType === 'open' ? 'مفتوحة' : 'محددة'} بنجاح!`);
+            showToast('success', 'تم!', `✓ تم بدء جلسة ${selectedSessionType === 'open' ? 'مفتوحة' : 'محددة'}!`);
         }
 
-        // Calculate TIME COST only (without products)
         function calculateTimeCost(session) {
-            const elapsedMinutes = Math.floor((new Date() - new Date(session.startTime)) / 1000 / 60);
-            let totalDuration = elapsedMinutes;
+            const elapsed = Math.floor((new Date() - new Date(session.startTime)) / 60000);
+            let total = elapsed;
             
-            if (session.timeExtensions && session.timeExtensions.length > 0) {
-                totalDuration = session.initialDuration + session.timeExtensions.reduce((sum, ext) => sum + ext.minutes, 0);
+            if (session.timeExtensions?.length > 0) {
+                total = session.initialDuration + session.timeExtensions.reduce((s, e) => s + e.minutes, 0);
             } else if (session.sessionType === 'timed') {
-                totalDuration = Math.max(elapsedMinutes, session.duration);
+                total = Math.max(elapsed, session.duration);
             }
             
-            return (totalDuration / 60) * session.hourlyRate;
+            return (total / 60) * session.hourlyRate;
         }
 
-        // Calculate TOTAL cost (time + products)
-        function calculateCurrentSessionCost(session) {
-            const timeCost = calculateTimeCost(session);
-            let productsCost = 0;
-            if (session.products && session.products.length > 0) {
-                productsCost = session.products.reduce((sum, p) => sum + p.price, 0);
-            }
-            
-            return timeCost + productsCost;
+        function calculateCurrentCost(session) {
+            return calculateTimeCost(session) + (session.products?.reduce((sum, p) => sum + p.price, 0));
         }
 
-        function manageSession(sessionId) {
-            const session = appData.sessions.find(s => s.id === sessionId);
+        function manageSession(id) {
+            const session = appData.sessions.find(s => s.id === id);
             if (!session) return;
             
-            currentManagingSessionId = sessionId;
-            const device = appData.devices.find(d => d.id === session.deviceId);
+            currentManagingSessionId = id;
+            const dev = appData.devices.find(d => d.id === session.deviceId);
             
-            document.getElementById('activeDeviceInfo').textContent = device ? `Screen ${device.number} (${device.type})` : '-';
+            document.getElementById('activeDeviceInfo').textContent = dev ? `شاشة ${dev.number} (${dev.type})` : '-';
             document.getElementById('activeCustomerName').textContent = session.customerName;
-            document.getElementById('activeSessionType').textContent = session.sessionType === 'open' ? '⏳ وقت مفتوح' : '⏰ محدد بوقت';
+            document.getElementById('activeSessionType').textContent = session.sessionType === 'open' ? '⏳ مفتوح' : '⏰ محدد';
             
             initAudioContext();
-            updateActiveSessionDisplay(session);
+            updateActiveDisplay(session);
             
             if (timerInterval) clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                updateActiveSessionDisplay(session);
-            }, 1000);
+            timerInterval = setInterval(() => updateActiveDisplay(session), 1000);
             
             document.getElementById('activeSessionModal').classList.add('active');
         }
 
-        function updateActiveSessionDisplay(session) {
-            const elapsedMs = new Date() - new Date(session.startTime);
-            const elapsedSeconds = Math.floor(elapsedMs / 1000);
-            const hours = Math.floor(elapsedSeconds / 3600);
-            const minutes = Math.floor((elapsedSeconds % 3600) / 60);
-            const seconds = elapsedSeconds % 60;
+        function updateActiveDisplay(session) {
+            const elapsed = Math.floor((new Date() - new Date(session.startTime)) / 1000);
+            const h = Math.floor(elapsed / 3600);
+            const m = Math.floor((elapsed % 3600) / 60);
+            const s = elapsed % 60;
             
-            const timerStr = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            document.getElementById('sessionTimerDisplay').textContent = timerStr;
+            document.getElementById('sessionTimerDisplay').textContent = 
+                `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
             
-            const elapsedMinutes = Math.floor(elapsedMs / 1000 / 60);
-            document.getElementById('activeElapsedTime').textContent = `${elapsedMinutes} min`;
-            
-            const currentCost = calculateCurrentSessionCost(session);
-            document.getElementById('activeCurrentCost').textContent = `${currentCost.toFixed(2)} EGP`;
+            document.getElementById('activeElapsedTime').textContent = `${Math.floor(elapsed/60)} دقيقة`;
+            document.getElementById('activeCurrentCost').textContent = `${calculateCurrentCost(session).toFixed(2)} EGP`;
             
             if (session.sessionType === 'timed') {
                 let totalAllowed = session.duration;
-                if (session.timeExtensions && session.timeExtensions.length > 0) {
-                    totalAllowed = session.initialDuration + session.timeExtensions.reduce((sum, ext) => sum + ext.minutes, 0);
+                if (session.timeExtensions?.length > 0) {
+                    totalAllowed = session.initialDuration + session.timeExtensions.reduce((s,e) => s + e.minutes, 0);
                 }
-                const remaining = totalAllowed - elapsedMinutes;
+                const remaining = totalAllowed - Math.floor(elapsed/60);
                 
                 if (remaining <= 0) {
                     document.getElementById('sessionTimerDisplay').classList.add('warning');
-                    document.getElementById('activeRemainingTime').textContent = '⚠️ انتهى الوقت!';
+                    document.getElementById('activeRemainingTime').textContent = '⚠️ انتهى!';
                     document.getElementById('remainingTimeRow').style.display = 'flex';
-                    playAlertSound();
-                    startAlertInterval();
+                    playProfessionalSound('critical');
+                    startAlertLoop();
                 } else if (remaining <= 5) {
                     document.getElementById('sessionTimerDisplay').classList.add('warning');
-                    document.getElementById('activeRemainingTime').textContent = `${remaining} min`;
+                    document.getElementById('activeRemainingTime').textContent = `${remaining} دقيقة`;
                     document.getElementById('remainingTimeRow').style.display = 'flex';
-                    if (remaining <= 2) playAlertSound();
+                    if (remaining <= 2) playProfessionalSound('warning');
                 } else {
                     document.getElementById('sessionTimerDisplay').classList.remove('warning');
-                    document.getElementById('activeRemainingTime').textContent = `${remaining} min`;
+                    document.getElementById('activeRemainingTime').textContent = `${remaining} دقيقة`;
                     document.getElementById('remainingTimeRow').style.display = 'flex';
-                    stopAlertInterval();
+                    stopAlertLoop();
                 }
             } else {
                 document.getElementById('remainingTimeRow').style.display = 'none';
                 document.getElementById('sessionTimerDisplay').classList.remove('warning');
-                stopAlertInterval();
+                stopAlertLoop();
             }
             
-            const productsDiv = document.getElementById('sessionProductsItems');
-            if (session.products && session.products.length > 0) {
-                productsDiv.innerHTML = session.products.map(p => 
-                    `<div style="padding: 0.55rem; background: var(--gray-50); border-radius: 0.5rem; margin-bottom: 0.55rem; display: flex; justify-content: space-between;">
+            const prodsDiv = document.getElementById('sessionProductsItems');
+            if (session.products?.length > 0) {
+                prodsDiv.innerHTML = session.products.map(p => `
+                    <div style="padding: 0.45rem;background:var(--gray-50);border-radius:8px;margin-bottom:0.45rem;display:flex;justify-content:space-between;">
                         <span>${p.name}</span>
-                        <strong style="direction: ltr;">${parseFloat(p.price).toFixed(2)} EGP</strong>
-                    </div>`
-                ).join('');
+                        <strong style="direction:ltr;">${parseFloat(p.price).toFixed(2)} EGP</strong>
+                    </div>
+                `).join('');
             } else {
-                productsDiv.textContent = 'لا توجد منتجات';
+                prodsDiv.textContent = 'لا توجد منتجات';
             }
         }
 
-        // ===== ✨ PROFESSIONAL AUDIO ALERT SYSTEM =====
+        // ===== PROFESSIONAL AUDIO SYSTEM =====
         function initAudioContext() {
             try {
                 if (!audioContext) {
                     audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                audioInitialized = true;
-                console.log('✅ Audio initialized successfully');
-                if (audioContext.state === 'suspended') {
-                    audioContext.resume();
                 }
+                if (audioContext.state === 'suspended') audioContext.resume();
                 return audioContext;
-            } catch (e) {
-                console.error('Audio initialization error:', e);
+            } catch(e) {
+                console.error('Audio init error:', e);
                 return null;
             }
         }
 
-        function playAlertSound() {
+        // ✅ PROFESSIONAL ALERT SOUND - Multi-frequency alarm
+        function playProfessionalSound(type = 'critical') {
             try {
                 const ctx = initAudioContext();
                 if (!ctx) return;
                 
-                // Create a more professional alarm sound with multiple frequencies
-                const oscillator1 = ctx.createOscillator();
-                const oscillator2 = ctx.createOscillator();
-                const gainNode = ctx.createGain();
+                const now = ctx.currentTime;
                 
-                oscillator1.connect(gainNode);
-                oscillator2.connect(gainNode);
-                gainNode.connect(ctx.destination);
+                // Create oscillator
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
                 
-                // Main tone - higher frequency for better audibility
-                oscillator1.frequency.value = 1200;
-                oscillator1.type = 'square';
-                gainNode.gain.setValueAtTime(0.7, ctx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.6);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
                 
-                // Secondary tone for richness
-                oscillator2.frequency.value = 800;
-                oscillator2.type = 'triangle';
-                gainNode.gain.setValueAtTime(0.5, ctx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+                if (type === 'critical') {
+                    // 🔴 CRITICAL: Loud multi-tone alarm (like real alarm)
+                    osc.frequency.setValueAtTime(880, now);
+                    osc.frequency.setValueAtTime(880, now + 0.1);
+                    osc.frequency.setValueAtTime(660, now + 0.2);
+                    osc.frequency.setValueAtTime(880, now + 0.3);
+                    osc.frequency.setValueAtTime(1100, now + 0.5);
+                    osc.frequency.setValueAtTime(880, now + 0.7);
+                    
+                    gain.gain.setValueAtTime(0, now);
+                    gain.gain.linearRampToValueAtTime(0.8, now + 0.05);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
+                    
+                    osc.type = 'square';
+                    osc.start(now);
+                    osc.stop(now + 0.8);
+                    
+                    // Second oscillator for depth
+                    const osc2 = ctx.createOscillator();
+                    const gain2 = ctx.createGain();
+                    osc2.connect(gain2);
+                    gain2.connect(ctx.destination);
+                    
+                    osc2.frequency.value = 440;
+                    osc2.type = 'sawtooth';
+                    gain2.gain.setValueAtTime(0.3, now);
+                    gain2.gain.linearRampToValueAtTime(0.01, now + 0.6);
+                    
+                    osc2.start(now + 0.1);
+                    osc2.stop(now + 0.6);
+                    
+                } else if (type === 'warning') {
+                    // ⚠️ WARNING: Softer double-beep
+                    osc.frequency.value = 660;
+                    osc.type = 'sine';
+                    
+                    gain.gain.setValueAtTime(0, now);
+                    gain.gain.linearRampToValueAtTime(0.7, now + 0.15);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+                    
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+                    
+                    // Second beep
+                    setTimeout(() => {
+                        const o = ctx.createOscillator();
+                        const g = ctx.createGain();
+                        o.connect(g);
+                        g.connect(ctx.destination);
+                        
+                        o.frequency.value = 880;
+                        o.type = 'sine';
+                        
+                        g.gain.setValueAtTime(0, ctx.currentTime);
+                        g.gain.linearRampToValueAtTime(0.6, ctx.currentTime + 0.2);
+                        g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+                        
+                        o.start(ctx.currentTime);
+                        o.stop(ctx.currentTime + 0.35);
+                    }, 150);
+                }
                 
-                oscillator1.start(ctx.currentTime);
-                oscillator2.start(ctx.currentTime);
-                oscillator1.stop(ctx.currentTime + 0.6);
-                oscillator2.stop(ctx.currentTime + 0.6);
-                
-                console.log('🔔 Professional alert sound played');
-            } catch (e) {
-                console.error('Audio error:', e);
+            } catch(e) {
+                console.error('Sound error:', e);
             }
         }
 
-        function startAlertInterval() {
-            if (!alertInterval) {
-                alertInterval = setInterval(() => {
-                    playAlertSound();
-                }, 1500); // Slightly slower interval
-            }
+        function startAlertLoop() {
+            if (alertInterval) clearInterval(alertInterval);
+            alertInterval = setInterval(() => playProfessionalSound('critical'), 1500);
         }
 
-        function stopAlertInterval() {
+        function stopAlertLoop() {
             if (alertInterval) {
                 clearInterval(alertInterval);
                 alertInterval = null;
@@ -2980,258 +2551,191 @@
         }
 
         function closeActiveSessionModal() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-            }
-            stopAlertInterval();
+            if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+            stopAlertLoop();
             document.getElementById('activeSessionModal').classList.remove('active');
             currentManagingSessionId = null;
         }
 
         function showExtendTimeOptions() {
             document.getElementById('extendHours').value = 0;
-            document.getElementById('extendMinutes').value = 30;
+            document document.getElementById('extendMinutes').value = 30;
             calcExtendPrice();
             document.getElementById('extendTimeModal').classList.add('active');
         }
 
         function calcExtendPrice() {
-            const session = appData.sessions.find(s => s.id === currentManagingSessionId);
-            if (!session) return;
+            const s = appData.sessions.find(x => x.id === currentManagingSessionId);
+            if (!s) return;
             
-            const hours = parseInt(document.getElementById('extendHours').value) || 0;
-            const minutes = parseInt(document.getElementById('extendMinutes').value) || 0;
-            const totalMinutes = (hours * 60) + minutes;
-            const price = (totalMinutes / 60) * session.hourlyRate;
-            document.getElementById('extendPriceDisplay').textContent = price.toFixed(2) + ' EGP';
+            const h = parseInt(document.getElementById('extendHours').value) || 0;
+            const m = parseInt(document.getElementById('extendMinutes').value) || 0;
+            const mins = (h * 60) + m;
+            document.getElementById('extendPriceDisplay').textContent = ((mins / 60) * s.hourlyRate).toFixed(2) + ' EGP';
         }
 
         document.getElementById('extendHours').addEventListener('input', calcExtendPrice);
         document.getElementById('extendMinutes').addEventListener('input', calcExtendPrice);
 
         function confirmExtendTime() {
-            const session = appData.sessions.find(s => s.id === currentManagingSessionId);
-            if (!session) return;
+            const s = appDatasessions.find(x => x.id === currentManagingSessionId);
+            if (!s) return;
             
-            const hours = parseInt(document.getElementById('extendHours').value) || 0;
-            const minutes = parseInt(document.getElementById('extendMinutes').value) || 0;
-            const totalMinutes = (hours * 60) + minutes;
+            const h = parseInt(document.getElementById('extendHours').value) || 0;
+            const m = parseInt(document.getElementById('extendMinutes').value) || 0;
+            const mins = (h * 60) + m;
             
-            if (totalMinutes <= 0) {
-                showProfessionalToast('error', 'خطأ', 'يرجى إدخال وقت صالح');
+            if (mins <= 0) {
+                showToast('error', 'خطأ', 'وقت غير صحيح');
                 return;
             }
             
-            const extensionCost = (totalMinutes / 60) * session.hourlyRate;
+            const cost = (mins / 60) * s.hourlyRate;
             
-            if (!session.timeExtensions) session.timeExtensions = [];
-            session.timeExtensions.push({
-                timestamp: new Date().toISOString(),
-                minutes: totalMinutes,
-                cost: extensionCost
-            });
+            if (!s.timeExtensions) s.timeExtensions = [];
+            s.timeExtensions.push({ timestamp: new Date().toISOString(), minutes: mins, cost: cost });
+            if (s.sessionType === 'timed') s.duration = (s.duration || 0) + mins;
             
-            if (session.sessionType === 'timed') {
-                session.duration = (session.duration || 0) + totalMinutes;
-            }
-            
-            alertedSessions.delete(session.id);
-            alertedSessions.delete(`warn-${session.id}`);
+            alertedSessions.delete(s.id);
+            alertedSessions.delete(`warn-${s.id}`);
             
             saveData();
             closeExtendTimeModal();
-            updateActiveSessionDisplay(session);
-            showProfessionalToast('success', 'تمت الإضافة!', `✓ تمت إضافة ${totalMinutes} دقيقة (+${extensionCost.toFixed(2)} EGP)`);
+            updateActiveDisplay(s);
+            showToast('success', 'تم!', `✓ +${mins} دقيقة (+${cost.toFixed(2)} EGP)`);
         }
 
         function closeExtendTimeModal() {
             document.getElementById('extendTimeModal').classList.remove('active');
         }
 
-        // ===== INVOICE SYSTEM =====
+        // ===== INVOICE =====
         function endActiveSessionAndShowInvoice() {
-            const session = appData.sessions.find(s => s.id === currentManagingSessionId);
-            if (!session) return;
+            const s = appData.sessions.find(x => x.id === currentManagingSessionId);
+            if (!s) return;
             
-            const elapsedMinutes = Math.floor((new Date() - new Date(session.startTime)) / 1000 / 60);
-            const device = appData.devices.find(d => d.id === session.deviceId);
+            const elapsed = Math.floor((new Date() - new Date(s.startTime)) / 60000);
+            const dev = appData.devices.find(d => d.id === s.deviceId);
             
-            const timeOnlyCost = calculateTimeCost(session);
+            const timeCost = calculateTimeCost(s);
+            const prodCost = s.products?.reduce((sum, p) => sum + p.price, 0);
+            const final = timeCost + prodCost;
             
-            let productsCost = 0;
-            if (session.products && session.products.length > 0) {
-                productsCost = session.products.reduce((sum, p) => sum + p.price, 0);
-            }
+            s.status = 'completed';
+            s.endTime = new Date().toISOString();
+            s.finalCost = final;
+            s.totalMinutes = elapsed;
             
-            const finalCost = timeOnlyCost + productsCost;
-            
-            session.status = 'completed';
-            session.endTime = new Date().toISOString();
-            session.finalCost = finalCost;
-            session.totalMinutes = elapsedMinutes;
-            
-            const deviceIndex = appData.devices.findIndex(d => d.id === session.deviceId);
-            if (deviceIndex !== -1) {
-                appData.devices[deviceIndex].status = 'available';
-            }
+            const idx = appData.devices.findIndex(d => d.id === s.deviceId);
+            if (idx !== -1) appData.devices[idx].status = 'available';
             
             appData.transactions.push({
                 date: new Date().toISOString(),
                 type: 'session',
-                customerName: session.customerName,
-                description: `${session.type} Session - ${elapsedMinutes} min`,
-                amount: timeOnlyCost,
-                screenNumber: device ? device.number : null
+                customerName: s.customerName,
+                description: `${s.type} - ${elapsed} دقيقة`,
+                amount: timeCost,
+                screenNumber: dev?.number
             });
             
-            if (session.products && session.products.length > 0) {
-                session.products.forEach(product => {
+            if (s.products?.length) {
+                s.products.forEach(p => {
                     appData.transactions.push({
                         date: new Date().toISOString(),
                         type: 'product',
-                        customerName: session.customerName,
-                        description: product.name,
-                        amount: product.price,
-                        screenNumber: device ? device.number : null
+                        customerName: s.customerName,
+                        description: p.name,
+                        amount: p.price,
+                        screenNumber: dev?.number
                     });
                 });
             }
             
-            if (session.customerName && session.customerName !== 'عميل بدون اسم') {
-                const clientIndex = appData.clients.findIndex(c => c.name === session.customerName);
-                if (clientIndex !== -1) {
-                    appData.clients[clientIndex].visits++;
-                    appData.clients[clientIndex].total += finalCost;
+            if (s.customerName && s.customerName !== 'عميل بدون اسم') {
+                const ci = appData.clients.findIndex(c => c.name === s.customerName);
+                if (ci !== -1) {
+                    appData.clients[ci].visits++;
+                    appData.clients[ci].total += final;
                 } else {
-                    appData.clients.push({
-                        name: session.customerName,
-                        phone: '',
-                        visits: 1,
-                        total: finalCost
-                    });
+                    appData.clients.push({ name: s.customerName, phone: '', visits: 1, total: final });
                 }
             }
             
-            alertedSessions.delete(session.id);
-            
+            alertedSessions.delete(s.id);
             saveData();
             closeActiveSessionModal();
-            
-            generateInvoice(session, device, finalCost, elapsedMinutes, timeOnlyCost, productsCost);
+            generateInvoice(s, dev, final, elapsed, timeCost, prodCost);
             renderAll();
         }
 
-        function generateInvoice(session, device, finalCost, elapsedMinutes, timeOnlyCost, productsCost) {
-            const startTime = new Date(session.startTime);
-            const endTime = new Date(session.endTime);
+        function generateInvoice(s, dev, final, elapsed, timeCost, prodCost) {
+            const start = new Date(s.startTime);
+            const end = new Date(s.endTime);
             
-            let extensionsCost = 0;
-            let extensionsHTML = '';
-            if (session.timeExtensions && session.timeExtensions.length > 0) {
-                extensionsCost = session.timeExtensions.reduce((sum, ext) => sum + ext.cost, 0);
-                extensionsHTML = `
+            let extHTML = '';
+            if (s.timeExtensions?.length > 0) {
+                const extCost = s.timeExtensions.reduce((sum, e) => sum + e.cost, 0);
+                extHTML = `
                     <div class="invoice-section">
                         <div class="invoice-section-title">⏰ الوقت الإضافي</div>
-                        ${session.timeExtensions.map(ext => `
+                        ${s.timeExtensions.map(e => `
                             <div class="invoice-row">
-                                <span>+${ext.minutes} دقيقة</span>
-                                <span style="direction: ltr;">${ext.cost.toFixed(2)} EGP</span>
+                                <span>+${e.minutes} دقيقة</span>
+                                <span style="direction:ltr">${e.cost.toFixed(2)} EGP</span>
                             </div>
-                        `).join('');
+                        `).join('')}
                     </div>
                 `;
             }
             
-            const invoiceHTML = `
+            document.getElementById('invoiceBody').innerHTML = `
                 <div class="invoice-section">
                     <div class="invoice-section-title">📋 معلومات الجلسة</div>
-                    <div class="invoice-row">
-                        <span>رقم الشاشة:</span>
-                        <strong>${device ? device.number : '-'}</strong>
-                    </div>
-                    <div class="invoice-row">
-                        <span>نوع الجهاز:</span>
-                        <strong>${session.type}</strong>
-                    </div>
-                    <div class="invoice-row">
-                        <span>اسم العميل:</span>
-                        <strong>${session.customerName}</strong>
-                    </div>
-                    <div class="invoice-row">
-                        <span>نوع الجلسة:</span>
-                        <strong>${session.sessionType === 'open' ? 'وقت مفتوح' : 'محدد بوقت'}</strong>
-                    </div>
+                    <div class="invoice-row"><span>رقم الشاشة:</span><strong>${dev?.number || '-'}</strong></div>
+                    <div class="invoice-row"><span>نوع الجهاز:</span><strong>${s.type}</strong></div>
+                    <div class="invoice-row"><span>العميل:</span><strong>${s.customerName}</strong></div>
+                    <div class="invoice-row"><span>نوع الجلسة:</span><strong>${s.sessionType === 'open' ? 'مفتوح' : 'محدد'}</strong></div>
                 </div>
                 
                 <div class="invoice-section">
                     <div class="invoice-section-title">⏱ تفاصيل الوقت</div>
-                    <div class="invoice-row">
-                        <span>وقت البداية:</span>
-                        <span style="direction: ltr;">${formatTime12(startTime)} - ${formatDateISO(startTime)}</span>
-                    </div>
-                    <div class="invoice-row">
-                        <span>وقت النهاية:</span>
-                        <span style="direction: ltr;">${formatTime12(endTime)} - ${formatDateISO(endTime)}</span>
-                    </div>
-                    <div class="invoice-row">
-                        <span>المدة الإجمالية:</span>
-                        <strong>${elapsedMinutes} دقيقة (${(elapsedMinutes / 60).toFixed(1)} ساعة)</strong>
-                    </div>
-                    <div class="invoice-row">
-                        <span>سعر الساعة:</span>
-                        <span style="direction: ltr;">${session.hourlyRate} EGP</span>
-                    </div>
-                    <div class="invoice-row">
-                        <span>تكلفة الوقت:</span>
-                        <span style="direction: ltr; font-weight: 800;">${timeOnlyCost.toFixed(2)} EGP</span>
-                    </div>
+                    <div class="invoice-row"><span>البداية:</span><span style="direction:ltr;">${formatTime(start)}</span></div>
+                    <div class="invoice-row"><span>النهاية:</span><span style="direction:ltr;">${formatTime(end)}</span></div>
+                    <div class="invoice-row"><span>المدة:</span><strong>${elapsed} دقيقة (${(elapsed/60).toFixed(1)} ساعة)</strong></div>
+                    <div class="invoice-row"><span>سعر/ساعة:</span><span style="direction:ltr;">${s.hourlyRate} EGP</span></div>
+                    <div class="invoice-row"><span>تكلفة الوقت:</span><span style="direction:ltr;font-weight:700;">${timeCost.toFixed(2)} EGP</span></div>
                 </div>
                 
-                ${extensionsHTML}
+                ${extHTML}
                 
                 <div class="invoice-section">
                     <div class="invoice-section-title">🛒 المنتجات</div>
-                    ${session.products && session.products.length > 0 ? `
+                    ${s.products?.length ? `
                         <div class="invoice-products-container">
                             <table class="invoice-products-table">
-                                <thead>
-                                    <tr>
-                                        <th>المنتج</th>
-                                        <th>السعر</th>
-                                    </tr>
-                                </thead>
+                                <thead><tr><th>المنتج</th><th>السعر</th></tr>
                                 <tbody>
-                                    ${session.products.map(p => `
-                                        <tr>
-                                            <td>${p.name}</td>
-                                            <td style="direction: ltr; text-align: left;">${parseFloat(p.price).toFixed(2)} EGP</td>
-                                        </tr>
+                                    ${s.products.map(p => `
+                                        <tr><td>${p.name}</td><td style="direction:ltr;text-align:left;">${parseFloat(p.price).toFixed(2)} EGP</td></tr>
                                     `).join('')}
                                 </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td><strong>إجمالي المنتجات</strong></td>
-                                        <td style="direction: ltr; text-align: left; color: var(--primary);"><strong>${productsCost.toFixed(2)} EGP</strong></td>
-                                    </tr>
-                                </tfoot>
+                                <tfoot><tr><td><strong>الإجمالي</strong></td><td style="direction:ltr;text-align:left;color:var(--primary);"><strong>${prodCost.toFixed(2)} EGP</strong></td></tfoot>
                             </table>
                         </div>
-                    ` : '<p style="color: var(--gray-500); text-align: center; padding: 1rem;">لا توجد منتجات</p>'}
+                    ` : '<p style="color:var(--gray-500);text-align:center;padding:1rem;">لا توجد منتجات</p>'}
                 </div>
                 
-                <div class="invoice-section" style="border: none;">
+                <div class="invoice-section" style="border:none;">
                     <div class="invoice-row total">
                         <span>💰 الإجمالي الكلي:</span>
-                        <span style="direction: ltr;">${finalCost.toFixed(2)} EGP</span>
+                        <span style="direction:ltr;">${final.toFixed(2)} EGP</span>
                     </div>
-                    <div style="text-align: center; margin-top: 1rem; padding: 1rem; background: #d1fae5; border-radius: var(--radius-lg); font-weight: 800; color: #065f46;">
-                        ✅ تم إنهاء الجلسة بنجاح - شكراً لزيارتك!
+                    <div style="text-align:center;margin-top:1rem;padding:1rem;background:#d1fae5;border-radius:12px;font-weight:700;color:#065f46;">
+                        ✅ تم بنجاح - شكراً لزيارتك!
                     </div>
                 </div>
             `;
             
-            document.getElementById('invoiceBody').innerHTML = invoiceHTML;
             document.getElementById('invoiceModal').classList.add('active');
         }
 
@@ -3239,7 +2743,7 @@
             document.getElementById('invoiceModal').classList.remove('active');
         }
 
-        // ===== PRODUCTS MANAGEMENT =====
+        // ===== PRODUCTS =====
         function openAddProductModal() {
             document.getElementById('productName').value = '';
             document.getElementById('productPrice').value = '';
@@ -3254,58 +2758,41 @@
             const name = document.getElementById('productName').value.trim();
             const price = parseFloat(document.getElementById('productPrice').value);
             
-            if (!name) {
-                showProfessionalToast('error', 'خطأ', 'يرجى إدخال اسم المنتج');
-                return;
-            }
+            if (!name) { showToast('error', 'خطأ', 'اسم المنتج مطلوب'); return; }
+            if (!price || price <= 0) { showToast('error', 'خطأ', 'السعر مطلوب'); return; }
             
-            if (!price || price <= 0) {
-                showProfessionalToast('error', 'خطأ', 'يرجى إدخال سعر صحيح');
-                return;
-            }
-            
-            const product = {
-                id: Date.now(),
-                name: name,
-                price: price,
-                createdAt: new Date().toISOString()
-            };
-            
-            appData.products.push(product);
+            appData.products.push({ id: Date.now(), name, price, createdAt: new Date().toISOString() });
             saveData();
             closeAddProductModal();
             renderProducts();
-            showProfessionalToast('success', 'تمت الإضافة!', `✓ تمت إضافة "${name}" بنجاح`);
+            showToast('success', 'تم!', `✓ "${name}" تمت الإضافة`);
         }
 
-        // ===== SELECT SESSION FOR PRODUCT =====
         function openSelectSessionModal(productId) {
             const product = appData.products.find(p => p.id === productId);
             if (!product) return;
             
             pendingProductId = productId;
+            const active = appData.sessions.filter(s => s.status === 'active');
             
-            const activeSessions = appData.sessions.filter(s => s.status === 'active');
-            
-            if (activeSessions.length === 0) {
-                showProfessionalToast('warning', 'تنبيه', 'لا توجد جلسات نشطة - ابدأ جلسة أولاً');
+            if (!active.length) {
+                showToast('warning', 'تنبيه', 'لا توجد جلسات نشطة');
                 return;
             }
             
-            const sessionsListDiv = document.getElementById('activeSessionsList');
-            sessionsListDiv.innerHTML = activeSessions.map(session => {
-                const device = appData.devices.find(d => d.id === session.deviceId);
-                const elapsed = Math.floor((new Date() - new Date(session.startTime)) / 1000 / 60);
+            document.getElementById('activeSessionsList').innerHTML = active.map(sess => {
+                const dev = appData.devices.find(d => d.id === sess.deviceId);
+                const elapsed = Math.floor((new Date() - new Date(sess.startTime)) / 60000);
                 return `
-                    <div class="session-list-item" onclick="addProductToSession(${session.id})">
+                    <div class="session-list-item" onclick="addProductToSession(${sess.id})">
                         <div>
-                            <strong style="font-size: 1.08rem;">🖥 شاشة ${device ? device.number : '-'}</strong>
-                            <div style="color: var(--gray-600); font-size: 0.9rem; margin-top: 0.3rem;">
-                                ${device ? device.type : ''} | العميل: ${session.customerName} | ${elapsed} min
+                            <strong style="font-size:1rem;">🖥 شاشة ${dev?.number || ''}</strong>
+                            <div style="color:var(--gray-600);font-size:0.85rem;margin-top:0.2rem;">
+                                ${dev?.type || ''} | ${sess.customerName} | ${elapsed} دقيقة
                             </div>
                         </div>
-                        <div style="text-align: left; direction: ltr;">
-                            <span style="font-weight: 900; color: var(--primary); font-size: 1.08rem;">${calculateCurrentSessionCost(session).toFixed(2)} EGP</span>
+                        <div style="direction:ltr;text-align:left;">
+                            <span style="font-weight:800;color:var(--primary);">${calculateCurrentCost(sess).toFixed(2)} EGP</span>
                         </div>
                     </div>
                 `;
@@ -3326,32 +2813,27 @@
             if (!product || !session) return;
             
             if (!session.products) session.products = [];
-            session.products.push({
-                id: product.id,
-                name: product.name,
-                price: product.price,
-                addedAt: new Date().toISOString()
-            });
+            session.products.push({ id: product.id, name: product.name, price: product.price, addedAt: new Date().toISOString() });
             
             saveData();
             closeSelectSessionModal();
             renderProducts();
             
-            const device = appData.devices.find(d => d.id === session.deviceId);
-            showProfessionalToast('success', 'تمت الإضافة!', `✓ تمت إضافة "${product.name}" إلى شاشة ${device ? device.number : sessionId} (+${product.price} EGP)`);
+            const dev = appData.devices.find(d => d.id === session.deviceId);
+            showToast('success', 'تم!', `✓ "${product.name}" أُضيف لشاشة ${dev?.number || sessionId}`);
         }
 
         // ===== SETTINGS =====
         function backupData() {
-            const dataStr = JSON.stringify(appData, null, 2);
-            const blob = new Blob([dataStr], { type: 'application/json' });
+            const str = JSON.stringify(appData, null, 2);
+            const blob = new Blob([str], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = `backup_${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
-            showProfessionalToast('success', 'تم التصدير', '✓ تم تصدير البيانات بنجاح');
+            showToast('success', 'تم التصدير', '✓ تم تصدير البيانات');
         }
 
         function restoreData(event) {
@@ -3363,9 +2845,9 @@
                         appData = JSON.parse(e.target.result);
                         saveData();
                         renderAll();
-                        showProfessionalToast('success', 'تم الاستعادة', '✓ تم استعادة البيانات بنجاح');
-                    } catch (err) {
-                        showProfessionalToast('error', 'خطأ', '❌ ملف غير صالح');
+                        showToast('success', 'تم الاستعادة', '✓ تم استعادة البيانات');
+                    } catch(err) {
+                        showToast('error', 'خطأ', '❌ ملف غير صالح');
                     }
                 };
                 reader.readAsText(file);
@@ -3373,53 +2855,27 @@
         }
 
         function resetData() {
-            if (confirm('⚠ هل أنت متأكد؟ سيتم حذف جميع البيانات نهائياً!')) {
+            if (confirm('⚠ هل أنت متأكد؟ سيتم حذف جميع البيانات!')) {
                 localStorage.removeItem('playstationLounge');
                 location.reload();
             }
         }
 
-        // ===== TIMER MANAGEMENT FOR ACTIVE SESSIONS =====
-        function startTimersForActiveSessions() {
-            const activeSessions = appData.sessions.filter(s => s.status === 'active');
-            if (activeSessions.length > 0) {
-                console.log(`Found ${activeSessions.length} active sessions`);
-            }
-        }
-
         // Close modals on outside click
-        document.getElementById('sessionModal').addEventListener('click', (e) => {
-            if (e.target.id === 'sessionModal') closeModal();
+        ['sessionModal','activeSessionModal','addProductModal','extendTimeModal','selectSessionModal','invoiceModal'].forEach(id => {
+            document.getElementById(id).addEventListener('click', (e) => {
+                if (e.target.id === id) window[id === 'close' + id.charAt(0).toUpperCase() + id.slice(1)]();
+            });
         });
 
-        document.getElementById('activeSessionModal').addEventListener('click', (e) => {
-            if (e.target.id === 'activeSessionModal') closeActiveSessionModal();
-        });
-
-        document.getElementById('addProductModal').addEventListener('click', (e) => {
-            if (e.target.id === 'addProductModal') closeAddProductModal();
-        });
-
-        document.getElementById('extendTimeModal').addEventListener('click', (e) => {
-            if (e.target.id === 'extendTimeModal') closeExtendTimeModal();
-        });
-
-        document.getElementById('selectSessionModal').addEventListener('click', (e) => {
-            if (e.target.id === 'selectSessionModal') closeSelectSessionModal();
-        });
-
-        document.getElementById('invoiceModal').addEventListener('click', (e) => {
-            if (e.target.id === 'invoiceModal') closeInvoiceModal();
-        });
-
-        // Initialize app
+        // Initialize
         init();
 
-        // Register service worker for PWA support
+        // Register SW for PWA
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                console.log('PWA Ready - App can be installed on mobile');
-            });
+            navigator.serviceWorker.register('/sw.js')
+                .then(() => console.log('✅ SW registered'))
+                .catch(err => console.log('SW registration failed:', err));
         }
     </script>
 </body>
