@@ -60,6 +60,97 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
+        /* ===== INSTALL BANNER ===== */
+        .install-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, var(--primary), #3b82f6);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            z-index: 99999;
+            box-shadow: 0 -4px 20px rgba(37, 99, 235, 0.3);
+            animation: slideUpBanner 0.5s ease;
+        }
+
+        .install-banner.hidden {
+            display: none;
+        }
+
+        @keyframes slideUpBanner {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .install-banner-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .install-icon {
+            font-size: 2.5rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .install-text h3 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .install-text p {
+            font-size: 0.85rem;
+            opacity: 0.95;
+        }
+
+        .install-btn {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-lg);
+            font-family: inherit;
+            font-weight: 800;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .install-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+
+        .install-dismiss {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            line-height: 1;
+        }
+
+        .install-dismiss:hover {
+            opacity: 1;
+        }
+
         /* ===== LOGIN SCREEN ===== */
         .login-screen {
             position: fixed;
@@ -233,6 +324,7 @@
             flex-direction: column;
             opacity: 0;
             transition: opacity 0.5s ease;
+            padding-bottom: 80px; /* Space for install banner */
         }
 
         .app-container.active {
@@ -1492,6 +1584,17 @@
                 height: 34px;
                 font-size: 1.1rem;
             }
+
+            /* Install banner mobile */
+            .install-banner {
+                padding: 0.85rem 1rem;
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .install-btn {
+                width: 100%;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1577,10 +1680,26 @@
             .toast-container {
                 top: calc(1rem + env(safe-area-inset-top));
             }
+            .install-banner {
+                padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Install PWA Banner -->
+    <div class="install-banner hidden" id="installBanner">
+        <div class="install-banner-content">
+            <div class="install-icon">📱</div>
+            <div class="install-text">
+                <h3>ثبت التطبيق الآن!</h3>
+                <p>احصل على تجربة أفضل بدون متصفح</p>
+            </div>
+        </div>
+        <button class="install-btn" id="installBtn" onclick="installApp()">⬇️ تثبيت</button>
+        <button class="install-dismiss" onclick="dismissInstall()">✕</button>
+    </div>
+
     <!-- Professional Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
 
@@ -1817,7 +1936,7 @@
                             <div class="setting-icon" style="background:#dbeafe;color:var(--primary)">🔔</div>
                             <div>
                                 <div class="setting-title">إعدادات التنبيهات</div>
-                                <div class="setting-desc">تفعيل الإشعارات الفورية</div>
+                                <div class="setting-desc">تفعيل الإشعارات الفورية عند انتهاء الوقت</div>
                             </div>
                         </div>
                         <div class="setting-actions">
@@ -2087,6 +2206,15 @@
         let backgroundCheckInterval = null;
         let notificationPermissionGranted = false;
 
+        // PWA Install Prompt
+        let deferredPrompt = null;
+
+        // Global alert check interval - runs ALL THE TIME
+        let globalAlertInterval = null;
+
+        // Track which sessions have been alerted
+        let alertedSessions = new Set();
+
         // ===== INITIALIZATION =====
         function init() {
             loadData();
@@ -2114,6 +2242,12 @@
             startTimersForActiveSessions();
             checkNotificationPermission();
             setupVisibilityHandler();
+            
+            // ✅ CRITICAL: Start global alert checker that runs continuously
+            startGlobalAlertChecker();
+            
+            // Setup PWA install prompt
+            setupInstallPrompt();
         }
 
         // ===== LOCAL STORAGE =====
@@ -2126,6 +2260,75 @@
             if (saved) {
                 appData = JSON.parse(saved);
             }
+        }
+
+        // ===== PWA INSTALL PROMPT =====
+        function setupInstallPrompt() {
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                
+                // Show install banner after a delay
+                setTimeout(() => {
+                    showInstallBanner();
+                }, 3000);
+            });
+
+            window.addEventListener('appinstalled', () => {
+                deferredPrompt = null;
+                hideInstallBanner();
+                showProfessionalToast('success', 'تم التثبيت!', 'تم تثبيت التطبيق بنجاح 🎉');
+            });
+        }
+
+        function showInstallBanner() {
+            if (deferredPrompt) {
+                document.getElementById('installBanner').classList.remove('hidden');
+            }
+        }
+
+        function hideInstallBanner() {
+            document.getElementById('installBanner').classList.add('hidden');
+        }
+
+        function dismissInstall() {
+            hideInstallBanner();
+            localStorage.setItem('pwaInstallDismissed', Date.now().toString());
+        }
+
+        async function installApp() {
+            if (!deferredPrompt) return;
+            
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            
+            if (outcome === 'accepted') {
+                console.log('User accepted install');
+            } else {
+                console.log('User dismissed install');
+            }
+            
+            deferredPrompt = null;
+            hideInstallBanner();
+        }
+
+        // Check if we should show install banner on load
+        function checkShouldShowInstall() {
+            const dismissed = localStorage.getItem('pwaInstallDismissed');
+            if (dismissed) {
+                const dismissedTime = parseInt(dismissed);
+                const oneWeek = 7 * 24 * 60 * 60 * 1000;
+                if (Date.now() - dismissedTime < oneWeek) {
+                    return false;
+                }
+            }
+            
+            // If already installed, don't show
+            if (window.matchMedia('(display-mode: standalone)').matches) {
+                return false;
+            }
+            
+            return true;
         }
 
         // ===== NOTIFICATION PERMISSION & BACKGROUND ALERTS =====
@@ -2173,35 +2376,27 @@
             }
         }
 
-        // ===== VISIBILITY HANDLER FOR BACKGROUND CHECKS =====
-        function setupVisibilityHandler() {
-            document.addEventListener('visibilitychange', () => {
-                if (document.visibilityState === 'visible') {
-                    // Page is now visible - check for expired sessions
-                    checkExpiredSessionsOnReturn();
-                    stopBackgroundChecking();
-                } else {
-                    // Page went to background - start checking
-                    startBackgroundChecking();
-                }
-            });
-
-            // Also handle page focus/blur as backup
-            window.addEventListener('focus', () => {
-                checkExpiredSessionsOnReturn();
-                stopBackgroundChecking();
-            });
-
-            window.addEventListener('blur', () => {
-                startBackgroundChecking();
-            });
+        // ===== ✅ GLOBAL ALERT CHECKER - RUNS CONTINUOUSLY =====
+        function startGlobalAlertChecker() {
+            // Check every second when page is visible, every 5 seconds when hidden
+            const checkInterval = document.visibilityState === 'visible' ? 1000 : 5000;
+            
+            if (globalAlertInterval) clearInterval(globalAlertInterval);
+            
+            globalAlertInterval = setInterval(() => {
+                checkAllSessionsForExpiration();
+            }, 1000); // Always check every second
+            
+            console.log('✅ Global alert checker started - checking every second');
         }
 
-        function startBackgroundChecking() {
+        function checkAllSessionsForExpiration() {
             const activeSessions = appData.sessions.filter(s => s.status === 'active' && s.sessionType === 'timed');
+            
             if (activeSessions.length === 0) return;
-
-            // Store end times for active timed sessions
+            
+            const now = Date.now();
+            
             activeSessions.forEach(session => {
                 const startTime = new Date(session.startTime).getTime();
                 let totalDuration = session.duration || 0;
@@ -2212,119 +2407,116 @@
                 }
                 
                 const endTime = startTime + (totalDuration * 60 * 1000);
-                
-                if (Date.now() >= endTime) {
-                    // Already expired - send notification immediately
-                    sendExpiredSessionNotification(session);
-                } else {
-                    // Schedule notification for when it expires
-                    const timeUntilEnd = endTime - Date.now();
-                    setTimeout(() => {
-                        sendExpiredSessionNotification(session);
-                    }, timeUntilEnd);
-                }
-            });
-
-            // Set up interval to keep checking every 30 seconds
-            backgroundCheckInterval = setInterval(() => {
-                checkAndNotifyExpiredSessions();
-            }, 30000);
-        }
-
-        function stopBackgroundChecking() {
-            if (backgroundCheckInterval) {
-                clearInterval(backgroundCheckInterval);
-                backgroundCheckInterval = null;
-            }
-        }
-
-        function checkAndNotifyExpiredSessions() {
-            const activeSessions = appData.sessions.filter(s => s.status === 'active' && s.sessionType === 'timed');
-            
-            activeSessions.forEach(session => {
-                const startTime = new Date(session.startTime).getTime();
-                let totalDuration = session.duration || 0;
-                
-                if (session.timeExtensions && session.timeExtensions.length > 0) {
-                    totalDuration = session.initialDuration + session.timeExtensions.reduce((sum, ext) => sum + ext.minutes, 0);
-                }
-                
-                const endTime = startTime + (totalDuration * 60 * 1000);
-                
-                if (Date.now() >= endTime) {
-                    sendExpiredSessionNotification(session);
-                }
-            });
-        }
-
-        function sendExpiredSessionNotification(session) {
-            const device = appData.devices.find(d => d.id === session.deviceId);
-            const deviceInfo = device ? `شاشة ${device.number} (${device.type})` : 'جهاز';
-            
-            // Browser notification
-            if (notificationPermissionGranted && 'Notification' in window) {
-                const notif = new Notification('⚠️ انتهاء وقت الجلسة - محل البليستيشن', {
-                    body: `الوقت انتهى للعميل ${session.customerName} على ${deviceInfo}\nيرجى إبلاغ العميل فوراً!`,
-                    icon: '🎮',
-                    badge: '⚠️',
-                    tag: `session-expired-${session.id}`,
-                    requireInteraction: true,
-                    actions: [
-                        { action: 'manage', title: 'إدارة الجلسة' },
-                        { action: 'dismiss', title: 'إغلاق' }
-                    ]
-                });
-
-                notif.onclick = () => {
-                    window.focus();
-                    manageSession(session.id);
-                };
-            }
-
-            // Play sound even in background (if audio context allows)
-            playAlertSound();
-        }
-
-        function checkExpiredSessionsOnReturn() {
-            const activeSessions = appData.sessions.filter(s => s.status === 'active' && s.sessionType === 'timed');
-            let hasExpired = false;
-
-            activeSessions.forEach(session => {
-                const startTime = new Date(session.startTime).getTime();
-                let totalDuration = session.duration || 0;
-                
-                if (session.timeExtensions && session.timeExtensions.length > 0) {
-                    totalDuration = session.initialDuration + session.timeExtensions.reduce((sum, ext) => sum + ext.minutes, 0);
-                }
-                
-                const elapsedMs = Date.now() - startTime;
+                const elapsedMs = now - startTime;
                 const elapsedMinutes = Math.floor(elapsedMs / 1000 / 60);
                 
-                if (elapsedMinutes >= totalDuration) {
-                    hasExpired = true;
-                    const device = appData.devices.find(d => d.id === session.deviceId);
+                // Check if time has expired or is about to expire
+                if (elapsedMinutes >= totalDuration && !alertedSessions.has(session.id)) {
+                    // Time has expired!
+                    alertedSessions.add(session.id);
                     
-                    // Show critical alert toast
-                    showProfessionalToast(
-                        'alert-critical',
-                        '⚠️ انتهاء الوقت!',
-                        `جلسة ${session.customerName} على شاشة ${device ? device.number : ''} انتهى وقتها منذ ${(elapsedMinutes - totalMinutes)} دقيقة`,
-                        15000,
-                        true
-                    );
+                    console.log(`🚨 SESSION EXPIRED: ${session.customerName} on device ${session.deviceId}`);
                     
-                    // Play alert sound repeatedly
-                    playAlertSound();
-                    startAlertInterval();
+                    // Trigger all alerts
+                    triggerExpiredSessionAlert(session, elapsedMinutes, totalDuration);
+                } else if (elapsedMinutes >= totalDuration - 1 && !alertedSessions.has(session.id)) {
+                    // Warning: 1 minute before expiration
+                    if (!alertedSessions.has(`warn-${session.id}`)) {
+                        alertedSessions.add(`warn-${session.id}`);
+                        console.log(`⚠️ WARNING: ${session.customerName} - 1 minute left`);
+                        
+                        // Show warning toast only (not critical)
+                        showProfessionalToast(
+                            'warning',
+                            '⚠️ تنبيه!',
+                            `جلسة ${session.customerName} - دقيقة واحدة متبقية`,
+                            8000
+                        );
+                        
+                        playAlertSound();
+                    }
+                }
+            });
+        }
+
+        function triggerExpiredSessionAlert(session, elapsedMinutes, totalDuration) {
+            const device = appData.devices.find(d => d.id === session.deviceId);
+            const deviceInfo = device ? `شاشة ${device.number} (${device.type})` : 'جهاز';
+            const overMinutes = elapsedMinutes - totalDuration;
+            
+            // 1. Browser Notification (works even in background)
+            sendBrowserNotification(session, deviceInfo, overMinutes);
+            
+            // 2. Play Alert Sound
+            playAlertSound();
+            
+            // 3. Start repeating sound
+            startAlertInterval();
+            
+            // 4. Show Critical Toast (only if page is visible)
+            if (document.visibilityState === 'visible') {
+                showProfessionalToast(
+                    'alert-critical',
+                    '🚨 انتهاء الوقت!',
+                    `جلسة ${session.customerName} على ${deviceInfo}\nانتهى منذ ${overMinutes} دقيقة!\nيرجى إبلاغ العميل فوراً`,
+                    20000,
+                    true
+                );
+            }
+        }
+
+        function sendBrowserNotification(session, deviceInfo, overMinutes) {
+            if (notificationPermissionGranted && 'Notification' in window) {
+                try {
+                    const notif = new Notification('🚨 انتهاء وقت الجلسة - محل البليستيشن', {
+                        body: `العميل: ${session.customerName}\nالجهاز: ${deviceInfo}\n\n⚠️ انتهى الوقت منذ ${overMinutes} دقيقة\nيرجى إبلاغ العميل فوراً!`,
+                        icon: '🎮',
+                        badge: '🚨',
+                        tag: `session-expired-${session.id}`,
+                        requireInteraction: true,
+                        renotify: true
+                    });
+
+                    notif.onclick = () => {
+                        window.focus();
+                        manageSession(session.id);
+                        notif.close();
+                    };
+                    
+                    console.log('📱 Browser notification sent');
+                } catch (e) {
+                    console.error('Notification error:', e);
+                }
+            }
+        }
+
+        // ===== VISIBILITY HANDLER FOR BACKGROUND CHECKS =====
+        function setupVisibilityHandler() {
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    // Page is now visible - immediate check
+                    console.log('📱 Page became visible - checking sessions...');
+                    checkAllSessionsForExpiration();
+                    
+                    // Also refresh the UI if managing a session
+                    if (currentManagingSessionId) {
+                        const session = appData.sessions.find(s => s.id === currentManagingSessionId);
+                        if (session && session.status === 'active') {
+                            updateActiveSessionDisplay(session);
+                        }
+                    }
+                } else {
+                    console.log('📱 Page went to background - continuing checks...');
                 }
             });
 
-            if (hasExpired) {
-                renderAll(); // Refresh to show updated state
-            }
+            window.addEventListener('focus', () => {
+                checkAllSessionsForExpiration();
+            });
         }
 
         // ===== PROFESSIONAL TOAST NOTIFICATION SYSTEM =====
+        // ✅ REMOVED: Vibration code completely removed
         function showProfessionalToast(type, title, message, duration = 5000, persistent = false) {
             const container = document.getElementById('toastContainer');
             
@@ -2356,10 +2548,7 @@
                 }, duration);
             }
 
-            // Haptic feedback on mobile
-            if ('vibrate' in navigator) {
-                navigator.vibrate(type === 'alert-critical' ? [200, 100, 200] : 100);
-            }
+            // ✅ NO VIBRATION - Removed completely as requested
         }
 
         function removeToast(toastElement) {
@@ -2958,6 +3147,10 @@
                 session.duration = (session.duration || 0) + totalMinutes;
             }
             
+            // Reset alert for this session since time was extended
+            alertedSessions.delete(session.id);
+            alertedSessions.delete(`warn-${session.id}`);
+            
             saveData();
             closeExtendTimeModal();
             updateActiveSessionDisplay(session);
@@ -3031,6 +3224,9 @@
                     });
                 }
             }
+            
+            // Remove from alerted sessions since it's completed now
+            alertedSessions.delete(session.id);
             
             saveData();
             closeActiveSessionModal();
@@ -3305,6 +3501,11 @@
             }
         }
 
+        function stopBackgroundChecking() {
+            // Keep global alert running even after "stop"
+            // This ensures alerts continue working
+        }
+
         // Close modals on outside click
         document.getElementById('sessionModal').addEventListener('click', (e) => {
             if (e.target.id === 'sessionModal') closeModal();
@@ -3336,8 +3537,6 @@
         // Register service worker for PWA support (if available)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                // Service worker registration would go here
-                // For now, we'll just log that PWA features are ready
                 console.log('PWA Ready - App can be installed on mobile');
             });
         }
