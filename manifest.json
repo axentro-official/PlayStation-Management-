@@ -1,7 +1,7 @@
 {
-  "name": "محل البليستيشن",
+  "name": "محل البلايستيشن",
   "short_name": "PS Lounge",
-  "description": "PlayStation Lounge Manager - نظام إدارة صالات البليستيشن",
+  "description": "PlayStation Lounge Manager - نظام إدارة صالات البلايستيشن",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
