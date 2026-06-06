@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محل البليستيشن - PlayStation Lounge Manager</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --primary-light: #DBEAFE;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --dark: #0F172A;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-800);
+            direction: rtl;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* ===== LOGIN SCREEN ===== */
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--dark) 0%, #1e293b 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: all 0.5s ease;
+        }
+
+        .login-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+
+        .login-box {
+            background: white;
+            padding: 3rem 2.5rem;
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-xl);
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+            animation: slideUp 0.6s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 100%);
+            border-radius: var(--radius-xl);
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+        }
+
+        .login-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .login-subtitle {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .pin-display {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .pin-dot {
+            width: 56px;
+            height: 56px;
+            border: 3px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            transition: all 0.3s ease;
+            background: var(--gray-50);
+        }
+
+        .pin-dot.filled {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: scale(1.05);
+        }
+
+        .error-msg {
+            background: #fef2f2;
+            color: var(--danger);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: none;
+            animation: shake 0.5s ease;
+        }
+
+        .error-msg.show { display: block; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+
+        .numpad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+
+        .num-btn {
+            padding: 18px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            background: white;
+            font-size: 1.35rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .num-btn:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .num-btn:active {
+            transform: scale(0.95);
+        }
+
+        .num-btn.delete {
+            background: #fef2f2;
+            border-color: #fecaca;
+            color: var(--danger);
+        }
+
+        .num-btn.submit {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            grid-column: span 3;
+        }
+
+        .num-btn.submit:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ===== MAIN APP ===== */
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .app-container.active {
+            opacity: 1;
+        }
+
+        /* Header */
+        .app-header {
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), #3b82f6);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+        }
+
+        .logout-btn {
+            background: #fee2e2;
+            color: var(--danger);
+            border: 1px solid #fecaca;
+            padding: 0.6rem 1.25rem;
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            background: #fecaca;
+            transform: translateY(-2px);
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            max-width: 1400px;
+            margin: 1rem auto 0;
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .nav-tab {
+            padding: 0.75rem 1.25rem;
+            border: none;
+            background: transparent;
+            color: var(--gray-500);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: var(--radius-md);
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            background: var(--gray-100);
+            color: var(--primary);
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .view-section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--gray-900);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .stat-icon.blue { background: var(--primary-light); color: var(--primary); }
+        .stat-icon.green { background: #d1fae5; color: var(--success); }
+        .stat-icon.orange { background: #fef3c7; color: var(--warning); }
+        .stat-icon.red { background: #fee2e2; color: var(--danger); }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+        }
+
+        /* Devices Grid */
+        .devices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .device-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            border: 2px solid var(--gray-200);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .device-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 4px;
+            transition: height 0.3s ease;
+        }
+
+        .device-card.available::before { background: var(--success); height: 4px; }
+        .device-card.in-use::before { background: var(--primary); height: 4px; }
+        .device-card.maintenance::before { background: var(--danger); height: 4px; }
+
+        .device-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .device-card:hover::before { height: 6px; }
+
+        .device-number {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .device-type {
+            color: var(--gray-500);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .device-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0.4rem 0.9rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .status-available { background: #d1fae5; color: #065f46; }
+        .status-in-use { background: var(--primary-light); color: var(--primary); }
+        .status-maintenance { background: #fee2e2; color: #991b1b; }
+
+        /* Session Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--radius-2xl);
+            width: 100%;
+            max-width: 480px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary), #3b82f6);
+            color: white;
+            padding: 1.5rem 2rem;
+            border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+        }
+
+        .modal-close {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255,255,255,0.3);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--gray-700);
+            font-size: 0.9rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .type-toggle {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .type-option {
+            padding: 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 700;
+        }
+
+        .type-option:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .type-option.selected {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        .duration-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .price-calc {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            padding: 1.25rem;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            margin: 1.25rem 0;
+        }
+
+        .price-value {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #92400e;
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 1rem;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-cancel {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+
+        .btn-cancel:hover {
+            background: var(--gray-200);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Products Section */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .product-image {
+            height: 150px;
+            background: linear-gradient(135deg, var(--primary-light), #bfdbfe);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+
+        .product-info {
+            padding: 1.25rem;
+        }
+
+        .product-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-desc {
+            color: var(--gray-500);
+            font-size: 0.88rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px dashed var(--gray-200);
+        }
+
+        .product-price {
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .add-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.65rem 1.25rem;
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .add-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        /* Reports Table */
+        .table-container {
+            background: white;
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: right;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        th {
+            background: var(--gray-50);
+            font-weight: 700;
+            color: var(--gray-700);
+            font-size: 0.88rem;
+        }
+
+        tr:hover {
+            background: var(--gray-50);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-danger { background: #fee2e2; color: #991b1b; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+
+        /* Clients List */
+        .clients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .client-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+        }
+
+        .client-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .client-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .client-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), #3b82f6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.25rem;
+        }
+
+        .client-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .client-phone {
+            color: var(--gray-500);
+            font-size: 0.88rem;
+        }
+
+        .client-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .client-stat {
+            background: var(--gray-50);
+            padding: 0.75rem;
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+
+        .client-stat-value {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+
+        .client-stat-label {
+            font-size: 0.78rem;
+            color: var(--gray-500);
+        }
+
+        /* Settings Cards */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .setting-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 1.75rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+        }
+
+        .setting-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .setting-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+        }
+
+        .setting-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .setting-desc {
+            color: var(--gray-500);
+            font-size: 0.88rem;
+            margin-bottom: 1rem;
+        }
+
+        .setting-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        .app-footer {
+            background: white;
+            border-top: 1px solid var(--gray-200);
+            padding: 2rem;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .footer-text {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .footer-team {
+            color: var(--gray-400);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .qr-link {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .qr-link:hover {
+            transform: scale(1.08);
+        }
+
+        .qr-link img {
+            height: 70px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--gray-900);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            z-index: 100000;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--danger); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .app-header { padding: 1rem; }
+            .main-content { padding: 1rem; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .devices-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+            .products-grid { grid-template-columns: 1fr; }
+            .clients-grid { grid-template-columns: 1fr; }
+            .settings-grid { grid-template-columns: 1fr; }
+            .btn-group { grid-template-columns: 1fr; }
+            .duration-row { grid-template-columns: 1fr; }
+            table { font-size: 0.85rem; }
+            th, td { padding: 0.75rem 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-box">
+            <div class="login-logo">🎮</div>
+            <h1 class="login-title">محل البليستيشن</h1>
+            <p class="login-subtitle">PlayStation Lounge Manager</p>
+            
+            <div class="error-msg" id="errorMsg"></div>
+            
+            <div class="pin-display">
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+            </div>
+            
+            <div class="numpad">
+                <button class="num-btn" data-num="1">1</button>
+                <button class="num-btn" data-num="2">2</button>
+                <button class="num-btn" data-num="3">3</button>
+                <button class="num-btn" data-num="4">4</button>
+                <button class="num-btn" data-num="5">5</button>
+                <button class="num-btn" data-num="6">6</button>
+                <button class="num-btn" data-num="7">7</button>
+                <button class="num-btn" data-num="8">8</button>
+                <button class="num-btn" data-num="9">9</button>
+                <button class="num-btn delete" data-action="delete">⌫</button>
+                <button class="num-btn" data-num="0">0</button>
+                <button class="num-btn submit" data-action="submit">دخول ✓</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div class="app-container" id="appContainer">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="brand">
+                    <div class="brand-icon">🎮</div>
+                    <span>محل البليستيشن</span>
+                </div>
+                <button class="logout-btn" onclick="logout()">⏻ خروج</button>
+            </div>
+            
+            <nav class="nav-tabs">
+                <button class="nav-tab active" onclick="showSection('dashboard')">📊 لوحة التحكم</button>
+                <button class="nav-tab" onclick="showSection('sessions')">⏱ الجلسات</button>
+                <button class="nav-tab" onclick="showSection('products')">🛒 المنتجات</button>
+                <button class="nav-tab" onclick="showSection('reports')">📈 التقارير</button>
+                <button class="nav-tab" onclick="showSection('clients')">👥 العملاء</button>
+                <button class="nav-tab" onclick="showSection('settings')">⚙ الإعدادات</button>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard -->
+            <section class="view-section active" id="dashboard">
+                <div class="section-header">
+                    <h2 class="section-title">📊 لوحة التحكم</h2>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">💰</div>
+                        <div class="stat-value" id="todayRevenue">0 ج.م</div>
+                        <div class="stat-label">إيرادات اليوم</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">⏱</div>
+                        <div class="stat-value" id="activeSessions">0</div>
+                        <div class="stat-label">جلسات نشطة</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange">👥</div>
+                        <div class="stat-value" id="totalClients">0</div>
+                        <div class="stat-label">إجمالي العملاء</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon red">🎮</div>
+                        <div class="stat-value" id="availableDevices">0</div>
+                        <div class="stat-label">أجهزة متاحة</div>
+                    </div>
+                </div>
+                
+                <div class="section-header">
+                    <h2 class="section-title">🎮 خريطة الأجهزة</h2>
+                </div>
+                <div class="devices-grid" id="devicesGrid"></div>
+            </section>
+
+            <!-- Sessions -->
+            <section class="view-section" id="sessions">
+                <div class="section-header">
+                    <h2 class="section-title">⏱ إدارة الجلسات</h2>
+                </div>
+                <p style="color: var(--gray-500); margin-bottom: 1.5rem;">اضغط على أي جهاز متاح لبدء جلسة جديدة</p>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>الجهاز</th>
+                                <th>العميل</th>
+                                <th>النوع</th>
+                                <th>البداية</th>
+                                <th>المدة</th>
+                                <th>السعر</th>
+                                <th>الحالة</th>
+                                <th>إجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sessionsTableBody">
+                            <tr><td colspan="8" style="text-align:center;color:var(--gray-400);padding:2rem;">لا توجد جلسات نشطة</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Products -->
+            <section class="view-section" id="products">
+                <div class="section-header">
+                    <h2 class="section-title">🛒 المنتجات والباقات</h2>
+                </div>
+                <div class="products-grid" id="productsGrid"></div>
+            </section>
+
+            <!-- Reports -->
+            <section class="view-section" id="reports">
+                <div class="section-header">
+                    <h2 class="section-title">📈 التقارير المالية</h2>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">💵</div>
+                        <div class="stat-value" id="totalRevenue">0 ج.م</div>
+                        <div class="stat-label">إجمالي الإيرادات</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">✅</div>
+                        <div class="stat-value" id="completedSessions">0</div>
+                        <div class="stat-label">جلسات مكتملة</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange">📦</div>
+                        <div class="stat-value" id="totalProductsSold">0</div>
+                        <div class="stat-label">منتجات مباعة</div>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>التاريخ</th>
+                                <th>النوع</th>
+                                <th>التفاصيل</th>
+                                <th>المبلغ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportsTableBody">
+                            <tr><td colspan="4" style="text-align:center;color:var(--gray-400);padding:2rem;">لا توجد معاملات</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Clients -->
+            <section class="view-section" id="clients">
+                <div class="section-header">
+                    <h2 class="section-title">👥 إدارة العملاء</h2>
+                </div>
+                <div class="clients-grid" id="clientsGrid"></div>
+            </section>
+
+            <!-- Settings -->
+            <section class="view-section" id="settings">
+                <div class="section-header">
+                    <h2 class="section-title">⚙ الإعدادات</h2>
+                </div>
+                <div class="settings-grid">
+                    <div class="setting-card">
+                        <div class="setting-header">
+                            <div class="setting-icon" style="background:#dbeafe;color:var(--primary)">💾</div>
+                            <div>
+                                <div class="setting-title">نسخ احتياطي</div>
+                                <div class="setting-desc">تصدير جميع البيانات كملف JSON</div>
+                            </div>
+                        </div>
+                        <div class="setting-actions">
+                            <button class="add-btn" onclick="backupData()">📥 تصدير البيانات</button>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-card">
+                        <div class="setting-header">
+                            <div class="setting-icon" style="background:#d1fae5;color:var(--success)">📤</div>
+                            <div>
+                                <div class="setting-title">استعادة البيانات</div>
+                                <div class="setting-desc">استيراد البيانات من ملف JSON</div>
+                            </div>
+                        </div>
+                        <div class="setting-actions">
+                            <label style="cursor:pointer;">
+                                <input type="file" accept=".json" onchange="restoreData(event)" style="display:none" id="restoreInput">
+                                <button class="add-btn" onclick="document.getElementById('restoreInput').click()">📂 اختيار ملف</button>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-card">
+                        <div class="setting-header">
+                            <div class="setting-icon" style="background:#fef3c7;color:var(--warning)">⚠</div>
+                            <div>
+                                <div class="setting-title">مسح البيانات</div>
+                                <div class="setting-desc">حذف جميع البيانات وإعادة التعيين</div>
+                            </div>
+                        </div>
+                        <div class="setting-actions">
+                            <button class="add-btn" style="background:var(--danger);" onclick="resetData()">🗑 مسح البيانات</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p class="footer-text">© 2024 Axentro – All Rights Reserved</p>
+            <p class="footer-team">By Axentro Team</p>
+            <a href="https://axentro-official.github.io/axentro-website/links.html" target="_blank" class="qr-link">
+                <img src="qr-links.png" alt="QR Code">
+            </a>
+        </footer>
+    </div>
+
+    <!-- Session Modal -->
+    <div class="modal-overlay" id="sessionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">🎮 بدء جلسة جديدة</h3>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">الجهاز</label>
+                    <input type="text" class="form-input" id="modalDevice" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">نوع الجهاز</label>
+                    <div class="type-toggle">
+                        <div class="type-option selected" data-type="ps4" data-price="50" onclick="selectType(this)">PS4 - 50 ج.م/ساعة</div>
+                        <div class="type-option" data-type="ps5" data-price="80" onclick="selectType(this)">PS5 - 80 ج.م/ساعة</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">مدة الجلسة</label>
+                    <div class="duration-row">
+                        <input type="number" class="form-input" id="sessionHours" placeholder="ساعات" value="1" min="0" oninput="calcPrice()">
+                        <input type="number" class="form-input" id="sessionMinutes" placeholder="دقائق" value="0" min="0" max="59" oninput="calcPrice()">
+                    </div>
+                </div>
+                
+                <div class="price-calc">
+                    <div class="price-value" id="sessionPrice">50.00 ج.م</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">اسم العميل (اختياري)</label>
+                    <input type="text" class="form-input" id="customerName" placeholder="اسم العميل">
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-cancel" onclick="closeModal()">إلغاء</button>
+                    <button class="btn btn-primary" onclick="startSession()">✓ بدء الجلسة</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ===== DATA STORE =====
+        let appData = {
+            devices: [],
+            sessions: [],
+            products: [
+                { id: 1, name: 'بيبسي كبيرة', price: 15, emoji: '🥤' },
+                { id: 2, name: 'ميراندا', price: 12, emoji: '🥤' },
+                { id: 3, name: 'شيبس تشيبيس', price: 10, emoji: '🍟' },
+                { id: 4, name: 'شوكولاتة', price: 8, emoji: '🍫' },
+                { id: 5, name: 'باقة 3 ساعات PS4', price: 130, emoji: '🎮' },
+                { id: 6, name: 'باقة 5 ساعات PS5', price: 350, emoji: '🎮' },
+                { id: 7, name: 'كابل شحن', price: 80, emoji: '🔌' },
+                { id: 8, name: 'هيدست', price: 250, emoji: '🎧' }
+            ],
+            clients: [],
+            transactions: [],
+            settings: {
+                ps4Price: 50,
+                ps5Price: 80,
+                storeName: 'محل البليستيشن'
+            }
+        };
+
+        let currentDevice = null;
+        let selectedType = 'ps4';
+        let selectedPrice = 50;
+
+        // ===== INITIALIZATION =====
+        function init() {
+            loadData();
+            if (!appData.devices.length) {
+                // Initialize devices if first time
+                for (let i = 1; i <= 16; i++) {
+                    appData.devices.push({
+                        id: i,
+                        number: i,
+                        type: i % 3 === 0 ? 'PS5' : 'PS4',
+                        status: 'available'
+                    });
+                }
+                saveData();
+            }
+            renderAll();
+        }
+
+        // ===== LOCAL STORAGE =====
+        function saveData() {
+            localStorage.setItem('playstationLounge', JSON.stringify(appData));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('playstationLounge');
+            if (saved) {
+                appData = JSON.parse(saved);
+            }
+        }
+
+        // ===== LOGIN SYSTEM =====
+        let enteredPin = '';
+        const CORRECT_PIN = '1407';
+
+        document.querySelectorAll('.num-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const num = btn.dataset.num;
+                const action = btn.dataset.action;
+                
+                if (action === 'delete') {
+                    enteredPin = enteredPin.slice(0, -1);
+                } else if (action === 'submit') {
+                    validatePin();
+                    return;
+                } else if (num && enteredPin.length < 4) {
+                    enteredPin += num;
+                }
+                
+                updatePinDisplay();
+                
+                if (enteredPin.length === 4) {
+                    setTimeout(validatePin, 200);
+                }
+            });
+        });
+
+        function updatePinDisplay() {
+            const dots = document.querySelectorAll('.pin-dot');
+            dots.forEach((dot, index) => {
+                dot.textContent = index < enteredPin.length ? '●' : '';
+                dot.classList.toggle('filled', index < enteredPin.length);
+            });
+            document.getElementById('errorMsg').classList.remove('show');
+        }
+
+        function validatePin() {
+            if (enteredPin === CORRECT_PIN) {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('appContainer').classList.add('active');
+                showToast('مرحباً بك! 🎉', 'success');
+            } else {
+                document.getElementById('errorMsg').textContent = '❌ رمز غير صحيح';
+                document.getElementById('errorMsg').classList.add('show');
+                setTimeout(() => {
+                    enteredPin = '';
+                    updatePinDisplay();
+                }, 1000);
+            }
+        }
+
+        function logout() {
+            if (confirm('هل تريد تسجيل الخروج؟')) {
+                document.getElementById('appContainer').classList.remove('active');
+                document.getElementById('loginScreen').classList.remove('hidden');
+                enteredPin = '';
+                updatePinDisplay();
+            }
+        }
+
+        // ===== NAVIGATION =====
+        function showSection(sectionId) {
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // ===== RENDER FUNCTIONS =====
+        function renderAll() {
+            renderDevices();
+            renderProducts();
+            renderClients();
+            updateStats();
+            renderReports();
+            renderSessions();
+        }
+
+        function renderDevices() {
+            const grid = document.getElementById('devicesGrid');
+            grid.innerHTML = appData.devices.map(device => `
+                <div class="device-card ${device.status}" onclick="openSessionModal(${device.id})">
+                    <div class="device-number">شاشة ${device.number}</div>
+                    <div class="device-type">${device.type}</div>
+                    <div class="device-status status-${device.status}">
+                        ${device.status === 'available' ? '✓ متاح' : device.status === 'in-use' ? '▶ مشغل' : '🔧 صيانة'}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = appData.products.map(product => `
+                <div class="product-card">
+                    <div class="product-image">${product.emoji}</div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-desc">منتج مميز</div>
+                        <div class="product-footer">
+                            <div class="product-price">${product.price} ج.م</div>
+                            <button class="add-btn" onclick="addToCart(${product.id})">+ إضافة</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderClients() {
+            const grid = document.getElementById('clientsGrid');
+            if (!appData.clients.length) {
+                grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--gray-400);">لا يوجد عملاء بعد</p>';
+                return;
+            }
+            grid.innerHTML = appData.clients.map(client => `
+                <div class="client-card">
+                    <div class="client-header">
+                        <div class="client-avatar">${client.name.charAt(0)}</div>
+                        <div>
+                            <div class="client-name">${client.name}</div>
+                            <div class="client-phone">${client.phone || 'لا يوجد رقم'}</div>
+                        </div>
+                    </div>
+                    <div class="client-stats">
+                        <div class="client-stat">
+                            <div class="client-stat-value">${client.visits || 0}</div>
+                            <div class="client-stat-label">زيارة</div>
+                        </div>
+                        <div class="client-stat">
+                            <div class="client-stat-value">${client.total || 0} ج.م</div>
+                            <div class="client-stat-label">إنفاق</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateStats() {
+            const available = appData.devices.filter(d => d.status === 'available').length;
+            const inUse = appData.sessions.filter(s => s.status === 'active').length;
+            const todayRevenue = appData.transactions
+                .filter(t => new Date(t.date).toDateString() === new Date().toDateString())
+                .reduce((sum, t) => sum + t.amount, 0);
+            
+            document.getElementById('availableDevices').textContent = available;
+            document.getElementById('activeSessions').textContent = inUse;
+            document.getElementById('totalClients').textContent = appData.clients.length;
+            document.getElementById('todayRevenue').textContent = todayRevenue.toFixed(2) + ' ج.م';
+            document.getElementById('totalRevenue').textContent = appData.transactions.reduce((s,t)=>s+t.amount,0).toFixed(2)+' ج.م';
+            document.getElementById('completedSessions').textContent = appData.sessions.filter(s=>s.status==='completed').length;
+            document.getElementById('totalProductsSold').textContent = appData.transactions.filter(t=>t.type==='product').length;
+        }
+
+        function renderSessions() {
+            const tbody = document.getElementById('sessionsTableBody');
+            const activeSessions = appData.sessions.filter(s => s.status === 'active');
+            
+            if (!activeSessions.length) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--gray-400);padding:2rem;">لا توجد جلسات نشطة</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = activeSessions.map(session => {
+                const device = appData.devices.find(d => d.id === session.deviceId);
+                return `<tr>
+                    <td>${device ? device.number : '-'}</td>
+                    <td>${session.customerName || '-'}</td>
+                    <td>${session.type.toUpperCase()}</td>
+                    <td>${new Date(session.startTime).toLocaleTimeString('ar-EG')}</td>
+                    <td>${session.duration} دقيقة</td>
+                    <td>${session.price.toFixed(2)} ج.م</td>
+                    <td><span class="badge badge-success">نشطة</span></td>
+                    <td><button class="add-btn" style="background:var(--danger);font-size:0.8rem;padding:0.4rem 0.8rem;" onclick="endSession(${session.id})">إنهاء</button></td>
+                </tr>`;
+            }).join('');
+        }
+
+        function renderReports() {
+            const tbody = document.getElementById('reportsTableBody');
+            if (!appData.transactions.length) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--gray-400);padding:2rem;">لا توجد معاملات</td></tr>';
+                return;
+            }
+            tbody.innerHTML = appData.transactions.slice(-20).reverse().map(t => `
+                <tr>
+                    <td>${new Date(t.date).toLocaleDateString('ar-EG')}</td>
+                    <td>${t.type === 'session' ? 'جلسة' : 'منتج'}</td>
+                    <td>${t.description}</td>
+                    <td>+${t.amount.toFixed(2)} ج.م</td>
+                </tr>
+            `).join('');
+        }
+
+        // ===== SESSION MODAL =====
+        function openSessionModal(deviceId) {
+            const device = appData.devices.find(d => d.id === deviceId);
+            if (!device || device.status !== 'available') {
+                showToast('هذا الجهاز غير متاح!', 'error');
+                return;
+            }
+            
+            currentDevice = deviceId;
+            selectedType = device.type.toLowerCase();
+            selectedPrice = selectedType === 'ps4' ? 50 : 80;
+            
+            document.getElementById('modalDevice').value = `شاشة ${device.number} - ${device.type}`;
+            document.getElementById('sessionHours').value = 1;
+            document.getElementById('sessionMinutes').value = 0;
+            document.getElementById('customerName').value = '';
+            
+            document.querySelectorAll('.type-option').forEach(opt => {
+                opt.classList.toggle('selected', opt.dataset.type === selectedType);
+            });
+            
+            calcPrice();
+            document.getElementById('sessionModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('sessionModal').classList.remove('active');
+            currentDevice = null;
+        }
+
+        function selectType(element) {
+            document.querySelectorAll('.type-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedType = element.dataset.type;
+            selectedPrice = parseInt(element.dataset.price);
+            calcPrice();
+        }
+
+        function calcPrice() {
+            const hours = parseInt(document.getElementById('sessionHours').value) || 0;
+            const minutes = parseInt(document.getElementById('sessionMinutes').value) || 0;
+            const totalMinutes = (hours * 60) + minutes;
+            const price = (totalMinutes / 60) * selectedPrice;
+            document.getElementById('sessionPrice').textContent = price.toFixed(2) + ' ج.م';
+        }
+
+        function startSession() {
+            const hours = parseInt(document.getElementById('sessionHours').value) || 0;
+            const minutes = parseInt(document.getElementById('sessionMinutes').value) || 0;
+            const customerName = document.getElementById('customerName').value.trim();
+            const totalMinutes = (hours * 60) + minutes;
+            
+            if (totalMinutes <= 0) {
+                showToast('يرجى إدخول مدة صحيحة', 'error');
+                return;
+            }
+            
+            const price = (totalMinutes / 60) * selectedPrice;
+            
+            const session = {
+                id: Date.now(),
+                deviceId: currentDevice,
+                type: selectedType.toUpperCase(),
+                customerName: customerName || 'عميل بدون اسم',
+                duration: totalMinutes,
+                startTime: new Date().toISOString(),
+                price: price,
+                status: 'active'
+            };
+            
+            appData.sessions.push(session);
+            
+            // Update device status
+            const deviceIndex = appData.devices.findIndex(d => d.id === currentDevice);
+            if (deviceIndex !== -1) {
+                appData.devices[deviceIndex].status = 'in-use';
+            }
+            
+            // Add transaction
+            appData.transactions.push({
+                date: new Date().toISOString(),
+                type: 'session',
+                description: `جلسة ${selectedType.toUpperCase()} - ${hours}س ${minutes}د`,
+                amount: price
+            });
+            
+            // Add or update client
+            if (customerName) {
+                const clientIndex = appData.clients.findIndex(c => c.name === customerName);
+                if (clientIndex !== -1) {
+                    appData.clients[clientIndex].visits++;
+                    appData.clients[clientIndex].total += price;
+                } else {
+                    appData.clients.push({
+                        name: customerName,
+                        phone: '',
+                        visits: 1,
+                        total: price
+                    });
+                }
+            }
+            
+            saveData();
+            closeModal();
+            renderAll();
+            showToast('✓ تم بدء الجلسة بنجاح!', 'success');
+        }
+
+        function endSession(sessionId) {
+            const sessionIndex = appData.sessions.findIndex(s => s.id === sessionId);
+            if (sessionIndex !== -1) {
+                appData.sessions[sessionIndex].status = 'completed';
+                
+                // Free the device
+                const deviceIndex = appData.devices.findIndex(d => d.id === appData.sessions[sessionIndex].deviceId);
+                if (deviceIndex !== -1) {
+                    appData.devices[deviceIndex].status = 'available';
+                }
+                
+                saveData();
+                renderAll();
+                showToast('✓ تم إنهاء الجلسة', 'success');
+            }
+        }
+
+        function addToCart(productId) {
+            const product = appData.products.find(p => p.id === productId);
+            if (product) {
+                appData.transactions.push({
+                    date: new Date().toISOString(),
+                    type: 'product',
+                    description: product.name,
+                    amount: product.price
+                });
+                saveData();
+                renderReports();
+                updateStats();
+                showToast(`✓ تمت إضافة ${product.name}`, 'success');
+            }
+        }
+
+        // ===== SETTINGS =====
+        function backupData() {
+            const dataStr = JSON.stringify(appData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `backup_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('✓ تم تصدير البيانات بنجاح', 'success');
+        }
+
+        function restoreData(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        appData = JSON.parse(e.target.result);
+                        saveData();
+                        renderAll();
+                        showToast('✓ تم استعادة البيانات بنجاح', 'success');
+                    } catch (err) {
+                        showToast('❌ ملف غير صالح', 'error');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function resetData() {
+            if (confirm('⚠ هل أنت متأكد؟ سيتم حذف جميع البيانات نهائياً!')) {
+                localStorage.removeItem('playstationLounge');
+                location.reload();
+            }
+        }
+
+        // ===== TOAST NOTIFICATIONS =====
+        function showToast(message, type = '') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast show ' + type;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Close modal on outside click
+        document.getElementById('sessionModal').addEventListener('click', (e) => {
+            if (e.target.id === 'sessionModal') closeModal();
+        });
+
+        // Initialize app
+        init();
+    </script>
+</body>
+</html>
