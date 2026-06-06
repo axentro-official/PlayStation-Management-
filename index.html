@@ -7,23 +7,16 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="محل البليستيشن">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>محل البليستيشن - PlayStation Lounge Manager</title>
     
-    <!-- PWA Manifest Inline -->
-    <link rel="manifest" href="data:application/json,{
-        %22name%22:%22%D9%85%D8%AD%D9%84%20%D8%A7%D9%84%D8%A8%D9%84%D9%8A%D8%B3%D8%AA%D9%8A%D8%B4%D9%86%22,
-        %22short_name%22:%22PS%20Lounge%22,
-        %22start_url%22:%22.%22,
-        %22display%22:%22standalone%22,
-        %22background_color%22:%22%23F8FAFC%22,
-        %22theme_color%22:%222563EB%22,
-        %22orientation%22:%22portrait%22,
-        %22icons%22:[{
-            %22src%22:%22data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%232563EB' width='100' height='100' rx='20'/><text x='50' y='70' font-size='60' text-anchor='middle'>🎮</text></svg>%22,
-            %22sizes%22:%22192x192%22,
-            %22type%22:%22image/svg+xml%22
-        }]
-    }">
+    <!-- ✅ PWA Manifest - EXTERNAL FILE (NOT INLINE) -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- ✅ PWA Icons - CRITICAL FOR INSTALLATION -->
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2060,7 +2053,9 @@
             checkNotificationPermission();
             startGlobalAlertChecker();
             setupInstallPrompt();
-            registerServiceWorker();
+            
+            // ✅ Register Service Worker ONCE - using external file only
+            registerServiceWorkerProperly();
         }
 
         function saveData() {
@@ -2072,92 +2067,167 @@
             if (saved) appData = JSON.parse(saved);
         }
 
-        // ===== SERVICE WORKER FOR PWA =====
-        function registerServiceWorker() {
+        // ===== SERVICE WORKER - PROPER REGISTRATION =====
+        function registerServiceWorkerProperly() {
             if ('serviceWorker' in navigator) {
-                // Create a simple service worker blob
-                const swCode = `
-                    self.addEventListener('install', e => self.skipWaiting());
-                    self.addEventListener('activate', e => e.waitUntil(clients.claim()));
-                    self.addEventListener('fetch', e => {
-                        e.respondWith(
-                            caches.match(e.request).then(r => r || fetch(e.request))
-                        );
+                // ✅ Use the EXTERNAL sw.js file - NOT a blob
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => {
+                        console.log('✅ Service Worker registered successfully:', registration.scope);
+                        
+                        // Check for updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    console.log('🔄 New SW available');
+                                }
+                            });
+                        });
+                    })
+                    .catch(error => {
+                        console.log('❌ SW registration failed:', error);
+                        // Fallback: Try with full path
+                        navigator.serviceWorker.register('./sw.js')
+                            .then(() => console.log('✅ SW registered with ./ path'))
+                            .catch(err => console.log('❌ SW still failed:', err));
                     });
-                `;
-                const blob = new Blob([swCode], { type: 'application/javascript' });
-                const swUrl = URL.createObjectURL(blob);
-                
-                navigator.serviceWorker.register(swUrl)
-                    .then(() => console.log('✅ Service Worker registered'))
-                    .catch(err => console.log('SW registration failed:', err));
+            } else {
+                console.log('⚠️ Service Workers not supported');
             }
         }
 
-        // ===== PWA INSTALL - IMPROVED =====
+        // ===== PWA INSTALL - IMPROVED & FIXED =====
         function setupInstallPrompt() {
-            setTimeout(() => showInstallBanner(), 2000);
+            // Show banner after delay
+            setTimeout(() => showInstallBanner(), 3000);
 
+            // Listen for install prompt event
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
-                console.log('✅ beforeinstallprompt fired');
+                console.log('✅ beforeinstallprompt fired - PWA can be installed!');
+                
+                // Show custom install button/UI
+                showInstallBanner();
             });
 
+            // Listen for successful installation
             window.addEventListener('appinstalled', () => {
+                console.log('🎉 PWA was installed!');
                 deferredPrompt = null;
                 hideInstallBanner();
-                showToast('success', 'تم التثبيت!', 'التطبيق مثبت بنجاح 🎉');
+                showToast('success', 'تم التثبيت بنجاح!', 'التطبيق جاهز للاستخدام 🎉');
+                
+                // Save that it's installed
+                localStorage.setItem('pwaInstalled', 'true');
             });
+
+            // Check if already installed
+            if (window.matchMedia('(display-mode: standalone)').matches || 
+                window.matchMedia('(display-mode: fullscreen)').matches ||
+                window.navigator.standalone === true) {
+                console.log('✅ App is already running in standalone mode');
+                hideInstallBanner();
+            }
         }
 
         function showInstallBanner() {
             const banner = document.getElementById('installBanner');
-            if (banner && !banner.classList.contains('hidden')) {
-                if (!window.matchMedia('(display-mode: standalone)').matches &&
-                    !window.matchMedia('(display-mode: fullscreen)').matches) {
-                    banner.classList.remove('hidden');
-                } else {
+            if (banner) {
+                // Don't show if already installed or in standalone mode
+                if (localStorage.getItem('pwaInstalled') === 'true' ||
+                    window.matchMedia('(display-mode: standalone)').matches ||
+                    window.navigator.standalone === true) {
                     hideInstallBanner();
+                    return;
                 }
+                
+                banner.classList.remove('hidden');
             }
         }
 
         function hideInstallBanner() {
-            document.getElementById('installBanner')?.classList.add('hidden');
+            const banner = document.getElementById('installBanner');
+            if (banner) {
+                banner.classList.add('hidden');
+            }
             localStorage.setItem('installDismissed', Date.now().toString());
         }
 
         function dismissInstall() {
             hideInstallBanner();
+            showToast('info', 'حسناً', 'يمكنك التثبيت لاحقاً من قائمة المتصفح');
         }
 
         async function installApp() {
+            // ✅ Method 1: Use the deferred prompt (best method)
             if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const result = await deferredPrompt.userChoice;
-                
-                if (result.outcome === 'accepted') {
-                    showToast('success', 'تم التثبيت!', 'جاري تحميل التطبيق... ⬇️');
-                } else {
-                    showToast('info', 'إلغاء', 'يمكنك التثبيت لاحقاً');
+                try {
+                    deferredPrompt.prompt();
+                    const result = await deferredPrompt.userChoice;
+                    
+                    if (result.outcome === 'accepted') {
+                        showToast('success', 'جاري التثبيت...', '⬇️ يرجى الانتظار');
+                        console.log('User accepted install prompt');
+                    } else {
+                        showToast('info', 'تم الإلغاء', 'يمكنك التثبيت لاحقاً');
+                        console.log('User dismissed install prompt');
+                    }
+                    
+                    deferredPrompt = null;
+                    hideInstallBanner();
+                } catch (error) {
+                    console.error('Install prompt error:', error);
+                    showManualInstallInstructions();
                 }
-                
-                deferredPrompt = null;
-                hideInstallBanner();
             } else {
-                // Fallback: Show instructions for manual install
-                showCustomDialog('info', '📱 تثبيت التطبيق', 
-                    'للتثبيت يدوياً:\n\n📌 Chrome: اضغط على القائمة (⋮) → "تثبيت التطبيق"\n\n📌 Safari: اضغط على مشاركة → "إضافة إلى الشاشة الرئيسية"\n\n📌 Samsung Internet: اضغط على القائمة → "Add to Home"', 
-                    null, 'فهمت ✅');
+                // ✅ Method 2: No deferred prompt - show manual instructions
+                showManualInstallInstructions();
             }
+        }
+
+        function showManualInstallInstructions() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            let instructions = '';
+            
+            if (userAgent.includes('chrome') && !userAgent.includes('edge')) {
+                instructions = `📌 لتثبيت التطبيق:\n\n` +
+                    `1. اضغط على القائمة (⋮) أعلى اليمين\n` +
+                    `2. اختر "تثبيت التطبيق" أو "Install app"\n` +
+                    `3. اضغط "تثبيت"\n\n` +
+                    `✨ سيفتح التطبيق في نافذة مستقلة بدون شريط عنوان!`;
+            } else if (userAgent.includes('safari')) {
+                instructions = `📌 لتثبيت التطبيق:\n\n` +
+                    `1. اضغط على أيقونة المشاركة (📤)\n` +
+                    `2. اختر "إضافة إلى الشاشة الرئيسية"\n` +
+                    `3. اضغط "إضافة"\n\n` +
+                    `✨ سيظهر التطبيق كتطبيق حقيقي!`;
+            } else if (userAgent.includes('firefox')) {
+                instructions = `📌 لتثبيت التطبيق:\n\n` +
+                    `1. عندما ترى أيقونة التثبيت في شريط العنوان\n` +
+                    `2. اضغط عليها\n` +
+                    `3. أكد التثبيت`;
+            } else if (userAgent.includes('samsung')) {
+                instructions = `📌 لتثبيت التطبيق:\n\n` +
+                    `1. اضغط على القائمة (⋮)\n` +
+                    `2. اختر "Add to Home screen"\n` +
+                    `3. اضغط "Add"`;
+            } else {
+                instructions = `📌 لتثبيت التطبيق:\n\n` +
+                    `🔹 Chrome: القائمة → "تثبيت التطبيق"\n\n` +
+                    `🔹 Safari: مشاركة → "إضافة للشاشة الرئيسية"\n\n` +
+                    `🔹 Samsung Internet: القائمة → "Add to Home"`;
+            }
+            
+            showCustomDialog('info', '📱 تثبيت التطبيق', instructions, 'فهمت ✅');
         }
 
         // ===== NOTIFICATIONS =====
         async function checkNotificationPermission() {
             if ('Notification' in window) {
                 const permission = Notification.permission;
-                updateNotifBtn(permission === 'granted');
+                updateNotifButton(permission === 'granted');
                 notificationPermissionGranted = permission === 'granted';
             } else {
                 document.getElementById('notifBtn').textContent = '❌ غير مدعوم';
@@ -2188,7 +2258,7 @@
                 
                 new Notification('🎮 محل البليستيشن', {
                     body: 'تم تفعيل الإشعارات! ✅',
-                    icon: '🎮',
+                    icon: 'icon-192.png',
                     tag: 'test'
                 });
             } else {
@@ -2252,8 +2322,8 @@
                 try {
                     new Notification('🚨 انتهاء الوقت!', {
                         body: `العميل: ${session.customerName}\nالجهاز: ${deviceInfo}\n\n⚠️ انتهى منذ ${overMin} دقيقة`,
-                        icon: '🎮',
-                        badge: '🚨',
+                        icon: 'icon-192.png',
+                        badge: 'icon-192.png',
                         tag: `expired-${session.id}`,
                         requireInteraction: true,
                         renotify: true
@@ -2299,16 +2369,7 @@
             setTimeout(() => el.remove(), 350);
         }
 
-        // ===== CUSTOM DIALOG SYSTEM - REPLACES BROWSER CONFIRM/ALERT =====
-        /**
-         * Shows a professional custom dialog
-         * @param {string} type - 'confirm', 'warning', 'danger', 'success', 'info'
-         * @param {string} title - Dialog title
-         * @param {string} message - Dialog message
-         * @param {string} confirmText - Confirm button text (optional)
-         * @param {string} cancelText - Cancel button text (optional)
-         * @returns {Promise<boolean>} - User's choice
-         */
+        // ===== CUSTOM DIALOG SYSTEM =====
         function showCustomDialog(type = 'confirm', title, message, confirmText = 'تأكيد', cancelText = 'إلغاء') {
             return new Promise((resolve) => {
                 customDialogResolver = resolve;
@@ -2320,7 +2381,6 @@
                 const confirmBtn = document.getElementById('dialogConfirmBtn');
                 const cancelBtn = document.querySelector('.dialog-btn-cancel');
 
-                // Set icon and colors based on type
                 iconWrapper.className = 'dialog-icon-wrapper ' + type;
                 const icons = {
                     confirm: '❓',
@@ -2331,21 +2391,15 @@
                 };
                 iconWrapper.textContent = icons[type] || '❓';
 
-                // Set text content
                 titleEl.textContent = title;
                 messageEl.textContent = message;
                 confirmBtn.textContent = confirmText;
                 cancelBtn.textContent = cancelText;
 
-                // Set button styles based on type
                 confirmBtn.className = 'dialog-btn dialog-btn-confirm';
-                if (type === 'danger') {
-                    confirmBtn.classList.add('danger');
-                } else if (type === 'warning') {
-                    confirmBtn.classList.add('warning');
-                }
+                if (type === 'danger') confirmBtn.classList.add('danger');
+                else if (type === 'warning') confirmBtn.classList.add('warning');
 
-                // Show dialog with animation
                 overlay.classList.add('active');
             });
         }
@@ -2360,7 +2414,6 @@
             }
         }
 
-        // Close dialog on overlay click
         document.getElementById('customDialogOverlay')?.addEventListener('click', (e) => {
             if (e.target.id === 'customDialogOverlay') {
                 closeCustomDialog(false);
@@ -2726,7 +2779,7 @@
             let total = elapsed;
             
             if (session.timeExtensions?.length > 0) {
-                total = session.initialDuration + session.timeExtensions.reduce((s, e) => s + e.minutes, 0);
+                total = session.initialDuration + session.timeExtensions.reduce((sum, e) => sum + e.minutes, 0);
             } else if (session.sessionType === 'timed') {
                 total = Math.max(elapsed, session.duration);
             }
@@ -3228,13 +3281,6 @@
 
         // Initialize
         init();
-
-        // Register SW for PWA
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-                .then(() => console.log('✅ SW registered'))
-                .catch(err => console.log('SW registration failed:', err));
-        }
     </script>
 </body>
 </html>
