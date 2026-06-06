@@ -9,8 +9,21 @@
     <meta name="apple-mobile-web-app-title" content="محل البليستيشن">
     <title>محل البليستيشن - PlayStation Lounge Manager</title>
     
-    <!-- PWA Manifest with proper icons -->
-    <link rel="manifest" href="manifest.json">
+    <!-- PWA Manifest Inline -->
+    <link rel="manifest" href="data:application/json,{
+        %22name%22:%22%D9%85%D8%AD%D9%84%20%D8%A7%D9%84%D8%A8%D9%84%D9%8A%D8%B3%D8%AA%D9%8A%D8%B4%D9%86%22,
+        %22short_name%22:%22PS%20Lounge%22,
+        %22start_url%22:%22.%22,
+        %22display%22:%22standalone%22,
+        %22background_color%22:%22%23F8FAFC%22,
+        %22theme_color%22:%222563EB%22,
+        %22orientation%22:%22portrait%22,
+        %22icons%22:[{
+            %22src%22:%22data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%232563EB' width='100' height='100' rx='20'/><text x='50' y='70' font-size='60' text-anchor='middle'>🎮</text></svg>%22,
+            %22sizes%22:%22192x192%22,
+            %22type%22:%22image/svg+xml%22
+        }]
+    }">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,7 +62,7 @@
             overflow-x: hidden;
         }
 
-        /* ===== INSTALL BANNER - ALWAYS VISIBLE ===== */
+        /* ===== INSTALL BANNER ===== */
         .install-banner {
             position: fixed;
             bottom: 0;
@@ -138,7 +151,7 @@
 
         .install-dismiss:hover { background: rgba(255,255,255,0.35); }
 
-        /* ===== LOGIN SCREEN - MUST BE HIGHEST Z-INDEX TO PREVENT BANNER BLOCKING INPUTS ===== */
+        /* ===== LOGIN SCREEN ===== */
         .login-screen {
             position: fixed;
             inset: 0;
@@ -860,7 +873,7 @@
         .qr-link:hover { transform: scale(1.08); }
         .qr-link img { height: 55px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
 
-        /* ===== PROFESSIONAL TOAST NOTIFICATION SYSTEM - COMPLETELY REDESIGNED ===== */
+        /* ===== PROFESSIONAL TOAST NOTIFICATION SYSTEM ===== */
         .toast-container {
             position: fixed;
             top: 1.5rem;
@@ -1060,6 +1073,213 @@
             to { width: 0%; }
         }
 
+        /* ===== CUSTOM DIALOG SYSTEM - REPLACES BROWSER CONFIRM/ALERT ===== */
+        .custom-dialog-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999998;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 1rem;
+        }
+
+        .custom-dialog-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .custom-dialog {
+            background: white;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 
+                0 25px 80px rgba(0, 0, 0, 0.35),
+                0 10px 30px rgba(0, 0, 0, 0.2);
+            transform: scale(0.85) translateY(30px);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+            animation: dialogGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes dialogGlow {
+            from { box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35), 0 0 0 0 rgba(37, 99, 235, 0); }
+            to { box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35), 0 0 0 8px rgba(37, 99, 235, 0.08); }
+        }
+
+        .custom-dialog-overlay.active .custom-dialog {
+            transform: scale(1) translateY(0);
+        }
+
+        .dialog-header {
+            padding: 2rem 2rem 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .dialog-icon-wrapper {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.25rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            position: relative;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .dialog-icon-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 3px dashed currentColor;
+            opacity: 0.3;
+            animation: iconSpin 12s linear infinite;
+        }
+
+        @keyframes iconSpin {
+            to { transform: rotate(360deg); }
+        }
+
+        .dialog-icon-wrapper.confirm {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            color: var(--primary);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        .dialog-icon-wrapper.warning {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: var(--warning);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+        }
+
+        .dialog-icon-wrapper.danger {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            color: var(--danger);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+        }
+
+        .dialog-icon-wrapper.success {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: var(--success);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .dialog-title {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .dialog-message {
+            font-size: 0.95rem;
+            color: var(--gray-600);
+            line-height: 1.7;
+            font-weight: 500;
+        }
+
+        .dialog-actions {
+            padding: 1.5rem 2rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.85rem;
+            background: var(--gray-50);
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .dialog-btn {
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 14px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dialog-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .dialog-btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .dialog-btn-cancel {
+            background: white;
+            color: var(--gray-700);
+            border: 2px solid var(--gray-200);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .dialog-btn-cancel:hover {
+            background: var(--gray-100);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .dialog-btn-confirm {
+            background: linear-gradient(135deg, var(--primary), #3b82f6);
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .dialog-btn-confirm:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+        }
+
+        .dialog-btn-confirm.danger {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .dialog-btn-confirm.danger:hover {
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+        }
+
+        .dialog-btn-confirm.warning {
+            background: linear-gradient(135deg, var(--warning), #d97706);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .dialog-btn-confirm.warning:hover {
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+        }
+
         /* Session Timer */
         .session-timer {
             background: linear-gradient(135deg, #1e293b, #334155);
@@ -1239,6 +1459,18 @@
             .toast-notification { max-width: 100%; font-size: 0.84rem; padding: 0.95rem 1.15rem; }
             .toast-icon { width: 38px; height: 38px; font-size: 1.15rem; }
 
+            .custom-dialog {
+                max-width: 100%;
+                margin: 0.5rem;
+            }
+
+            .dialog-header { padding: 1.5rem 1.25rem 1.25rem; }
+            .dialog-icon-wrapper { width: 65px; height: 65px; font-size: 2rem; }
+            .dialog-title { font-size: 1.2rem; }
+            .dialog-message { font-size: 0.88rem; }
+            .dialog-actions { padding: 1.25rem 1.25rem 1.5rem; }
+            .dialog-btn { padding: 0.85rem 1.25rem; font-size: 0.92rem; }
+
             .install-banner {
                 padding: 0.8rem 1rem;
                 flex-direction: column;
@@ -1276,6 +1508,8 @@
             .toast-notification { padding: 0.85rem 1rem; }
             .toast-title { font-size: 0.84rem; }
             .toast-message { font-size: 0.76rem; }
+
+            .dialog-actions { grid-template-columns: 1fr; }
         }
 
         @media print {
@@ -1308,6 +1542,21 @@
 
     <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Custom Dialog Container -->
+    <div class="custom-dialog-overlay" id="customDialogOverlay">
+        <div class="custom-dialog" id="customDialog">
+            <div class="dialog-header">
+                <div class="dialog-icon-wrapper" id="dialogIconWrapper">❓</div>
+                <h3 class="dialog-title" id="dialogTitle">عنوان</h3>
+                <p class="dialog-message" id="dialogMessage">رسالة</p>
+            </div>
+            <div class="dialog-actions" id="dialogActions">
+                <button class="dialog-btn dialog-btn-cancel" onclick="closeCustomDialog(false)">إلغاء</button>
+                <button class="dialog-btn dialog-btn-confirm" id="dialogConfirmBtn" onclick="closeCustomDialog(true)">تأكيد</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Login Screen -->
     <div class="login-screen" id="loginScreen">
@@ -1350,7 +1599,7 @@
                     <div class="brand-icon">🎮</div>
                     <span>محل البليستيشن</span>
                 </div>
-                <button class="logout-btn" onclick="logout()">⏻ خروج</button>
+                <button class="logout-btn" onclick="handleLogout()">⏻ خروج</button>
             </div>
             
             <nav class="nav-tabs">
@@ -1530,7 +1779,7 @@
                             </div>
                         </div>
                         <div class="setting-actions">
-                            <button class="add-btn" style="background:var(--danger);" onclick="resetData()">🗑 مسح</button>
+                            <button class="add-btn" style="background:var(--danger);" onclick="handleResetData()">🗑 مسح</button>
                         </div>
                     </div>
                     
@@ -1783,6 +2032,9 @@
         let alertedSessions = new Set();
         let notificationPermissionGranted = false;
 
+        // Custom Dialog System
+        let customDialogResolver = null;
+
         // ===== INITIALIZATION =====
         function init() {
             loadData();
@@ -1808,6 +2060,7 @@
             checkNotificationPermission();
             startGlobalAlertChecker();
             setupInstallPrompt();
+            registerServiceWorker();
         }
 
         function saveData() {
@@ -1819,9 +2072,30 @@
             if (saved) appData = JSON.parse(saved);
         }
 
+        // ===== SERVICE WORKER FOR PWA =====
+        function registerServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                // Create a simple service worker blob
+                const swCode = `
+                    self.addEventListener('install', e => self.skipWaiting());
+                    self.addEventListener('activate', e => e.waitUntil(clients.claim()));
+                    self.addEventListener('fetch', e => {
+                        e.respondWith(
+                            caches.match(e.request).then(r => r || fetch(e.request))
+                        );
+                    });
+                `;
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+                
+                navigator.serviceWorker.register(swUrl)
+                    .then(() => console.log('✅ Service Worker registered'))
+                    .catch(err => console.log('SW registration failed:', err));
+            }
+        }
+
         // ===== PWA INSTALL - IMPROVED =====
         function setupInstallPrompt() {
-            // Show banner after 2 seconds always
             setTimeout(() => showInstallBanner(), 2000);
 
             window.addEventListener('beforeinstallprompt', (e) => {
@@ -1840,9 +2114,11 @@
         function showInstallBanner() {
             const banner = document.getElementById('installBanner');
             if (banner && !banner.classList.contains('hidden')) {
-                // Don't show if already installed
-                if (!window.matchMedia('(display-mode: standalone)').matches) {
+                if (!window.matchMedia('(display-mode: standalone)').matches &&
+                    !window.matchMedia('(display-mode: fullscreen)').matches) {
                     banner.classList.remove('hidden');
+                } else {
+                    hideInstallBanner();
                 }
             }
         }
@@ -1857,22 +2133,24 @@
         }
 
         async function installApp() {
-            if (!deferredPrompt) {
-                showToast('info', 'تنبيه', 'يمكنك تثبيت التطبيق من قائمة المتصفح');
-                return;
-            }
-            
-            deferredPrompt.prompt();
-            const result = await deferredPrompt.userChoice;
-            
-            if (result.outcome === 'accepted') {
-                showToast('success', 'تم التثبيت!', 'جاري تحميل التطبيق... ⬇️');
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const result = await deferredPrompt.userChoice;
+                
+                if (result.outcome === 'accepted') {
+                    showToast('success', 'تم التثبيت!', 'جاري تحميل التطبيق... ⬇️');
+                } else {
+                    showToast('info', 'إلغاء', 'يمكنك التثبيت لاحقاً');
+                }
+                
+                deferredPrompt = null;
+                hideInstallBanner();
             } else {
-                showToast('info', 'إلغاء', 'يمكنك التثبيت لاحقاً');
+                // Fallback: Show instructions for manual install
+                showCustomDialog('info', '📱 تثبيت التطبيق', 
+                    'للتثبيت يدوياً:\n\n📌 Chrome: اضغط على القائمة (⋮) → "تثبيت التطبيق"\n\n📌 Safari: اضغط على مشاركة → "إضافة إلى الشاشة الرئيسية"\n\n📌 Samsung Internet: اضغط على القائمة → "Add to Home"', 
+                    null, 'فهمت ✅');
             }
-            
-            deferredPrompt = null;
-            hideInstallBanner();
         }
 
         // ===== NOTIFICATIONS =====
@@ -1944,7 +2222,6 @@
                 const elapsedMs = now - startTime;
                 const elapsedMinutes = Math.floor(elapsedMs / 1000 / 60);
                 
-                // Check expiration
                 if (elapsedMinutes >= totalDuration && !alertedSessions.has(session.id)) {
                     alertedSessions.add(session.id);
                     triggerExpiredAlert(session, elapsedMinutes, totalDuration);
@@ -1966,8 +2243,7 @@
             startAlertLoop();
             
             if (document.visibilityState === 'visible') {
-                showToast('alert-critical', '🚨 انتهاء الوقت!', `جلسة ${session.customerName} على ${deviceInfo}
-انتهى منذ ${overMin} دقيقة`, 25000, true);
+                showToast('alert-critical', '🚨 انتهاء الوقت!', `جلسة ${session.customerName} على ${deviceInfo}\nانتهى منذ ${overMin} دقيقة`, 25000, true);
             }
         }
 
@@ -1975,10 +2251,7 @@
             if (notificationPermissionGranted && 'Notification' in window) {
                 try {
                     new Notification('🚨 انتهاء الوقت!', {
-                        body: `العميل: ${session.customerName}
-الجهاز: ${deviceInfo}
-
-⚠️ انتهى منذ ${overMin} دقيقة`,
+                        body: `العميل: ${session.customerName}\nالجهاز: ${deviceInfo}\n\n⚠️ انتهى منذ ${overMin} دقيقة`,
                         icon: '🎮',
                         badge: '🚨',
                         tag: `expired-${session.id}`,
@@ -1989,7 +2262,7 @@
             }
         }
 
-        // ===== PROFESSIONAL TOAST - REDESIGNED =====
+        // ===== PROFESSIONAL TOAST SYSTEM =====
         function showToast(type, title, message, duration = 5000, persistent = false) {
             const container = document.getElementById('toastContainer');
             
@@ -2007,7 +2280,7 @@
                 <div class="toast-icon">${icons[type] || 'ℹ️'}</div>
                 <div class="toast-content">
                     <div class="toast-title">${title}</div>
-                    <div class="toast-message">${message}</div>
+                    <div class="toast-message">${message.replace(/\n/g, '<br>')}</div>
                 </div>
                 <button class="toast-close" onclick="removeToast(this.parentElement)">✕</button>
                 ${!persistent ? `<div class="toast-progress" style="animation-duration: ${duration}ms;"></div>` : ''}
@@ -2026,10 +2299,73 @@
             setTimeout(() => el.remove(), 350);
         }
 
-        // Keep backward compatibility
-        function showProfessionalToast(type, title, message, duration, persistent) {
-            showToast(type, title, message, duration, persistent);
+        // ===== CUSTOM DIALOG SYSTEM - REPLACES BROWSER CONFIRM/ALERT =====
+        /**
+         * Shows a professional custom dialog
+         * @param {string} type - 'confirm', 'warning', 'danger', 'success', 'info'
+         * @param {string} title - Dialog title
+         * @param {string} message - Dialog message
+         * @param {string} confirmText - Confirm button text (optional)
+         * @param {string} cancelText - Cancel button text (optional)
+         * @returns {Promise<boolean>} - User's choice
+         */
+        function showCustomDialog(type = 'confirm', title, message, confirmText = 'تأكيد', cancelText = 'إلغاء') {
+            return new Promise((resolve) => {
+                customDialogResolver = resolve;
+                
+                const overlay = document.getElementById('customDialogOverlay');
+                const iconWrapper = document.getElementById('dialogIconWrapper');
+                const titleEl = document.getElementById('dialogTitle');
+                const messageEl = document.getElementById('dialogMessage');
+                const confirmBtn = document.getElementById('dialogConfirmBtn');
+                const cancelBtn = document.querySelector('.dialog-btn-cancel');
+
+                // Set icon and colors based on type
+                iconWrapper.className = 'dialog-icon-wrapper ' + type;
+                const icons = {
+                    confirm: '❓',
+                    warning: '⚠️',
+                    danger: '🗑️',
+                    success: '✅',
+                    info: 'ℹ️'
+                };
+                iconWrapper.textContent = icons[type] || '❓';
+
+                // Set text content
+                titleEl.textContent = title;
+                messageEl.textContent = message;
+                confirmBtn.textContent = confirmText;
+                cancelBtn.textContent = cancelText;
+
+                // Set button styles based on type
+                confirmBtn.className = 'dialog-btn dialog-btn-confirm';
+                if (type === 'danger') {
+                    confirmBtn.classList.add('danger');
+                } else if (type === 'warning') {
+                    confirmBtn.classList.add('warning');
+                }
+
+                // Show dialog with animation
+                overlay.classList.add('active');
+            });
         }
+
+        function closeCustomDialog(result) {
+            const overlay = document.getElementById('customDialogOverlay');
+            overlay.classList.remove('active');
+            
+            if (customDialogResolver) {
+                customDialogResolver(result);
+                customDialogResolver = null;
+            }
+        }
+
+        // Close dialog on overlay click
+        document.getElementById('customDialogOverlay')?.addEventListener('click', (e) => {
+            if (e.target.id === 'customDialogOverlay') {
+                closeCustomDialog(false);
+            }
+        });
 
         // ===== LOGIN =====
         let enteredPin = '';
@@ -2071,13 +2407,40 @@
             }
         }
 
-        function logout() {
-            if (confirm('هل تريد الخروج؟')) {
+        // ===== LOGOUT WITH CUSTOM DIALOG =====
+        async function handleLogout() {
+            const result = await showCustomDialog(
+                'warning', 
+                '⏻ تأكيد الخروج', 
+                'هل أنت متأكد من تسجيل الخروج؟\nسيتم إنهاء جميع العمليات الحالية.',
+                'نعم، خروج',
+                'إلغاء'
+            );
+            
+            if (result) {
                 sessionStorage.removeItem('isLoggedIn');
                 document.getElementById('appContainer').classList.remove('active');
                 document.getElementById('loginScreen').classList.remove('hidden');
                 enteredPin = '';
                 updatePinDisplay();
+                showToast('info', 'تم الخروج', 'نتقابل قريباً 👋');
+            }
+        }
+
+        // ===== RESET DATA WITH CUSTOM DIALOG =====
+        async function handleResetData() {
+            const result = await showCustomDialog(
+                'danger',
+                '🗑 مسح البيانات',
+                '⚠️ تحذير خطير!\n\nهل أنت متأكد تماماً من حذف جميع البيانات؟\n\nهذا الإجراء لا يمكن التراجع عنه!',
+                'نعم، امسح الكل!',
+                'إلغاء'
+            );
+            
+            if (result) {
+                localStorage.removeItem('playstationLounge');
+                showToast('success', 'تم المسح', '✓ تم حذف جميع البيانات بنجاح');
+                setTimeout(() => location.reload(), 1500);
             }
         }
 
@@ -2187,7 +2550,6 @@
             return date.toISOString().split('T')[0];
         }
 
-        // ✅ FIXED: Show duration properly in sessions table
         function renderSessions() {
             const tbody = document.getElementById('sessionsTableBody');
             const active = appData.sessions.filter(s => s.status === 'active');
@@ -2204,7 +2566,6 @@
                 const elapsed = Math.floor((now - start) / 60000);
                 const typeLabel = s.sessionType === 'open' ? 'مفتوح' : 'محدد';
                 
-                // ✅ FIX: Calculate and display duration correctly
                 let durationText = '-';
                 if (s.sessionType === 'timed') {
                     let dur = s.duration || 0;
@@ -2326,7 +2687,7 @@
                 duration = (h * 60) + m;
                 
                 if (duration <= 0) {
-                    showToast('error', 'خطأ', 'يرجى إدخالمدة صحيحة');
+                    showToast('error', 'خطأ', 'يرجى إدخال مدة صحيحة');
                     return;
                 }
                 
@@ -2466,7 +2827,6 @@
             }
         }
 
-        // ✅ PROFESSIONAL ALERT SOUND - Multi-frequency alarm
         function playProfessionalSound(type = 'critical') {
             try {
                 const ctx = initAudioContext();
@@ -2474,7 +2834,6 @@
                 
                 const now = ctx.currentTime;
                 
-                // Create oscillator
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 
@@ -2482,7 +2841,6 @@
                 gain.connect(ctx.destination);
                 
                 if (type === 'critical') {
-                    // 🔴 CRITICAL: Loud multi-tone alarm (like real alarm)
                     osc.frequency.setValueAtTime(880, now);
                     osc.frequency.setValueAtTime(880, now + 0.1);
                     osc.frequency.setValueAtTime(660, now + 0.2);
@@ -2498,7 +2856,6 @@
                     osc.start(now);
                     osc.stop(now + 0.8);
                     
-                    // Second oscillator for depth
                     const osc2 = ctx.createOscillator();
                     const gain2 = ctx.createGain();
                     osc2.connect(gain2);
@@ -2513,7 +2870,6 @@
                     osc2.stop(now + 0.6);
                     
                 } else if (type === 'warning') {
-                    // ⚠️ WARNING: Softer double-beep
                     osc.frequency.value = 660;
                     osc.type = 'sine';
                     
@@ -2524,7 +2880,6 @@
                     osc.start(now);
                     osc.stop(now + 0.4);
                     
-                    // Second beep
                     setTimeout(() => {
                         const o = ctx.createOscillator();
                         const g = ctx.createGain();
@@ -2587,7 +2942,7 @@
         document.getElementById('extendHours').addEventListener('input', calcExtendPrice);
         document.getElementById('extendMinutes').addEventListener('input', calcExtendPrice);
 
-        function confirmExtendTime() {
+        async function confirmExtendTime() {
             const s = appData.sessions.find(x => x.id === currentManagingSessionId);
             if (!s) return;
             
@@ -2861,13 +3216,6 @@
                     }
                 };
                 reader.readAsText(file);
-            }
-        }
-
-        function resetData() {
-            if (confirm('⚠ هل أنت متأكد؟ سيتم حذف جميع البيانات!')) {
-                localStorage.removeItem('playstationLounge');
-                location.reload();
             }
         }
 
