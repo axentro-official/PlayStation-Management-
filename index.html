@@ -138,7 +138,7 @@
 
         .install-dismiss:hover { background: rgba(255,255,255,0.35); }
 
-        /* ===== LOGIN SCREEN ===== */
+        /* ===== LOGIN SCREEN - MUST BE HIGHEST Z-INDEX TO PREVENT BANNER BLOCKING INPUTS ===== */
         .login-screen {
             position: fixed;
             inset: 0;
@@ -146,7 +146,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 9999;
+            z-index: 999999;
             transition: all 0.5s ease;
         }
 
@@ -247,6 +247,9 @@
             max-width: 300px;
             margin: 0 auto;
             direction: ltr;
+            position: relative;
+            z-index: 10;
+            pointer-events: auto !important;
         }
 
         .num-btn {
@@ -261,6 +264,9 @@
             font-family: inherit;
             direction: ltr;
             -webkit-tap-highlight-color: transparent;
+            position: relative;
+            z-index: 10;
+            pointer-events: auto !important;
         }
 
         .num-btn:hover {
@@ -1288,7 +1294,7 @@
 </head>
 <body>
     <!-- Install Banner -->
-    <div class="install-banner" id="installBanner">
+    <div class="install-banner" id="installBanner" style="pointer-events: none;">
         <div class="install-banner-content">
             <div class="install-icon">📱</div>
             <div class="install-text">
@@ -1296,8 +1302,8 @@
                 <p>تجربة سريعة مثل التطبيقات الحقيقية</p>
             </div>
         </div>
-        <button class="install-btn" id="installBtn" onclick="installApp()">⬇️ تثبيت الآن</button>
-        <button class="install-dismiss" onclick="dismissInstall()">✕</button>
+        <button class="install-btn" id="installBtn" onclick="installApp()" style="pointer-events: auto;">⬇️ تثبيت الآن</button>
+        <button class="install-dismiss" onclick="dismissInstall()" style="pointer-events: auto;">✕</button>
     </div>
 
     <!-- Toast Container -->
@@ -1891,7 +1897,7 @@
         }
 
         async function requestNotificationPermission() {
-            if (!('Notification' in window) {
+            if (!('Notification' in window)) {
                 showToast('error', 'خطأ', 'المصفح لا يدعم الإشعارات');
                 return;
             }
@@ -1960,7 +1966,8 @@
             startAlertLoop();
             
             if (document.visibilityState === 'visible') {
-                showToast('alert-critical', '🚨 انتهاء الوقت!', `جلسة ${session.customerName} على ${deviceInfo}\nانتهى منذ ${overMin} دقيقة`, 25000, true);
+                showToast('alert-critical', '🚨 انتهاء الوقت!', `جلسة ${session.customerName} على ${deviceInfo}
+انتهى منذ ${overMin} دقيقة`, 25000, true);
             }
         }
 
@@ -1968,7 +1975,10 @@
             if (notificationPermissionGranted && 'Notification' in window) {
                 try {
                     new Notification('🚨 انتهاء الوقت!', {
-                        body: `العميل: ${session.customerName}\nالجهاز: ${deviceInfo}\n\n⚠️ انتهى منذ ${overMin} دقيقة`,
+                        body: `العميل: ${session.customerName}
+الجهاز: ${deviceInfo}
+
+⚠️ انتهى منذ ${overMin} دقيقة`,
                         icon: '🎮',
                         badge: '🚨',
                         tag: `expired-${session.id}`,
@@ -2559,7 +2569,7 @@
 
         function showExtendTimeOptions() {
             document.getElementById('extendHours').value = 0;
-            document document.getElementById('extendMinutes').value = 30;
+            document.getElementById('extendMinutes').value = 30;
             calcExtendPrice();
             document.getElementById('extendTimeModal').classList.add('active');
         }
@@ -2578,7 +2588,7 @@
         document.getElementById('extendMinutes').addEventListener('input', calcExtendPrice);
 
         function confirmExtendTime() {
-            const s = appDatasessions.find(x => x.id === currentManagingSessionId);
+            const s = appData.sessions.find(x => x.id === currentManagingSessionId);
             if (!s) return;
             
             const h = parseInt(document.getElementById('extendHours').value) || 0;
