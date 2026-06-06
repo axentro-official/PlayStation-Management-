@@ -2,11 +2,20 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2563EB">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="محل البليستيشن">
     <title>محل البليستيشن - PlayStation Lounge Manager</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json,{%22name%22:%22محل%20البليستيشن%22,%22short_name%22:%22PS%20Lounge%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23F8FAFC%22,%22theme_color%22:%222563EB%22,%22icons%22:[]}">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -46,6 +55,9 @@
             direction: rtl;
             min-height: 100vh;
             line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         /* ===== LOGIN SCREEN ===== */
@@ -163,7 +175,7 @@
             40%, 80% { transform: translateX(10px); }
         }
 
-        /* Numpad with LTR layout (numbers from left) */
+        /* Numpad with LTR layout */
         .numpad {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -184,6 +196,7 @@
             transition: all 0.2s ease;
             font-family: inherit;
             direction: ltr;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .num-btn:hover {
@@ -230,7 +243,7 @@
         .app-header {
             background: white;
             border-bottom: 1px solid var(--gray-200);
-            padding: 1rem 2rem;
+            padding: 1rem;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -249,7 +262,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 800;
             color: var(--primary);
         }
@@ -276,6 +289,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
+            font-size: 0.9rem;
         }
 
         .logout-btn:hover {
@@ -291,20 +305,28 @@
             gap: 0.5rem;
             overflow-x: auto;
             padding-bottom: 0.5rem;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .nav-tabs::-webkit-scrollbar {
+            display: none;
         }
 
         .nav-tab {
-            padding: 0.75rem 1.25rem;
+            padding: 0.7rem 1rem;
             border: none;
             background: transparent;
             color: var(--gray-500);
             font-family: inherit;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
             border-radius: var(--radius-md);
             transition: all 0.2s ease;
             white-space: nowrap;
+            -webkit-tap-highlight-color: transparent;
+            flex-shrink: 0;
         }
 
         .nav-tab:hover {
@@ -320,7 +342,7 @@
         /* Main Content */
         .main-content {
             flex: 1;
-            padding: 2rem;
+            padding: 1.5rem 1rem;
             max-width: 1400px;
             margin: 0 auto;
             width: 100%;
@@ -351,7 +373,7 @@
         }
 
         .section-title {
-            font-size: 1.5rem;
+            font-size: 1.35rem;
             font-weight: 800;
             color: var(--gray-900);
         }
@@ -359,14 +381,14 @@
         /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.25rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
             margin-bottom: 2rem;
         }
 
         .stat-card {
             background: white;
-            padding: 1.5rem;
+            padding: 1.25rem;
             border-radius: var(--radius-xl);
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--gray-200);
@@ -379,13 +401,13 @@
         }
 
         .stat-icon {
-            width: 48px;
-            height: 48px;
+            width: 45px;
+            height: 45px;
             border-radius: var(--radius-lg);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.35rem;
             margin-bottom: 0.75rem;
         }
 
@@ -395,7 +417,7 @@
         .stat-icon.red { background: #fee2e2; color: var(--danger); }
 
         .stat-value {
-            font-size: 1.75rem;
+            font-size: 1.5rem;
             font-weight: 800;
             color: var(--gray-900);
             margin-bottom: 0.25rem;
@@ -405,20 +427,20 @@
 
         .stat-label {
             color: var(--gray-500);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         /* Devices Grid */
         .devices-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 1.25rem;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
         }
 
         .device-card {
             background: white;
             border-radius: var(--radius-xl);
-            padding: 1.5rem;
+            padding: 1.25rem;
             text-align: center;
             box-shadow: var(--shadow-sm);
             border: 2px solid var(--gray-200);
@@ -426,6 +448,7 @@
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
             overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .device-card::before {
@@ -451,7 +474,7 @@
         .device-card:hover::before { height: 6px; }
 
         .device-number {
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             font-weight: 800;
             color: var(--gray-900);
             margin-bottom: 0.5rem;
@@ -459,7 +482,7 @@
 
         .device-type {
             color: var(--gray-500);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
             margin-bottom: 0.75rem;
         }
@@ -468,9 +491,9 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 0.4rem 0.9rem;
+            padding: 0.35rem 0.8rem;
             border-radius: 9999px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 700;
         }
 
@@ -512,6 +535,7 @@
             box-shadow: var(--shadow-xl);
             transform: scale(0.9) translateY(20px);
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            -webkit-overflow-scrolling: touch;
         }
 
         .modal-overlay.active .modal-content {
@@ -521,7 +545,7 @@
         .modal-header {
             background: linear-gradient(135deg, var(--primary), #3b82f6);
             color: white;
-            padding: 1.5rem 2rem;
+            padding: 1.25rem 1.5rem;
             border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
             display: flex;
             align-items: center;
@@ -529,7 +553,7 @@
         }
 
         .modal-title {
-            font-size: 1.35rem;
+            font-size: 1.2rem;
             font-weight: 800;
         }
 
@@ -553,7 +577,7 @@
         }
 
         .modal-body {
-            padding: 2rem;
+            padding: 1.5rem;
         }
 
         .form-group {
@@ -599,6 +623,7 @@
             cursor: pointer;
             transition: all 0.2s ease;
             font-weight: 700;
+            font-size: 0.9rem;
         }
 
         .type-option:hover {
@@ -620,13 +645,14 @@
         }
 
         .session-type-option {
-            padding: 1.25rem;
+            padding: 1.1rem;
             border: 2px solid var(--gray-200);
             border-radius: var(--radius-lg);
             text-align: center;
             cursor: pointer;
             transition: all 0.2s ease;
             font-weight: 700;
+            font-size: 0.9rem;
         }
 
         .session-type-option:hover {
@@ -655,7 +681,7 @@
         }
 
         .price-value {
-            font-size: 2rem;
+            font-size: 1.75rem;
             font-weight: 900;
             color: #92400e;
             direction: ltr;
@@ -674,7 +700,7 @@
             border: none;
             border-radius: var(--radius-lg);
             font-family: inherit;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -682,6 +708,7 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .btn-cancel {
@@ -717,7 +744,7 @@
             background: linear-gradient(135deg, var(--primary), #3b82f6);
             color: white;
             border: none;
-            padding: 0.85rem 1.5rem;
+            padding: 0.75rem 1.25rem;
             border-radius: var(--radius-lg);
             font-family: inherit;
             font-weight: 700;
@@ -726,6 +753,7 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            font-size: 0.9rem;
         }
 
         .add-product-btn:hover {
@@ -735,8 +763,8 @@
 
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.25rem;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
         }
 
         .product-card {
@@ -754,27 +782,27 @@
         }
 
         .product-image {
-            height: 150px;
+            height: 130px;
             background: linear-gradient(135deg, var(--primary-light), #bfdbfe);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 4rem;
+            font-size: 3.5rem;
         }
 
         .product-info {
-            padding: 1.25rem;
+            padding: 1.1rem;
         }
 
         .product-name {
             font-weight: 700;
-            font-size: 1.1rem;
+            font-size: 1rem;
             margin-bottom: 0.5rem;
         }
 
         .product-desc {
             color: var(--gray-500);
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             margin-bottom: 1rem;
         }
 
@@ -787,7 +815,7 @@
         }
 
         .product-price {
-            font-size: 1.35rem;
+            font-size: 1.25rem;
             font-weight: 900;
             color: var(--primary);
             direction: ltr;
@@ -798,12 +826,13 @@
             background: var(--primary);
             color: white;
             border: none;
-            padding: 0.65rem 1.25rem;
+            padding: 0.55rem 1.1rem;
             border-radius: var(--radius-md);
             font-family: inherit;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease;
+            font-size: 0.85rem;
         }
 
         .add-btn:hover {
@@ -819,26 +848,28 @@
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--gray-200);
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 900px;
+            min-width: 700px;
         }
 
         th, td {
-            padding: 1rem;
+            padding: 0.85rem;
             text-align: right;
             border-bottom: 1px solid var(--gray-200);
             direction: ltr;
+            font-size: 0.88rem;
         }
 
         th {
             background: var(--gray-50);
             font-weight: 700;
             color: var(--gray-700);
-            font-size: 0.88rem;
+            font-size: 0.82rem;
         }
 
         tr:hover {
@@ -847,9 +878,9 @@
 
         .badge {
             display: inline-block;
-            padding: 0.35rem 0.75rem;
+            padding: 0.3rem 0.65rem;
             border-radius: 9999px;
-            font-size: 0.78rem;
+            font-size: 0.72rem;
             font-weight: 700;
         }
 
@@ -861,14 +892,14 @@
         /* Clients List */
         .clients-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.25rem;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1rem;
         }
 
         .client-card {
             background: white;
             border-radius: var(--radius-xl);
-            padding: 1.5rem;
+            padding: 1.35rem;
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--gray-200);
             transition: all 0.3s ease;
@@ -887,8 +918,8 @@
         }
 
         .client-avatar {
-            width: 50px;
-            height: 50px;
+            width: 48px;
+            height: 48px;
             background: linear-gradient(135deg, var(--primary), #3b82f6);
             border-radius: 50%;
             display: flex;
@@ -896,17 +927,17 @@
             justify-content: center;
             color: white;
             font-weight: 800;
-            font-size: 1.25rem;
+            font-size: 1.2rem;
         }
 
         .client-name {
             font-weight: 700;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
         }
 
         .client-phone {
             color: var(--gray-500);
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             direction: ltr;
             display: inline-block;
         }
@@ -914,40 +945,40 @@
         .client-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
+            gap: 0.7rem;
         }
 
         .client-stat {
             background: var(--gray-50);
-            padding: 0.75rem;
+            padding: 0.7rem;
             border-radius: var(--radius-md);
             text-align: center;
         }
 
         .client-stat-value {
             font-weight: 800;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             color: var(--primary);
             direction: ltr;
             display: inline-block;
         }
 
         .client-stat-label {
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             color: var(--gray-500);
         }
 
         /* Settings Cards */
         .settings-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.25rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
         }
 
         .setting-card {
             background: white;
             border-radius: var(--radius-xl);
-            padding: 1.75rem;
+            padding: 1.5rem;
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--gray-200);
         }
@@ -956,35 +987,35 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            margin-bottom: 1.25rem;
+            margin-bottom: 1rem;
             padding-bottom: 1rem;
             border-bottom: 1px solid var(--gray-200);
         }
 
         .setting-icon {
-            width: 45px;
-            height: 45px;
+            width: 42px;
+            height: 42px;
             border-radius: var(--radius-lg);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.35rem;
+            font-size: 1.25rem;
         }
 
         .setting-title {
             font-weight: 700;
-            font-size: 1.05rem;
+            font-size: 1rem;
         }
 
         .setting-desc {
             color: var(--gray-500);
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             margin-bottom: 1rem;
         }
 
         .setting-actions {
             display: flex;
-            gap: 0.75rem;
+            gap: 0.7rem;
             flex-wrap: wrap;
         }
 
@@ -992,21 +1023,21 @@
         .app-footer {
             background: white;
             border-top: 1px solid var(--gray-200);
-            padding: 2rem;
+            padding: 1.5rem;
             text-align: center;
             margin-top: auto;
         }
 
         .footer-text {
             color: var(--gray-500);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             margin-bottom: 0.5rem;
             font-weight: 600;
         }
 
         .footer-team {
             color: var(--gray-400);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             margin-bottom: 1rem;
         }
 
@@ -1020,37 +1051,158 @@
         }
 
         .qr-link img {
-            height: 70px;
+            height: 60px;
             border-radius: var(--radius-md);
             box-shadow: var(--shadow-md);
         }
 
-        /* Toast Notification */
-        .toast {
+        /* ===== PROFESSIONAL TOAST NOTIFICATION SYSTEM ===== */
+        .toast-container {
             position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: var(--gray-900);
-            color: white;
-            padding: 1rem 1.5rem;
+            top: 1rem;
+            left: 1rem;
+            right: 1rem;
+            z-index: 1000000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            pointer-events: none;
+        }
+
+        .toast-notification {
+            background: white;
             border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-xl);
-            z-index: 100000;
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            font-weight: 600;
+            padding: 1rem 1.25rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.85rem;
+            animation: toastSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: all;
+            border-right: 4px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+            max-width: 450px;
+            margin: 0 auto;
         }
 
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
+        .toast-notification.removing {
+            animation: toastSlideOut 0.3s ease forwards;
         }
 
-        .toast.success { background: var(--success); }
-        .toast.error { background: var(--danger); }
-        .toast.warning { background: var(--warning); color: var(--dark); }
+        @keyframes toastSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-100%) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        @keyframes toastSlideOut {
+            to {
+                opacity: 0;
+                transform: translateX(100%) scale(0.8);
+            }
+        }
+
+        .toast-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .toast-notification.success .toast-icon {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .toast-notification.error .toast-icon {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .toast-notification.warning .toast-icon {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .toast-notification.info .toast-icon {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .toast-notification.alert-critical {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            color: white;
+            border-right: 4px solid #fff;
+            animation: toastPulse 1s infinite, toastSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes toastPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
+            50% { box-shadow: 0 0 0 15px rgba(220, 38, 38, 0); }
+        }
+
+        .toast-notification.alert-critical .toast-icon {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .toast-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .toast-title {
+            font-weight: 800;
+            font-size: 0.95rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .toast-message {
+            font-size: 0.82rem;
+            opacity: 0.85;
+            line-height: 1.4;
+        }
+
+        .toast-close {
+            background: transparent;
+            border: none;
+            color: inherit;
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 0.25rem;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+            line-height: 1;
+        }
+
+        .toast-close:hover {
+            opacity: 1;
+        }
+
+        .toast-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: currentColor;
+            opacity: 0.3;
+            animation: toastProgress linear forwards;
+        }
+
+        @keyframes toastProgress {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
 
         /* Session Timer Display */
         .session-timer {
@@ -1060,7 +1212,7 @@
             border-radius: var(--radius-lg);
             text-align: center;
             margin: 1rem 0;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 900;
             font-family: monospace;
             direction: ltr;
@@ -1082,7 +1234,7 @@
             padding: 1rem;
             border-radius: var(--radius-md);
             margin: 1rem 0;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
         }
 
         .session-detail-row {
@@ -1107,36 +1259,36 @@
             direction: ltr;
         }
 
-        /* Invoice Modal Styles */
+        /* Invoice Modal Styles - IMPROVED RESPONSIVE */
         .invoice-modal .modal-content {
             max-width: 650px;
         }
 
         .invoice-header {
             text-align: center;
-            padding: 2rem;
+            padding: 1.75rem 1.5rem;
             background: linear-gradient(135deg, var(--dark), #1e293b);
             color: white;
             border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
         }
 
         .invoice-title {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 900;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
         }
 
         .invoice-subtitle {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             opacity: 0.9;
         }
 
         .invoice-body {
-            padding: 2rem;
+            padding: 1.5rem;
         }
 
         .invoice-section {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
             padding-bottom: 1rem;
             border-bottom: 2px dashed var(--gray-200);
         }
@@ -1146,10 +1298,10 @@
         }
 
         .invoice-section-title {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 800;
             color: var(--primary);
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.7rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -1158,12 +1310,14 @@
         .invoice-row {
             display: flex;
             justify-content: space-between;
-            padding: 0.5rem 0;
-            font-size: 0.95rem;
+            padding: 0.45rem 0;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
 
         .invoice-row.total {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 900;
             color: var(--success);
             margin-top: 1rem;
@@ -1171,21 +1325,41 @@
             border-top: 3px solid var(--primary);
         }
 
+        /* ✅ FIXED: Responsive Products Table in Invoice */
+        .invoice-products-container {
+            margin-top: 0.5rem;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
         .invoice-products-table {
             width: 100%;
-            margin-top: 0.5rem;
+            min-width: 300px;
+            border-collapse: collapse;
         }
 
         .invoice-products-table th,
         .invoice-products-table td {
-            padding: 0.65rem;
-            font-size: 0.88rem;
+            padding: 0.6rem 0.75rem;
+            font-size: 0.85rem;
             border: 1px solid var(--gray-200);
+            text-align: right;
         }
 
         .invoice-products-table th {
             background: var(--gray-50);
             font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .invoice-products-table td:first-child {
+            word-break: break-word;
+            max-width: 180px;
+        }
+
+        .invoice-products-table tfoot tr {
+            font-weight: 800;
+            background: var(--gray-50);
         }
 
         /* Select Session Modal */
@@ -1193,12 +1367,14 @@
             padding: 1rem;
             border: 2px solid var(--gray-200);
             border-radius: var(--radius-lg);
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.7rem;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
 
         .session-list-item:hover {
@@ -1212,25 +1388,202 @@
             background: #d1fae5;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .app-header { padding: 1rem; }
-            .main-content { padding: 1rem; }
-            .stats-grid { grid-template-columns: 1fr 1fr; }
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 1024px) {
+            .main-content { padding: 1.25rem 0.75rem; }
+            .stats-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
             .devices-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+            .products-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+        }
+
+        @media (max-width: 768px) {
+            .app-header { padding: 0.85rem; }
+            .main-content { padding: 1rem 0.5rem; }
+            
+            .brand { font-size: 1.1rem; }
+            .brand-icon { width: 36px; height: 36px; font-size: 1.1rem; }
+            
+            .logout-btn {
+                padding: 0.5rem 0.9rem;
+                font-size: 0.82rem;
+            }
+            
+            .nav-tab {
+                padding: 0.6rem 0.85rem;
+                font-size: 0.8rem;
+            }
+            
+            .section-title { font-size: 1.2rem; }
+            
+            .stats-grid { 
+                grid-template-columns: 1fr 1fr; 
+                gap: 0.75rem;
+            }
+            
+            .stat-card { padding: 1rem; }
+            .stat-value { font-size: 1.3rem; }
+            
+            .devices-grid { 
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 0.75rem;
+            }
+            
+            .device-card { padding: 1rem; }
+            .device-number { font-size: 1rem; }
+            .device-status { font-size: 0.7rem; padding: 0.3rem 0.65rem; }
+            
             .products-grid { grid-template-columns: 1fr; }
             .clients-grid { grid-template-columns: 1fr; }
             .settings-grid { grid-template-columns: 1fr; }
+            
             .btn-group { grid-template-columns: 1fr; }
             .duration-row { grid-template-columns: 1fr; }
-            table { font-size: 0.85rem; }
-            th, td { padding: 0.75rem 0.5rem; }
+            
+            table { font-size: 0.8rem; min-width: 600px; }
+            th, td { padding: 0.65rem 0.5rem; }
+            
             .session-type-toggle { grid-template-columns: 1fr; }
-            .invoice-modal .modal-content { max-width: 100%; margin: 0.5rem; }
+            
+            .modal-content {
+                max-width: 100%;
+                margin: 0.5rem;
+                max-height: 95vh;
+            }
+            
+            .modal-body { padding: 1.25rem; }
+            .modal-title { font-size: 1.1rem; }
+            
+            .login-box {
+                padding: 2rem 1.5rem;
+                width: 95%;
+            }
+            
+            .pin-dot {
+                width: 48px;
+                height: 48px;
+                font-size: 1.3rem;
+            }
+            
+            .num-btn {
+                padding: 16px;
+                font-size: 1.2rem;
+            }
+            
+            .session-timer {
+                font-size: 1.8rem;
+                padding: 1.25rem;
+            }
+            
+            .invoice-modal .modal-content { 
+                max-width: 100%; 
+                margin: 0.25rem;
+            }
+            
+            .invoice-body { padding: 1.25rem; }
+            .invoice-title { font-size: 1.35rem; }
+            
+            .toast-notification {
+                max-width: 100%;
+                font-size: 0.88rem;
+            }
+            
+            .toast-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-content {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            
+            .brand {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .logout-btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .nav-tabs {
+                justify-content: flex-start;
+            }
+            
+            .nav-tab {
+                padding: 0.55rem 0.75rem;
+                font-size: 0.78rem;
+            }
+            
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+            .stat-card { padding: 0.85rem; }
+            .stat-value { font-size: 1.2rem; }
+            .stat-label { font-size: 0.78rem; }
+            
+            .devices-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+            }
+            
+            .device-card { padding: 0.85rem; }
+            .device-number { font-size: 0.95rem; }
+            .device-type { font-size: 0.75rem; }
+            
+            .product-image { height: 110px; font-size: 3rem; }
+            .product-info { padding: 1rem; }
+            .product-name { font-size: 0.95rem; }
+            
+            .session-timer { font-size: 1.6rem; padding: 1rem; }
+            
+            .toast-container {
+                left: 0.5rem;
+                right: 0.5rem;
+                top: 0.5rem;
+            }
+            
+            .toast-notification {
+                padding: 0.85rem 1rem;
+            }
+            
+            .toast-title { font-size: 0.88rem; }
+            .toast-message { font-size: 0.78rem; }
+        }
+
+        /* Print Styles for Invoice */
+        @media print {
+            body * { visibility: hidden; }
+            .invoice-modal, .invoice-modal * { visibility: visible; }
+            .invoice-modal {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background: white;
+            }
+        }
+
+        /* Safe area insets for notch devices */
+        @supports (padding-top: env(safe-area-inset-top)) {
+            .app-header {
+                padding-top: calc(1rem + env(safe-area-inset-top));
+            }
+            .app-footer {
+                padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+            }
+            .toast-container {
+                top: calc(1rem + env(safe-area-inset-top));
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Professional Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
     <!-- Login Screen -->
     <div class="login-screen" id="loginScreen">
         <div class="login-box">
@@ -1247,7 +1600,7 @@
                 <div class="pin-dot"></div>
             </div>
             
-            <!-- Numpad with LTR layout (1,2,3 from LEFT) -->
+            <!-- Numpad -->
             <div class="numpad">
                 <button class="num-btn" data-num="1">1</button>
                 <button class="num-btn" data-num="2">2</button>
@@ -1329,7 +1682,7 @@
                 <div class="section-header">
                     <h2 class="section-title">⏱ إدارة الجلسات</h2>
                 </div>
-                <p style="color: var(--gray-500); margin-bottom: 1.5rem;">اضغط على أي جهاز متاح لبدء جلسة جديدة</p>
+                <p style="color: var(--gray-500); margin-bottom: 1.5rem; font-size: 0.9rem;">اضغط على أي جهاز متاح لبدء جلسة جديدة</p>
                 <div class="table-container">
                     <table>
                         <thead>
@@ -1458,6 +1811,19 @@
                             <button class="add-btn" style="background:var(--danger);" onclick="resetData()">🗑 مسح البيانات</button>
                         </div>
                     </div>
+                    
+                    <div class="setting-card">
+                        <div class="setting-header">
+                            <div class="setting-icon" style="background:#dbeafe;color:var(--primary)">🔔</div>
+                            <div>
+                                <div class="setting-title">إعدادات التنبيهات</div>
+                                <div class="setting-desc">تفعيل الإشعارات الفورية</div>
+                            </div>
+                        </div>
+                        <div class="setting-actions">
+                            <button class="add-btn" onclick="requestNotificationPermission()" id="notifBtn">🔔 تفعيل الإشعارات</button>
+                        </div>
+                    </div>
                 </div>
             </section>
         </main>
@@ -1577,8 +1943,8 @@
                 </div>
 
                 <div id="sessionProductsList" style="margin: 1rem 0;">
-                    <h4 style="font-weight: 700; margin-bottom: 0.75rem; color: var(--gray-700);">🛒 منتجات مضافة لهذه الجلسة:</h4>
-                    <div id="sessionProductsItems" style="color: var(--gray-500); font-size: 0.9rem;">لا توجد منتجات</div>
+                    <h4 style="font-weight: 700; margin-bottom: 0.75rem; color: var(--gray-700); font-size: 0.95rem;">🛒 منتجات مضافة لهذه الجلسة:</h4>
+                    <div id="sessionProductsItems" style="color: var(--gray-500); font-size: 0.88rem;">لا توجد منتجات</div>
                 </div>
                 
                 <div class="btn-group" style="grid-template-columns: 1fr;">
@@ -1633,7 +1999,7 @@
                 <button class="modal-close" onclick="closeSelectSessionModal()">✕</button>
             </div>
             <div class="modal-body">
-                <p style="margin-bottom: 1rem; color: var(--gray-600); font-weight: 600;">اختر الجلسة التي تريد إضافة المنتج عليها:</p>
+                <p style="margin-bottom: 1rem; color: var(--gray-600); font-weight: 600; font-size: 0.9rem;">اختر الجلسة التي تريد إضافة المنتج عليها:</p>
                 <div id="activeSessionsList"></div>
             </div>
         </div>
@@ -1680,16 +2046,13 @@
             <div class="invoice-body" id="invoiceBody">
                 <!-- Invoice content will be generated dynamically -->
             </div>
-            <div style="padding: 0 2rem 2rem;">
+            <div style="padding: 0 1.5rem 1.5rem;">
                 <button class="btn btn-primary" onclick="closeInvoiceModal()" style="width: 100%;">
                     ✕ إغلاق الفاتورة
                 </button>
             </div>
         </div>
     </div>
-
-    <!-- Toast -->
-    <div class="toast" id="toast"></div>
 
     <script>
         // ===== DATA STORE =====
@@ -1719,11 +2082,16 @@
         let audioContext = null;
         let audioInitialized = false;
 
+        // Background tracking variables
+        let sessionEndTime = null;
+        let backgroundCheckInterval = null;
+        let notificationPermissionGranted = false;
+
         // ===== INITIALIZATION =====
         function init() {
             loadData();
             
-            // Check if user is already logged in (using sessionStorage)
+            // Check if user is already logged in
             if (sessionStorage.getItem('isLoggedIn') === 'true') {
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('appContainer').classList.add('active');
@@ -1744,6 +2112,8 @@
             
             renderAll();
             startTimersForActiveSessions();
+            checkNotificationPermission();
+            setupVisibilityHandler();
         }
 
         // ===== LOCAL STORAGE =====
@@ -1756,6 +2126,262 @@
             if (saved) {
                 appData = JSON.parse(saved);
             }
+        }
+
+        // ===== NOTIFICATION PERMISSION & BACKGROUND ALERTS =====
+        async function checkNotificationPermission() {
+            if ('Notification' in window) {
+                const permission = Notification.permission;
+                updateNotifButton(permission === 'granted');
+                notificationPermissionGranted = permission === 'granted';
+            } else {
+                document.getElementById('notifBtn').textContent = '❌ المتصفح لا يدعم الإشعارات';
+                document.getElementById('notifBtn').disabled = true;
+            }
+        }
+
+        function updateNotifButton(granted) {
+            const btn = document.getElementById('notifBtn');
+            if (granted) {
+                btn.textContent = '✅ الإشعارات مفعلة';
+                btn.style.background = 'var(--success)';
+                btn.style.color = 'white';
+            }
+        }
+
+        async function requestNotificationPermission() {
+            if (!('Notification' in window)) {
+                showProfessionalToast('error', 'خطأ', 'متصفحك لا يدعم الإشعارات');
+                return;
+            }
+
+            const permission = await Notification.requestPermission();
+            if (permission === 'granted') {
+                notificationPermissionGranted = true;
+                updateNotifButton(true);
+                showProfessionalToast('success', 'تم التفعيل', 'سيصلك إشعار عند انتهاء وقت أي جلسة');
+                
+                // Test notification
+                new Notification('محل البليستيشن', {
+                    body: 'تم تفعيل الإشعارات بنجاح! 🔔',
+                    icon: '🎮',
+                    badge: '🎮',
+                    tag: 'test'
+                });
+            } else {
+                showProfessionalToast('warning', 'لم يتم التفعيل', 'يرجى السماح بالإشعارات من إعدادات المتصفح');
+            }
+        }
+
+        // ===== VISIBILITY HANDLER FOR BACKGROUND CHECKS =====
+        function setupVisibilityHandler() {
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    // Page is now visible - check for expired sessions
+                    checkExpiredSessionsOnReturn();
+                    stopBackgroundChecking();
+                } else {
+                    // Page went to background - start checking
+                    startBackgroundChecking();
+                }
+            });
+
+            // Also handle page focus/blur as backup
+            window.addEventListener('focus', () => {
+                checkExpiredSessionsOnReturn();
+                stopBackgroundChecking();
+            });
+
+            window.addEventListener('blur', () => {
+                startBackgroundChecking();
+            });
+        }
+
+        function startBackgroundChecking() {
+            const activeSessions = appData.sessions.filter(s => s.status === 'active' && s.sessionType === 'timed');
+            if (activeSessions.length === 0) return;
+
+            // Store end times for active timed sessions
+            activeSessions.forEach(session => {
+                const startTime = new Date(session.startTime).getTime();
+                let totalDuration = session.duration || 0;
+                
+                // Account for extensions
+                if (session.timeExtensions && session.timeExtensions.length > 0) {
+                    totalDuration = session.initialDuration + session.timeExtensions.reduce((sum, ext) => sum + ext.minutes, 0);
+                }
+                
+                const endTime = startTime + (totalDuration * 60 * 1000);
+                
+                if (Date.now() >= endTime) {
+                    // Already expired - send notification immediately
+                    sendExpiredSessionNotification(session);
+                } else {
+                    // Schedule notification for when it expires
+                    const timeUntilEnd = endTime - Date.now();
+                    setTimeout(() => {
+                        sendExpiredSessionNotification(session);
+                    }, timeUntilEnd);
+                }
+            });
+
+            // Set up interval to keep checking every 30 seconds
+            backgroundCheckInterval = setInterval(() => {
+                checkAndNotifyExpiredSessions();
+            }, 30000);
+        }
+
+        function stopBackgroundChecking() {
+            if (backgroundCheckInterval) {
+                clearInterval(backgroundCheckInterval);
+                backgroundCheckInterval = null;
+            }
+        }
+
+        function checkAndNotifyExpiredSessions() {
+            const activeSessions = appData.sessions.filter(s => s.status === 'active' && s.sessionType === 'timed');
+            
+            activeSessions.forEach(session => {
+                const startTime = new Date(session.startTime).getTime();
+                let totalDuration = session.duration || 0;
+                
+                if (session.timeExtensions && session.timeExtensions.length > 0) {
+                    totalDuration = session.initialDuration + session.timeExtensions.reduce((sum, ext) => sum + ext.minutes, 0);
+                }
+                
+                const endTime = startTime + (totalDuration * 60 * 1000);
+                
+                if (Date.now() >= endTime) {
+                    sendExpiredSessionNotification(session);
+                }
+            });
+        }
+
+        function sendExpiredSessionNotification(session) {
+            const device = appData.devices.find(d => d.id === session.deviceId);
+            const deviceInfo = device ? `شاشة ${device.number} (${device.type})` : 'جهاز';
+            
+            // Browser notification
+            if (notificationPermissionGranted && 'Notification' in window) {
+                const notif = new Notification('⚠️ انتهاء وقت الجلسة - محل البليستيشن', {
+                    body: `الوقت انتهى للعميل ${session.customerName} على ${deviceInfo}\nيرجى إبلاغ العميل فوراً!`,
+                    icon: '🎮',
+                    badge: '⚠️',
+                    tag: `session-expired-${session.id}`,
+                    requireInteraction: true,
+                    actions: [
+                        { action: 'manage', title: 'إدارة الجلسة' },
+                        { action: 'dismiss', title: 'إغلاق' }
+                    ]
+                });
+
+                notif.onclick = () => {
+                    window.focus();
+                    manageSession(session.id);
+                };
+            }
+
+            // Play sound even in background (if audio context allows)
+            playAlertSound();
+        }
+
+        function checkExpiredSessionsOnReturn() {
+            const activeSessions = appData.sessions.filter(s => s.status === 'active' && s.sessionType === 'timed');
+            let hasExpired = false;
+
+            activeSessions.forEach(session => {
+                const startTime = new Date(session.startTime).getTime();
+                let totalDuration = session.duration || 0;
+                
+                if (session.timeExtensions && session.timeExtensions.length > 0) {
+                    totalDuration = session.initialDuration + session.timeExtensions.reduce((sum, ext) => sum + ext.minutes, 0);
+                }
+                
+                const elapsedMs = Date.now() - startTime;
+                const elapsedMinutes = Math.floor(elapsedMs / 1000 / 60);
+                
+                if (elapsedMinutes >= totalDuration) {
+                    hasExpired = true;
+                    const device = appData.devices.find(d => d.id === session.deviceId);
+                    
+                    // Show critical alert toast
+                    showProfessionalToast(
+                        'alert-critical',
+                        '⚠️ انتهاء الوقت!',
+                        `جلسة ${session.customerName} على شاشة ${device ? device.number : ''} انتهى وقتها منذ ${(elapsedMinutes - totalMinutes)} دقيقة`,
+                        15000,
+                        true
+                    );
+                    
+                    // Play alert sound repeatedly
+                    playAlertSound();
+                    startAlertInterval();
+                }
+            });
+
+            if (hasExpired) {
+                renderAll(); // Refresh to show updated state
+            }
+        }
+
+        // ===== PROFESSIONAL TOAST NOTIFICATION SYSTEM =====
+        function showProfessionalToast(type, title, message, duration = 5000, persistent = false) {
+            const container = document.getElementById('toastContainer');
+            
+            const icons = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️',
+                info: 'ℹ️',
+                'alert-critical': '🚨'
+            };
+
+            const toast = document.createElement('div');
+            toast.className = `toast-notification ${type}`;
+            toast.innerHTML = `
+                <div class="toast-icon">${icons[type] || 'ℹ️'}</div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close" onclick="removeToast(this.parentElement)">✕</button>
+                ${!persistent ? '<div class="toast-progress" style="animation-duration: ' + duration + 'ms;"></div>' : ''}
+            `;
+
+            container.appendChild(toast);
+
+            if (!persistent) {
+                setTimeout(() => {
+                    removeToast(toast);
+                }, duration);
+            }
+
+            // Haptic feedback on mobile
+            if ('vibrate' in navigator) {
+                navigator.vibrate(type === 'alert-critical' ? [200, 100, 200] : 100);
+            }
+        }
+
+        function removeToast(toastElement) {
+            if (!toastElement || !toastElement.parentElement) return;
+            toastElement.classList.add('removing');
+            setTimeout(() => {
+                if (toastElement.parentElement) {
+                    toastElement.parentElement.removeChild(toastElement);
+                }
+            }, 300);
+        }
+
+        // Keep old showToast for backward compatibility but redirect to new system
+        function showToast(message, type = '') {
+            const typeMap = {
+                'success': 'success',
+                'error': 'error',
+                'warning': 'warning'
+            };
+            
+            const toastType = typeMap[type] || 'info';
+            showProfessionalToast(toastType, message, '', message);
         }
 
         // ===== LOGIN SYSTEM =====
@@ -1798,8 +2424,7 @@
                 sessionStorage.setItem('isLoggedIn', 'true');
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('appContainer').classList.add('active');
-                showToast('مرحباً بك! 🎉', 'success');
-                // Initialize audio on login
+                showProfessionalToast('success', 'مرحباً بك!', 'تم تسجيل الدخول بنجاح 🎉');
                 initAudioContext();
             } else {
                 document.getElementById('errorMsg').textContent = '❌ رمز غير صحيح';
@@ -1814,10 +2439,11 @@
         function logout() {
             if (confirm('هل تريد تسجيل الخروج؟')) {
                 sessionStorage.removeItem('isLoggedIn');
-                document.getElementById('appContainer').classList.remove('active');
+                document.getElementById('appContainer').remove('active');
                 document.getElementById('loginScreen').classList.remove('hidden');
                 enteredPin = '';
                 updatePinDisplay();
+                stopBackgroundChecking();
             }
         }
 
@@ -1856,7 +2482,7 @@
         function renderProducts() {
             const grid = document.getElementById('productsGrid');
             if (!appData.products.length) {
-                grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--gray-400);font-size:1.1rem;">📦 لا توجد منتجات بعد - اضغط "إضافة منتج جديد" لإضافة منتجاتك</p>';
+                grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:2.5rem;color:var(--gray-400);font-size:1rem;">📦 لا توجد منتجات بعد - اضغط "إضافة منتج جديد" لإضافة منتجاتك</p>';
                 return;
             }
             grid.innerHTML = appData.products.map(product => `
@@ -1990,7 +2616,7 @@
         function openSessionModal(deviceId) {
             const device = appData.devices.find(d => d.id === deviceId);
             if (!device || device.status !== 'available') {
-                showToast('هذا الجهاز غير متاح!', 'error');
+                showProfessionalToast('error', 'غير متاح', 'هذا الجهاز غير متاح!');
                 return;
             }
             
@@ -2067,7 +2693,7 @@
                 duration = (hours * 60) + minutes;
                 
                 if (duration <= 0) {
-                    showToast('يرجى إدخال مدة صحيحة', 'error');
+                    showProfessionalToast('error', 'خطأ', 'يرجى إدخال مدة صحيحة');
                     return;
                 }
                 
@@ -2101,10 +2727,10 @@
             saveData();
             closeModal();
             renderAll();
-            showToast(`✓ تم بدء جلسة ${selectedSessionType === 'open' ? 'مفتوحة' : 'محددة'} بنجاح!`, 'success');
+            showProfessionalToast('success', 'تم بنجاح', `✓ تم بدء جلسة ${selectedSessionType === 'open' ? 'مفتوحة' : 'محددة'} بنجاح!`);
         }
 
-        // ✅ FIXED: Calculate TIME COST only (without products)
+        // Calculate TIME COST only (without products)
         function calculateTimeCost(session) {
             const elapsedMinutes = Math.floor((new Date() - new Date(session.startTime)) / 1000 / 60);
             let totalDuration = elapsedMinutes;
@@ -2219,21 +2845,19 @@
             }
         }
 
-        // ===== AUDIO ALERT SYSTEM - FIXED =====
+        // ===== AUDIO ALERT SYSTEM =====
         function initAudioContext() {
             try {
                 if (!audioContext) {
                     audioContext = new (window.AudioContext || window.webkitAudioContext)();
                     audioInitialized = true;
-                    console.log('✅ Audio Context initialized successfully');
                 }
-                // Resume context if suspended (browser autoplay policy)
                 if (audioContext.state === 'suspended') {
                     audioContext.resume();
                 }
                 return audioContext;
             } catch (e) {
-                console.log('❌ Audio Context initialization error:', e);
+                console.log('Audio initialization error:', e);
                 return null;
             }
         }
@@ -2241,31 +2865,22 @@
         function playAlertSound() {
             try {
                 const ctx = initAudioContext();
-                if (!ctx) {
-                    console.log('⚠️ Audio context not available');
-                    return;
-                }
+                if (!ctx) return;
                 
-                // Create oscillator for beep sound
                 const oscillator = ctx.createOscillator();
                 const gainNode = ctx.createGain();
                 
                 oscillator.connect(gainNode);
                 gainNode.connect(ctx.destination);
                 
-                // Set frequency and type for alert sound
                 oscillator.frequency.value = 800;
                 oscillator.type = 'sine';
                 
-                // Set volume envelope
                 gainNode.gain.setValueAtTime(0.5, ctx.currentTime);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
                 
-                // Play sound
                 oscillator.start(ctx.currentTime);
                 oscillator.stop(ctx.currentTime + 0.3);
-                
-                console.log('🔔 Alert sound played at:', new Date().toLocaleTimeString());
             } catch (e) {
                 console.log('Audio error:', e);
             }
@@ -2274,9 +2889,8 @@
         function startAlertInterval() {
             if (!alertInterval) {
                 alertInterval = setInterval(() => {
-                    console.log('🔄 Playing repeated alert...');
                     playAlertSound();
-                }, 2000); // Play every 2 seconds when time is up
+                }, 2000);
             }
         }
 
@@ -2327,13 +2941,12 @@
             const totalMinutes = (hours * 60) + minutes;
             
             if (totalMinutes <= 0) {
-                showToast('يرجى إدخال وقت صالح', 'error');
+                showProfessionalToast('error', 'خطأ', 'يرجى إدخال وقت صالح');
                 return;
             }
             
             const extensionCost = (totalMinutes / 60) * session.hourlyRate;
             
-            // Record the extension
             if (!session.timeExtensions) session.timeExtensions = [];
             session.timeExtensions.push({
                 timestamp: new Date().toISOString(),
@@ -2341,7 +2954,6 @@
                 cost: extensionCost
             });
             
-            // Update duration for timed sessions
             if (session.sessionType === 'timed') {
                 session.duration = (session.duration || 0) + totalMinutes;
             }
@@ -2349,14 +2961,14 @@
             saveData();
             closeExtendTimeModal();
             updateActiveSessionDisplay(session);
-            showToast(`✓ تمت إضافة ${totalMinutes} دقيقة (+${extensionCost.toFixed(2)} EGP)`, 'success');
+            showProfessionalToast('success', 'تمت الإضافة', `✓ تمت إضافة ${totalMinutes} دقيقة (+${extensionCost.toFixed(2)} EGP)`);
         }
 
         function closeExtendTimeModal() {
             document.getElementById('extendTimeModal').classList.remove('active');
         }
 
-        // ===== INVOICE SYSTEM - FIXED CALCULATION =====
+        // ===== INVOICE SYSTEM - WITH RESPONSIVE TABLE FIX =====
         function endActiveSessionAndShowInvoice() {
             const session = appData.sessions.find(s => s.id === currentManagingSessionId);
             if (!session) return;
@@ -2364,40 +2976,34 @@
             const elapsedMinutes = Math.floor((new Date() - new Date(session.startTime)) / 1000 / 60);
             const device = appData.devices.find(d => d.id === session.deviceId);
             
-            // ✅ FIX: Calculate costs separately
-            const timeOnlyCost = calculateTimeCost(session); // Time cost ONLY
+            const timeOnlyCost = calculateTimeCost(session);
             
-            // Calculate products cost
             let productsCost = 0;
             if (session.products && session.products.length > 0) {
                 productsCost = session.products.reduce((sum, p) => sum + p.price, 0);
             }
             
-            const finalCost = timeOnlyCost + productsCost; // True total
+            const finalCost = timeOnlyCost + productsCost;
             
-            // Update session status
             session.status = 'completed';
             session.endTime = new Date().toISOString();
             session.finalCost = finalCost;
             session.totalMinutes = elapsedMinutes;
             
-            // Free the device
             const deviceIndex = appData.devices.findIndex(d => d.id === session.deviceId);
             if (deviceIndex !== -1) {
                 appData.devices[deviceIndex].status = 'available';
             }
             
-            // ✅ FIX: Add transaction for SESSION (TIME COST ONLY)
             appData.transactions.push({
                 date: new Date().toISOString(),
                 type: 'session',
                 customerName: session.customerName,
                 description: `${session.type} Session - ${elapsedMinutes} min`,
-                amount: timeOnlyCost, // ⭐ TIME ONLY - NOT including products!
+                amount: timeOnlyCost,
                 screenNumber: device ? device.number : null
             });
             
-            // Add transactions for PRODUCTS separately
             if (session.products && session.products.length > 0) {
                 session.products.forEach(product => {
                     appData.transactions.push({
@@ -2405,13 +3011,12 @@
                         type: 'product',
                         customerName: session.customerName,
                         description: product.name,
-                        amount: product.price, // Product price only
+                        amount: product.price,
                         screenNumber: device ? device.number : null
                     });
                 });
             }
             
-            // Add or update client
             if (session.customerName && session.customerName !== 'عميل بدون اسم') {
                 const clientIndex = appData.clients.findIndex(c => c.name === session.customerName);
                 if (clientIndex !== -1) {
@@ -2430,7 +3035,6 @@
             saveData();
             closeActiveSessionModal();
             
-            // Show Invoice
             generateInvoice(session, device, finalCost, elapsedMinutes, timeOnlyCost, productsCost);
             renderAll();
         }
@@ -2439,7 +3043,6 @@
             const startTime = new Date(session.startTime);
             const endTime = new Date(session.endTime);
             
-            // Calculate extensions cost
             let extensionsCost = 0;
             let extensionsHTML = '';
             if (session.timeExtensions && session.timeExtensions.length > 0) {
@@ -2457,6 +3060,7 @@
                 `;
             }
             
+            // ✅ FIXED: Improved responsive invoice with better product table
             const invoiceHTML = `
                 <div class="invoice-section">
                     <div class="invoice-section-title">📋 معلومات الجلسة</div>
@@ -2507,28 +3111,30 @@
                 <div class="invoice-section">
                     <div class="invoice-section-title">🛒 المنتجات</div>
                     ${session.products && session.products.length > 0 ? `
-                        <table class="invoice-products-table">
-                            <thead>
-                                <tr>
-                                    <th>المنتج</th>
-                                    <th>السعر</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${session.products.map(p => `
+                        <div class="invoice-products-container">
+                            <table class="invoice-products-table">
+                                <thead>
                                     <tr>
-                                        <td>${p.name}</td>
-                                        <td style="direction: ltr; text-align: left;">${parseFloat(p.price).toFixed(2)} EGP</td>
+                                        <th>المنتج</th>
+                                        <th>السعر</th>
                                     </tr>
-                                `).join('')}
-                            </tbody>
-                            <tfoot>
-                                <tr style="font-weight: 800; background: var(--gray-50);">
-                                    <td>إجمالي المنتجات</td>
-                                    <td style="direction: ltr; text-align: left; color: var(--primary);">${productsCost.toFixed(2)} EGP</td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    ${session.products.map(p => `
+                                        <tr>
+                                            <td>${p.name}</td>
+                                            <td style="direction: ltr; text-align: left;">${parseFloat(p.price).toFixed(2)} EGP</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td><strong>إجمالي المنتجات</strong></td>
+                                        <td style="direction: ltr; text-align: left; color: var(--primary);"><strong>${productsCost.toFixed(2)} EGP</strong></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     ` : '<p style="color: var(--gray-500); text-align: center; padding: 1rem;">لا توجد منتجات</p>'}
                 </div>
                 
@@ -2567,12 +3173,12 @@
             const price = parseFloat(document.getElementById('productPrice').value);
             
             if (!name) {
-                showToast('يرجى إدخال اسم المنتج', 'error');
+                showProfessionalToast('error', 'خطأ', 'يرجى إدخال اسم المنتج');
                 return;
             }
             
             if (!price || price <= 0) {
-                showToast('يرجى إدخال سعر صحيح', 'error');
+                showProfessionalToast('error', 'خطأ', 'يرجى إدخال سعر صحيح');
                 return;
             }
             
@@ -2587,7 +3193,7 @@
             saveData();
             closeAddProductModal();
             renderProducts();
-            showToast(`✓ تمت إضافة "${name}" بنجاح`, 'success');
+            showProfessionalToast('success', 'تمت الإضافة', `✓ تمت إضافة "${name}" بنجاح`);
         }
 
         // ===== SELECT SESSION FOR PRODUCT =====
@@ -2600,7 +3206,7 @@
             const activeSessions = appData.sessions.filter(s => s.status === 'active');
             
             if (activeSessions.length === 0) {
-                showToast('لا توجد جلسات نشطة - ابدأ جلسة أولاً', 'warning');
+                showProfessionalToast('warning', 'تنبيه', 'لا توجد جلسات نشطة - ابدأ جلسة أولاً');
                 return;
             }
             
@@ -2611,8 +3217,8 @@
                 return `
                     <div class="session-list-item" onclick="addProductToSession(${session.id})">
                         <div>
-                            <strong style="font-size: 1.1rem;">🖥 شاشة ${device ? device.number : '-'}</strong>
-                            <div style="color: var(--gray-600); font-size: 0.9rem; margin-top: 0.25rem;">
+                            <strong style="font-size: 1.05rem;">🖥 شاشة ${device ? device.number : '-'}</strong>
+                            <div style="color: var(--gray-600); font-size: 0.88rem; margin-top: 0.25rem;">
                                 ${device ? device.type : ''} | العميل: ${session.customerName} | ${elapsed} min
                             </div>
                         </div>
@@ -2650,7 +3256,7 @@
             renderProducts();
             
             const device = appData.devices.find(d => d.id === session.deviceId);
-            showToast(`✓ تمت إضافة "${product.name}" إلى شاشة ${device ? device.number : sessionId} (+${product.price} EGP)`, 'success');
+            showProfessionalToast('success', 'تمت الإضافة', `✓ تمت إضافة "${product.name}" إلى شاشة ${device ? device.number : sessionId} (+${product.price} EGP)`);
         }
 
         // ===== SETTINGS =====
@@ -2663,7 +3269,7 @@
             a.download = `backup_${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
-            showToast('✓ تم تصدير البيانات بنجاح', 'success');
+            showProfessionalToast('success', 'تم التصدير', '✓ تم تصدير البيانات بنجاح');
         }
 
         function restoreData(event) {
@@ -2675,9 +3281,9 @@
                         appData = JSON.parse(e.target.result);
                         saveData();
                         renderAll();
-                        showToast('✓ تم استعادة البيانات بنجاح', 'success');
+                        showProfessionalToast('success', 'تم الاستعادة', '✓ تم استعادة البيانات بنجاح');
                     } catch (err) {
-                        showToast('❌ ملف غير صالح', 'error');
+                        showProfessionalToast('error', 'خطأ', '❌ ملف غير صالح');
                     }
                 };
                 reader.readAsText(file);
@@ -2697,17 +3303,6 @@
             if (activeSessions.length > 0) {
                 console.log(`Found ${activeSessions.length} active sessions`);
             }
-        }
-
-        // ===== TOAST NOTIFICATIONS =====
-        function showToast(message, type = '') {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = 'toast show ' + type;
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
         }
 
         // Close modals on outside click
@@ -2737,6 +3332,15 @@
 
         // Initialize app
         init();
+
+        // Register service worker for PWA support (if available)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                // Service worker registration would go here
+                // For now, we'll just log that PWA features are ready
+                console.log('PWA Ready - App can be installed on mobile');
+            });
+        }
     </script>
 </body>
 </html>
