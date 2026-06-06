@@ -2,8 +2,8 @@
   "name": "محل البلايستيشن",
   "short_name": "PS Lounge",
   "description": "PlayStation Lounge Manager - نظام إدارة صالات البلايستيشن",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#F8FAFC",
   "theme_color": "#2563EB",
@@ -61,7 +61,7 @@
       "name": "لوحة التحكم",
       "short_name": "التحكم",
       "description": "فتح لوحة التحكم مباشرة",
-      "url": "/#dashboard",
+      "url": "./index.html#dashboard",
       "icons": [{ "src": "icon-96.png", "sizes": "96x96" }]
     }
   ]
