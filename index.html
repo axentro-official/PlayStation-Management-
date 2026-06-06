@@ -1717,6 +1717,7 @@
 
         // Audio Context for alerts
         let audioContext = null;
+        let audioInitialized = false;
 
         // ===== INITIALIZATION =====
         function init() {
@@ -1798,6 +1799,8 @@
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('appContainer').classList.add('active');
                 showToast('مرحباً بك! 🎉', 'success');
+                // Initialize audio on login
+                initAudioContext();
             } else {
                 document.getElementById('errorMsg').textContent = '❌ رمز غير صحيح';
                 document.getElementById('errorMsg').classList.add('show');
@@ -2101,18 +2104,24 @@
             showToast(`✓ تم بدء جلسة ${selectedSessionType === 'open' ? 'مفتوحة' : 'محددة'} بنجاح!`, 'success');
         }
 
-        function calculateCurrentSessionCost(session) {
+        // ✅ FIXED: Calculate TIME COST only (without products)
+        function calculateTimeCost(session) {
             const elapsedMinutes = Math.floor((new Date() - new Date(session.startTime)) / 1000 / 60);
             let totalDuration = elapsedMinutes;
             
-            // Add any time extensions
+            // For timed sessions with extensions, use the allowed time
             if (session.timeExtensions && session.timeExtensions.length > 0) {
                 totalDuration = session.initialDuration + session.timeExtensions.reduce((sum, ext) => sum + ext.minutes, 0);
             } else if (session.sessionType === 'timed') {
                 totalDuration = Math.max(elapsedMinutes, session.duration);
             }
             
-            const cost = (totalDuration / 60) * session.hourlyRate;
+            return (totalDuration / 60) * session.hourlyRate;
+        }
+
+        // Calculate TOTAL cost (time + products) - for display only
+        function calculateCurrentSessionCost(session) {
+            const timeCost = calculateTimeCost(session);
             
             // Add product costs
             let productsCost = 0;
@@ -2120,7 +2129,7 @@
                 productsCost = session.products.reduce((sum, p) => sum + p.price, 0);
             }
             
-            return cost + productsCost;
+            return timeCost + productsCost;
         }
 
         function manageSession(sessionId) {
@@ -2133,6 +2142,9 @@
             document.getElementById('activeDeviceInfo').textContent = device ? `Screen ${device.number} (${device.type})` : '-';
             document.getElementById('activeCustomerName').textContent = session.customerName;
             document.getElementById('activeSessionType').textContent = session.sessionType === 'open' ? '⏳ وقت مفتوح' : '⏰ محدد بوقت';
+            
+            // Initialize audio when managing session
+            initAudioContext();
             
             // Update timer and details
             updateActiveSessionDisplay(session);
@@ -2207,31 +2219,53 @@
             }
         }
 
-        // ===== AUDIO ALERT SYSTEM =====
+        // ===== AUDIO ALERT SYSTEM - FIXED =====
         function initAudioContext() {
-            if (!audioContext) {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            try {
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    audioInitialized = true;
+                    console.log('✅ Audio Context initialized successfully');
+                }
+                // Resume context if suspended (browser autoplay policy)
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+                return audioContext;
+            } catch (e) {
+                console.log('❌ Audio Context initialization error:', e);
+                return null;
             }
-            return audioContext;
         }
 
         function playAlertSound() {
             try {
                 const ctx = initAudioContext();
+                if (!ctx) {
+                    console.log('⚠️ Audio context not available');
+                    return;
+                }
+                
+                // Create oscillator for beep sound
                 const oscillator = ctx.createOscillator();
                 const gainNode = ctx.createGain();
                 
                 oscillator.connect(gainNode);
                 gainNode.connect(ctx.destination);
                 
+                // Set frequency and type for alert sound
                 oscillator.frequency.value = 800;
                 oscillator.type = 'sine';
                 
-                gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+                // Set volume envelope
+                gainNode.gain.setValueAtTime(0.5, ctx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
                 
+                // Play sound
                 oscillator.start(ctx.currentTime);
-                oscillator.stop(ctx.currentTime + 0.5);
+                oscillator.stop(ctx.currentTime + 0.3);
+                
+                console.log('🔔 Alert sound played at:', new Date().toLocaleTimeString());
             } catch (e) {
                 console.log('Audio error:', e);
             }
@@ -2240,8 +2274,9 @@
         function startAlertInterval() {
             if (!alertInterval) {
                 alertInterval = setInterval(() => {
+                    console.log('🔄 Playing repeated alert...');
                     playAlertSound();
-                }, 3000); // Play every 3 seconds
+                }, 2000); // Play every 2 seconds when time is up
             }
         }
 
@@ -2321,14 +2356,24 @@
             document.getElementById('extendTimeModal').classList.remove('active');
         }
 
-        // ===== INVOICE SYSTEM =====
+        // ===== INVOICE SYSTEM - FIXED CALCULATION =====
         function endActiveSessionAndShowInvoice() {
             const session = appData.sessions.find(s => s.id === currentManagingSessionId);
             if (!session) return;
             
-            const finalCost = calculateCurrentSessionCost(session);
             const elapsedMinutes = Math.floor((new Date() - new Date(session.startTime)) / 1000 / 60);
             const device = appData.devices.find(d => d.id === session.deviceId);
+            
+            // ✅ FIX: Calculate costs separately
+            const timeOnlyCost = calculateTimeCost(session); // Time cost ONLY
+            
+            // Calculate products cost
+            let productsCost = 0;
+            if (session.products && session.products.length > 0) {
+                productsCost = session.products.reduce((sum, p) => sum + p.price, 0);
+            }
+            
+            const finalCost = timeOnlyCost + productsCost; // True total
             
             // Update session status
             session.status = 'completed';
@@ -2342,17 +2387,17 @@
                 appData.devices[deviceIndex].status = 'available';
             }
             
-            // Add transaction for session
+            // ✅ FIX: Add transaction for SESSION (TIME COST ONLY)
             appData.transactions.push({
                 date: new Date().toISOString(),
                 type: 'session',
                 customerName: session.customerName,
                 description: `${session.type} Session - ${elapsedMinutes} min`,
-                amount: finalCost,
+                amount: timeOnlyCost, // ⭐ TIME ONLY - NOT including products!
                 screenNumber: device ? device.number : null
             });
             
-            // Add transactions for products
+            // Add transactions for PRODUCTS separately
             if (session.products && session.products.length > 0) {
                 session.products.forEach(product => {
                     appData.transactions.push({
@@ -2360,7 +2405,7 @@
                         type: 'product',
                         customerName: session.customerName,
                         description: product.name,
-                        amount: product.price,
+                        amount: product.price, // Product price only
                         screenNumber: device ? device.number : null
                     });
                 });
@@ -2386,22 +2431,13 @@
             closeActiveSessionModal();
             
             // Show Invoice
-            generateInvoice(session, device, finalCost, elapsedMinutes);
+            generateInvoice(session, device, finalCost, elapsedMinutes, timeOnlyCost, productsCost);
             renderAll();
         }
 
-        function generateInvoice(session, device, finalCost, elapsedMinutes) {
+        function generateInvoice(session, device, finalCost, elapsedMinutes, timeOnlyCost, productsCost) {
             const startTime = new Date(session.startTime);
             const endTime = new Date(session.endTime);
-            
-            // Calculate time cost
-            const timeCost = (elapsedMinutes / 60) * session.hourlyRate;
-            
-            // Calculate products cost
-            let productsCost = 0;
-            if (session.products && session.products.length > 0) {
-                productsCost = session.products.reduce((sum, p) => sum + p.price, 0);
-            }
             
             // Calculate extensions cost
             let extensionsCost = 0;
@@ -2462,7 +2498,7 @@
                     </div>
                     <div class="invoice-row">
                         <span>تكلفة الوقت:</span>
-                        <span style="direction: ltr; font-weight: 700;">${timeCost.toFixed(2)} EGP</span>
+                        <span style="direction: ltr; font-weight: 700;">${timeOnlyCost.toFixed(2)} EGP</span>
                     </div>
                 </div>
                 
