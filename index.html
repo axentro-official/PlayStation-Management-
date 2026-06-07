@@ -2034,8 +2034,8 @@
         let isManagingSession = false; // Track if user is in management view
         let alertSoundPlayed = new Set(); // Track which sessions had alert sound played (once only)
 
-        // ✅ NEW: Alert threshold - when to play alert before expiration (in minutes)
-        const ALERT_BEFORE_EXPIRATION_MINUTES = 2; // 🔔 Alert plays when 2 minutes remaining
+        // ✅ NEW: Smart Alert Threshold - 20% of remaining time (works for ANY duration!)
+        const ALERT_PERCENTAGE_THRESHOLD = 20; // 🔔 Alert when 20% of time remains
 
         // Custom Dialog System
         let customDialogResolver = null;
@@ -2264,7 +2264,7 @@
             }
         }
 
-        // ===== GLOBAL ALERT CHECKER - ✅ FINAL VERSION WITH SMART ALERT LOGIC =====
+        // ===== GLOBAL ALERT CHECKER - ✅ SMART VERSION WITH PERCENTAGE-BASED ALERT =====
         function startGlobalAlertChecker() {
             if (globalAlertInterval) clearInterval(globalAlertInterval);
             
@@ -2294,11 +2294,13 @@
                 const remainingMinutes = totalDuration - elapsedMinutes;
                 
                 // ============================================
-                // ✅ LOGIC 1: ALERT - When approaching end (SMART)
-                // Plays ONCE when remaining time <= threshold
-                // Works for ANY duration (1 hour, 2 hours, 30 mins, etc.)
+                // ✅ LOGIC 1: SMART ALERT - When approaching end
+                // Uses PERCENTAGE-based threshold (works for ANY duration!)
+                // Plays ONCE when remaining time <= 20% of total duration
                 // ============================================
-                if (remainingMinutes > 0 && remainingMinutes <= ALERT_BEFORE_EXPIRATION_MINUTES) {
+                const alertThresholdMinutes = Math.max(1, Math.floor(totalDuration * (ALERT_PERCENTAGE_THRESHOLD / 100)));
+                
+                if (remainingMinutes > 0 && remainingMinutes <= alertThresholdMinutes) {
                     // Check if we already played alert for this session
                     if (!alertSoundPlayed.has(`alert-${session.id}`)) {
                         // Mark as played (so it only plays ONCE)
@@ -2317,7 +2319,7 @@
                         // Send browser notification
                         sendBrowserNotif(session, `تنبيه: متبقي ${remainingMinutes} دقيقة`, 0);
                         
-                        console.log(`🔔 Alert played for session ${session.id} - ${remainingMinutes} minutes remaining`);
+                        console.log(`🔔 Alert played for session ${session.id} - ${remainingMinutes} minutes remaining (threshold: ${alertThresholdMinutes}min)`);
                     }
                 }
                 
@@ -2896,6 +2898,7 @@
                     document.getElementById('activeRemainingTime').textContent = '⚠️ انتهى!';
                     document.getElementById('remainingTimeRow').style.display = 'flex';
                     
+                    // ✅ In management mode - NO sounds, just visual warning
                     if (!isManagingSession) {
                         playProfessionalSound('critical');
                         startAlertLoop();
@@ -2905,6 +2908,7 @@
                     document.getElementById('activeRemainingTime').textContent = `${remaining} دقيقة`;
                     document.getElementById('remainingTimeRow').style.display = 'flex';
                     
+                    // ✅ In management mode - NO alert sounds
                     if (!isManagingSession && remaining <= 2) {
                         playProfessionalSound('warning');
                     }
