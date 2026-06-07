@@ -1996,10 +1996,18 @@
         </div>
     </div>
 
-    <!-- ✅ PROFESSIONAL SOUND EFFECTS - MP3 FILES -->
+    <!-- ✅ PROFESSIONAL SOUND EFFECTS - 3 MP3 FILES -->
+    <!-- Timer.mp3: يشتغل فقط داخل نافذة إدارة الجلسة -->
     <audio id="timerSound" preload="auto">
         <source src="Timer.mp3" type="audio/mpeg">
     </audio>
+    
+    <!-- alert.mp3: يشتغل كتنبيه قبل انتهاء الوقت -->
+    <audio id="alertSound" preload="auto">
+        <source src="alert.mp3" type="audio/mpeg">
+    </audio>
+    
+    <!-- alarm.mp3: يشتغل عند انتهاء الوقت (مع تكرار) -->
     <audio id="alarmSound" preload="auto" loop>
         <source src="alarm.mp3" type="audio/mpeg">
     </audio>
@@ -2032,6 +2040,9 @@
 
         // Custom Dialog System
         let customDialogResolver = null;
+
+        // ✅ Timer tick interval for session management modal
+        let timerTickInterval = null;
 
         // ===== INITIALIZATION =====
         function init() {
@@ -2303,7 +2314,8 @@
                 } else if (elapsedMinutes >= totalDuration - 1 && !alertedSessions.has(`warn-${session.id}`)) {
                     alertedSessions.add(`warn-${session.id}`);
                     showToast('warning', '⚠️ تنبيه', `جلسة ${session.customerName} - دقيقة واحدة`);
-                    playProfessionalSound('warning');
+                    // ✅ استخدم alert.mp3 للتنبيه قبل انتهاء الوقت
+                    playProfessionalSound('alert');
                 }
             });
         }
@@ -2811,6 +2823,9 @@
             if (timerInterval) clearInterval(timerInterval);
             timerInterval = setInterval(() => updateActiveDisplay(session), 1000);
             
+            // ✅ ابدأ تشغيل صوت Timer.mp3 كل ثانية (فقط داخل نافذة الإدارة)
+            startTimerTick();
+            
             document.getElementById('activeSessionModal').classList.add('active');
         }
 
@@ -2843,7 +2858,8 @@
                     document.getElementById('sessionTimerDisplay').classList.add('warning');
                     document.getElementById('activeRemainingTime').textContent = `${remaining} دقيقة`;
                     document.getElementById('remainingTimeRow').style.display = 'flex';
-                    if (remaining <= 2) playProfessionalSound('warning');
+                    // ✅ استخدم alert.mp3 للتنبيه قبل انتهاء الوقت (2 دقيقة أو أقل)
+                    if (remaining <= 2) playProfessionalSound('alert');
                 } else {
                     document.getElementById('sessionTimerDisplay').classList.remove('warning');
                     document.getElementById('activeRemainingTime').textContent = `${remaining} دقيقة`;
@@ -2869,27 +2885,55 @@
             }
         }
 
-        // ===== ✅ PROFESSIONAL AUDIO SYSTEM - USING MP3 FILES =====
+        // ===== ✅ PROFESSIONAL AUDIO SYSTEM - 3 SOUNDS =====
         function playProfessionalSound(type = 'critical') {
             try {
                 const timerAudio = document.getElementById('timerSound');
+                const alertAudio = document.getElementById('alertSound');
                 const alarmAudio = document.getElementById('alarmSound');
                 
-                if (type === 'critical') {
-                    // 🔴 Alarm sound - for time expiration
-                    if (alarmAudio) {
-                        alarmAudio.currentTime = 0;
-                        alarmAudio.play().catch(e => console.log('Alarm play error:', e));
-                    }
-                } else if (type === 'warning') {
-                    // 🟡 Timer tick sound - for warnings
+                if (type === 'timer') {
+                    // ⏱ Timer sound - يشتغل فقط داخل نافذة إدارة الجلسة
                     if (timerAudio) {
                         timerAudio.currentTime = 0;
                         timerAudio.play().catch(e => console.log('Timer play error:', e));
                     }
+                } else if (type === 'alert') {
+                    // 🔔 Alert sound - تنبيه قبل انتهاء الوقت
+                    if (alertAudio) {
+                        alertAudio.currentTime = 0;
+                        alertAudio.play().catch(e => console.log('Alert play error:', e));
+                    }
+                } else if (type === 'critical') {
+                    // 🚨 Alarm sound - انتهاء الوقت
+                    if (alarmAudio) {
+                        alarmAudio.currentTime = 0;
+                        alarmAudio.play().catch(e => console.log('Alarm play error:', e));
+                    }
                 }
             } catch(e) {
                 console.error('Sound error:', e);
+            }
+        }
+
+        // ✅ تشغيل Timer.mp3 كل ثانية (فقط لما نافذة الإدارة مفتوحة)
+        function startTimerTick() {
+            if (timerTickInterval) clearInterval(timerTickInterval);
+            timerTickInterval = setInterval(() => {
+                playProfessionalSound('timer');
+            }, 1000);
+        }
+
+        // ✅ إيقاف Timer.mp3
+        function stopTimerTick() {
+            if (timerTickInterval) {
+                clearInterval(timerTickInterval);
+                timerTickInterval = null;
+            }
+            const timerAudio = document.getElementById('timerSound');
+            if (timerAudio) {
+                timerAudio.pause();
+                timerAudio.currentTime = 0;
             }
         }
 
@@ -2914,6 +2958,8 @@
         function closeActiveSessionModal() {
             if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
             stopAlertLoop();
+            // ✅ إيقاف صوت Timer لما تغلق النافذة
+            stopTimerTick();
             document.getElementById('activeSessionModal').classList.remove('active');
             currentManagingSessionId = null;
         }
