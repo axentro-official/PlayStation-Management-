@@ -1832,6 +1832,7 @@
                             ⏳ وقت مفتوح
                         </div>
                     </div>
+                </div>
                 
                 <div id="timedSessionFields">
                     <div class="form-group">
@@ -1961,7 +1962,7 @@
                 <div class="form-group">
                     <label class="form-label">الوقت الإضافي</label>
                     <div class="duration-row">
-                        <input type="number" class="form-input" id="extendHours" placeholder="ساعات" value="0" min="0>
+                        <input type="number" class="form-input" id="extendHours" placeholder="ساعات" value="0" min="0">
                         <input type="number" class="form-input" id="extendMinutes" placeholder="دقائق" value="30" min="0" max="59">
                     </div>
                 </div>
@@ -1995,18 +1996,10 @@
         </div>
     </div>
 
-    <!-- ✅ PROFESSIONAL SOUND EFFECTS - 3 MP3 FILES -->
-    <!-- Timer.mp3: يشتغل داخل نافذة الإدارة فقط -->
+    <!-- ✅ PROFESSIONAL SOUND EFFECTS - MP3 FILES -->
     <audio id="timerSound" preload="auto">
         <source src="Timer.mp3" type="audio/mpeg">
     </audio>
-    
-    <!-- alert.mp3: تنبيه قبل انتهاء الوقت (مرة واحدة فقط) -->
-    <audio id="alertSound" preload="auto">
-        <source src="alert.mp3" type="audio/mpeg">
-    </audio>
-    
-    <!-- alarm.mp3: إنذار عند انتهاء الوقت (مستمر) -->
     <audio id="alarmSound" preload="auto" loop>
         <source src="alarm.mp3" type="audio/mpeg">
     </audio>
@@ -2037,11 +2030,12 @@
         let alertedSessions = new Set();
         let notificationPermissionGranted = false;
 
+        // ✅ NEW: Professional Sound Management Variables
+        let isManagingSession = false; // Track if user is in management view
+        let alertSoundPlayed = new Set(); // Track which sessions had alert sound played (once only)
+
         // Custom Dialog System
         let customDialogResolver = null;
-
-        // ✅ NEW: Track if session management modal is open
-        let isSessionModalOpen = false;
 
         // ===== INITIALIZATION =====
         function init() {
@@ -2085,10 +2079,12 @@
         // ===== SERVICE WORKER - PROPER REGISTRATION =====
         function registerServiceWorkerProperly() {
             if ('serviceWorker' in navigator) {
+                // ✅ Use the EXTERNAL sw.js file - NOT a blob
                 navigator.serviceWorker.register('sw.js')
                     .then(registration => {
                         console.log('✅ Service Worker registered successfully:', registration.scope);
                         
+                        // Check for updates
                         registration.addEventListener('updatefound', () => {
                             const newWorker = registration.installing;
                             newWorker.addEventListener('statechange', () => {
@@ -2100,6 +2096,7 @@
                     })
                     .catch(error => {
                         console.log('❌ SW registration failed:', error);
+                        // Fallback: Try with full path
                         navigator.serviceWorker.register('./sw.js')
                             .then(() => console.log('✅ SW registered with ./ path'))
                             .catch(err => console.log('❌ SW still failed:', err));
@@ -2111,23 +2108,31 @@
 
         // ===== PWA INSTALL - IMPROVED & FIXED =====
         function setupInstallPrompt() {
+            // Show banner after delay
             setTimeout(() => showInstallBanner(), 3000);
 
+            // Listen for install prompt event
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
                 console.log('✅ beforeinstallprompt fired - PWA can be installed!');
+                
+                // Show custom install button/UI
                 showInstallBanner();
             });
 
+            // Listen for successful installation
             window.addEventListener('appinstalled', () => {
                 console.log('🎉 PWA was installed!');
                 deferredPrompt = null;
                 hideInstallBanner();
                 showToast('success', 'تم التثبيت بنجاح!', 'التطبيق جاهز للاستخدام 🎉');
+                
+                // Save that it's installed
                 localStorage.setItem('pwaInstalled', 'true');
             });
 
+            // Check if already installed
             if (window.matchMedia('(display-mode: standalone)').matches || 
                 window.matchMedia('(display-mode: fullscreen)').matches ||
                 window.navigator.standalone === true) {
@@ -2139,6 +2144,7 @@
         function showInstallBanner() {
             const banner = document.getElementById('installBanner');
             if (banner) {
+                // Don't show if already installed or in standalone mode
                 if (localStorage.getItem('pwaInstalled') === 'true' ||
                     window.matchMedia('(display-mode: standalone)').matches ||
                     window.navigator.standalone === true) {
@@ -2164,6 +2170,7 @@
         }
 
         async function installApp() {
+            // ✅ Method 1: Use the deferred prompt (best method)
             if (deferredPrompt) {
                 try {
                     deferredPrompt.prompt();
@@ -2184,6 +2191,7 @@
                     showManualInstallInstructions();
                 }
             } else {
+                // ✅ Method 2: No deferred prompt - show manual instructions
                 showManualInstallInstructions();
             }
         }
@@ -2209,6 +2217,11 @@
                     `1. عندما ترى أيقونة التثبيت في شريط العنوان\n` +
                     `2. اضغط عليها\n` +
                     `3. أكد التثبيت`;
+            } else if (userAgent.includes('samsung')) {
+                instructions = `📌 لتثبيت التطبيق:\n\n` +
+                    `1. اضغط على القائمة (⋮)\n` +
+                    `2. اختر "Add to Home screen"\n` +
+                    `3. اضغط "Add"`;
             } else {
                 instructions = `📌 لتثبيت التطبيق:\n\n` +
                     `🔹 Chrome: القائمة → "تثبيت التطبيق"\n\n` +
@@ -2262,7 +2275,7 @@
             }
         }
 
-        // ===== GLOBAL ALERT CHECKER =====
+        // ===== GLOBAL ALERT CHECKER - ✅ IMPROVED WITH PROFESSIONAL SOUND LOGIC =====
         function startGlobalAlertChecker() {
             if (globalAlertInterval) clearInterval(globalAlertInterval);
             
@@ -2288,28 +2301,56 @@
                 const elapsedMs = now - startTime;
                 const elapsedMinutes = Math.floor(elapsedMs / 1000 / 60);
                 
-                if (elapsedMinutes >= totalDuration && !alertedSessions.has(session.id)) {
-                    alertedSessions.add(session.id);
-                    triggerExpiredAlert(session, elapsedMinutes, totalDuration);
-                } else if (elapsedMinutes >= totalDuration - 1 && !alertedSessions.has(`warn-${session.id}`)) {
-                    alertedSessions.add(`warn-${session.id}`);
-                    // ✅ تشغيل alert.mp3 مرة واحدة فقط
-                    playProfessionalSound('alert');
+                // ✅ LOGIC 1: BEFORE 1 MINUTE - ALERT SOUND (ONCE ONLY)
+                if (elapsedMinutes >= totalDuration - 1 && elapsedMinutes < totalDuration) {
+                    // Check if we already played alert for this session
+                    if (!alertSoundPlayed.has(`alert-${session.id}`)) {
+                        // Mark as played
+                        alertSoundPlayed.add(`alert-${session.id}`);
+                        
+                        // Play alert sound ONCE
+                        playProfessionalSound('warning'); // This is the "alert" sound
+                        
+                        // Show warning toast
+                        showToast('warning', '⚠️ تنبيه', `جلسة ${session.customerName} - دقيقة واحدة متبقية`);
+                        
+                        // Send browser notification
+                        sendBrowserNotif(session, 'تنبيه', 0);
+                    }
+                }
+                
+                // ✅ LOGIC 2: TIME EXPIRED - ALARM SOUND (CONTINUOUS)
+                else if (elapsedMinutes >= totalDuration) {
+                    // Only trigger if not already alerted for expiration
+                    if (!alertedSessions.has(session.id)) {
+                        alertedSessions.add(session.id);
+                        triggerExpiredAlarm(session, elapsedMinutes, totalDuration);
+                    }
+                    
+                    // Keep playing alarm continuously (unless user is managing)
+                    if (!isManagingSession) {
+                        // Ensure alarm loop is running
+                        if (!alertInterval) {
+                            startAlertLoop();
+                        }
+                    }
                 }
             });
         }
 
-        function triggerExpiredAlert(session, elapsedMinutes, totalDuration) {
+        function triggerExpiredAlarm(session, elapsedMinutes, totalDuration) {
             const device = appData.devices.find(d => d.id === session.deviceId);
             const deviceInfo = device ? `شاشة ${device.number}` : '';
             const overMin = elapsedMinutes - totalDuration;
             
+            // Send persistent browser notification
             sendBrowserNotif(session, deviceInfo, overMin);
-            // ✅ تشغيل alarm.mp3 مستمر
-            playProfessionalSound('alarm');
+            
+            // Start continuous alarm sound
             startAlertLoop();
             
-            if (document.visibilityState === 'visible') {
+            // Show critical toast (only if page is visible and not managing)
+            if (document.visibilityState === 'visible' && !isManagingSession) {
                 showToast('alert-critical', '🚨 انتهاء الوقت!', `جلسة ${session.customerName} على ${deviceInfo}\nانتهى منذ ${overMin} دقيقة`, 25000, true);
             }
         }
@@ -2327,6 +2368,22 @@
                     });
                 } catch(e) { console.error('Notif error:', e); }
             }
+        }
+
+        // ===== ✅ NEW FUNCTION: Stop All Sounds Except Timer =====
+        function stopAllSoundsExceptTimer() {
+            // Stop alarm loop
+            stopAlertLoop();
+            
+            // Pause and reset alarm audio
+            const alarmAudio = document.getElementById('alarmSound');
+            if (alarmAudio) {
+                alarmAudio.pause();
+                alarmAudio.currentTime = 0;
+            }
+            
+            // Note: We DON'T stop timer sound here - it will be controlled by updateActiveDisplay
+            console.log('🔇 All sounds stopped except timer (management mode)');
         }
 
         // ===== PROFESSIONAL TOAST SYSTEM =====
@@ -2736,7 +2793,7 @@
                 duration = (h * 60) + m;
                 
                 if (duration <= 0) {
-                    showToast('error', 'خطأ', 'يرجى إدخالمدة صحيحة');
+                    showToast('error', 'خطأ', 'يرجى إدخال مدة صحيحة');
                     return;
                 }
                 
@@ -2787,11 +2844,19 @@
             return calculateTimeCost(session) + (session.products?.reduce((sum, p) => sum + p.price, 0));
         }
 
+        // ✅ MANAGE SESSION - WITH SOUND CONTROL
         function manageSession(id) {
             const session = appData.sessions.find(s => s.id === id);
             if (!session) return;
             
             currentManagingSessionId = id;
+            
+            // ✅ KEY: Set managing mode to TRUE
+            isManagingSession = true;
+            
+            // ✅ KEY: Stop all sounds except timer when entering management
+            stopAllSoundsExceptTimer();
+            
             const dev = appData.devices.find(d => d.id === session.deviceId);
             
             document.getElementById('activeDeviceInfo').textContent = dev ? `شاشة ${dev.number} (${dev.type})` : '-';
@@ -2802,13 +2867,6 @@
             
             if (timerInterval) clearInterval(timerInterval);
             timerInterval = setInterval(() => updateActiveDisplay(session), 1000);
-            
-            // ✅ نفتح نافذة الإدارة
-            isSessionModalOpen = true;
-            stopAllBackgroundSounds(); // إيقاف alert و alert
-            
-            // ✅ شغلغ Timer كل ثانية
-            startTimerTick();
             
             document.getElementById('activeSessionModal').classList.add('active');
         }
@@ -2823,7 +2881,7 @@
                 `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
             
             document.getElementById('activeElapsedTime').textContent = `${Math.floor(elapsed/60)} دقيقة`;
-            document.getElementById('activeCurrentCost').textContent = `${calculateCurrentCost(session).toFixed(2)} EGP}`;
+            document.getElementById('activeCurrentCost').textContent = `${calculateCurrentCost(session).toFixed(2)} EGP`;
             
             if (session.sessionType === 'timed') {
                 let totalAllowed = session.duration;
@@ -2837,17 +2895,20 @@
                     document.getElementById('activeRemainingTime').textContent = '⚠️ انتهى!';
                     document.getElementById('remainingTimeRow').style.display = 'flex';
                     
-                    // ✅ تشغيل alarm.mp3 مستمر (لأنه داخل أو خارج التطبيق)
-                    playProfessionalSound('alarm');
-                    startAlertLoop();
+                    // ✅ Only play critical sound if NOT in management mode
+                    // In management mode, we only use visual warnings, no alarm
+                    if (!isManagingSession) {
+                        playProfessionalSound('critical');
+                        startAlertLoop();
+                    }
                 } else if (remaining <= 5) {
                     document.getElementById('sessionTimerDisplay').classList.add('warning');
                     document.getElementById('activeRemainingTime').textContent = `${remaining} دقيقة`;
                     document.getElementById('remainingTimeRow').style.display = 'flex';
                     
-                    // ✅ تنبيه قبل دقيقتين (2 دقيقة أو أقل) - فقط لما هو خارج نافذة الإدارة
-                    if (!isSessionModalOpen && remaining <= 2) {
-                        playProfessionalSound('alert');
+                    // ✅ Only play warning sound if NOT in management mode
+                    if (!isManagingSession && remaining <= 2) {
+                        playProfessionalSound('warning');
                     }
                 } else {
                     document.getElementById('sessionTimerDisplay').classList.remove('warning');
@@ -2856,9 +2917,8 @@
                     stopAlertLoop();
                 }
             } else {
+                document.getElementById('remainingTimeRow').style.display = 'none';
                 document.getElementById('sessionTimerDisplay').classList.remove('warning');
-                document.getElementById('activeRemainingTime').textContent = `${remaining} دقيقة`;
-                document.getElementById('remainingTimeRow').style.display = 'flex';
                 stopAlertLoop();
             }
             
@@ -2875,43 +2935,23 @@
             }
         }
 
-        // ===== ✅ PROFESSIONAL AUDIO SYSTEM - 3 SOUNDS WITH STATE MANAGEMENT =====
-        
-        /**
-         * نظام الأصوات الاحترافي - كل صوت له وظيفة ومكان واستخدام محدددة
-         * Timer: يشتغل داخل نافذة الإدارة فقط
-         * Alert: يشتغل مرة واحدة قبل انتهاء الوقت (في الصفحة الرئيسية)
-         * Alarm: يشتغل عند انتهاء الوقت (داخل أو خارج التطبيق)
-         */
-
-        function playProfessionalSound(type = 'alarm') {
+        // ===== ✅ PROFESSIONAL AUDIO SYSTEM - USING MP3 FILES =====
+        function playProfessionalSound(type = 'critical') {
             try {
                 const timerAudio = document.getElementById('timerSound');
-                const alertAudio = document.getElementById('alertSound');
                 const alarmAudio = document.getElementById('alarmSound');
                 
-                console.log(`🔊 Playing sound: ${type}`, isSessionModalOpen ? '(inside management modal)' : '(outside)');
-                
-                if (type === 'timer') {
-                    // ⏱ Timer - فقط داخل نافذة الإدارة
-                    if (timerAudio && isSessionModalOpen) {
-                        timerAudio.currentTime = 0;
-                        timerAudio.play().catch(e => console.log('Timer play error:', e));
-                    }
-                } else if (type === 'alert') {
-                    // 🔔 Alert - تنبيه قبل انتهاء (مرة واحدة فقط)
-                    if (alertAudio && !isSessionModalOpen) {
-                        alertAudio.currentTime = 0;
-                        alertAudio.play().then(() => {
-                            // ✅ منع التكرار
-                            setTimeout(() => { alertAudio.pause(); alertAudio.currentTime = 0; }, alertAudio.currentTime = 0;
-                        }, 1500);
-                    }
-                } else if (type === 'critical') {
-                    // 🚨 Alarm - إنذار عند الانتهاء
+                if (type === 'critical') {
+                    // 🔴 Alarm sound - for time expiration
                     if (alarmAudio) {
                         alarmAudio.currentTime = 0;
                         alarmAudio.play().catch(e => console.log('Alarm play error:', e));
+                    }
+                } else if (type === 'warning') {
+                    // 🟡 Timer tick sound - for warnings (alert before expiration)
+                    if (timerAudio) {
+                        timerAudio.currentTime = 0;
+                        timerAudio.play().catch(e => console.log('Timer play error:', e));
                     }
                 }
             } catch(e) {
@@ -2919,85 +2959,9 @@
             }
         }
 
-        /**
-         * إيقاف/تشغيل جميع الأصوات الخلفية
-         * يستخدم داخل manageSession() للتحويل إلى playProfessionalSound()
-         */
-        function stopAllBackgroundSounds() {
-            console.log('🔇 Stopping all background sounds (alert & alarm)');
-            
-            // إيقاف alert
-            const alertAudio = document.getElementById('alertSound');
-            if (alertAudio) {
-                alertAudio.pause();
-                alertAudio.currentTime = 0;
-            }
-            
-            // إيقاف alarm
-            const alarmAudio = document.getElementById('alarmSound');
-            if (alarmAudio) {
-                alarmAudio.pause();
-                alarmAudio.currentTime = 0;
-            }
-            
-            // إيقاف timer
-            const timerAudio = document.getElementById('timerSound');
-            if (timerAudio) {
-                timerAudio.pause();
-                timerAudio.currentTime = 0;
-            }
-        }
-
-        /**
-         * تشغيل Timer.mp3 كل ثانية داخل نافذة الإدارة
-         * يستخدم في manageSession() بعد فتحديث النافذة
-         */
-        function startTimerTick() {
-            if (timerTickInterval) clearInterval(timerTickInterval);
-            timerTickInterval = setInterval(() => {
-                playProfessionalSound('timer');
-            }, 1000);
-        }
-
-        /**
-         * إيقاف تشغيل Timer
-         * يستخدم في closeActiveSessionModal()
-         */
-        function stopTimerTick() {
-            if (timerTickInterval) {
-                clearInterval(timerTickInterval);
-                timerTickInterval = null;
-            }
-            const timerAudio = document.getElementById('timerSound');
-            if (timerAudio) {
-                timerAudio.pause();
-                timerAudio.currentTime = 0;
-            }
-        }
-
-        /**
-         * بدء تشغيل نافذة الإدارة
-         * يقوم بإيقاف alert/alarm أولاً تشغيل
-         */
-        function openSessionManagementModal(id) {
-            isSessionModalOpen = true;
-            manageSession(id);
-        }
-
-        /**
-         * إغلقق نافذة الإدارة
-         * يعيدخل على stopAllBackgroundSounds()
-         */
-        function closeSessionManagementModal() {
-            isSessionModalOpen = false;
-            stopAllBackgroundSounds();
-        }
-
         function startAlertLoop() {
             if (alertInterval) clearInterval(alertInterval);
-            alertInterval = setInterval(() => {
-                playProfessionalSound('alarm');
-            }, 1500);
+            alertInterval = setInterval(() => playProfessionalSound('critical'), 1500);
         }
 
         function stopAlertLoop() {
@@ -3005,12 +2969,22 @@
                 clearInterval(alertInterval);
                 alertInterval = null;
             }
+            // Stop the alarm sound
+            const alarmAudio = document.getElementById('alarmSound');
+            if (alarmAudio) {
+                alarmAudio.pause();
+                alarmAudio.currentTime = 0;
+            }
         }
 
+        // ✅ CLOSE ACTIVE SESSION MODAL - RESET MANAGEMENT STATE
         function closeActiveSessionModal() {
             if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
-            stopAllBackgroundSounds();
-            isSessionModalOpen = false;
+            stopAlertLoop();
+            
+            // ✅ KEY: Reset managing state when closing
+            isManagingSession = false;
+            
             document.getElementById('activeSessionModal').classList.remove('active');
             currentManagingSessionId = null;
         }
@@ -3054,8 +3028,10 @@
             s.timeExtensions.push({ timestamp: new Date().toISOString(), minutes: mins, cost: cost });
             if (s.sessionType === 'timed') s.duration = (s.duration || 0) + mins;
             
+            // ✅ Reset alert tracking for this session after extending time
             alertedSessions.delete(s.id);
-            alertedSessions.delete(`warn-${s.id}`);
+            alertSoundPlayed.delete(`alert-${s.id}`);
+            alertSoundPlayed.delete(`warn-${s.id}`);
             
             saveData();
             closeExtendTimeModal();
@@ -3119,7 +3095,10 @@
                 }
             }
             
+            // ✅ Clean up tracking sets for completed session
             alertedSessions.delete(s.id);
+            alertSoundPlayed.delete(`alert-${s.id}`);
+            
             saveData();
             closeActiveSessionModal();
             generateInvoice(s, dev, final, elapsed, timeCost, prodCost);
@@ -3171,13 +3150,13 @@
                     ${s.products?.length ? `
                         <div class="invoice-products-container">
                             <table class="invoice-products-table">
-                                <thead><tr><th>المنتجج</th><th>السعر</th></tr></thead>
+                                <thead><tr><th>المنتج</th><th>السعر</th></tr></thead>
                                 <tbody>
                                     ${s.products.map(p => `
                                         <tr><td>${p.name}</td><td style="direction:ltr;text-align:left;">${parseFloat(p.price).toFixed(2)} EGP</td></tr>
                                     `).join('')}
                                 </tbody>
-                                <tfoot><tr><td><strong>الإجمالي</strong></td><td style="direction:ltr;text-align:left;color:var(--primary);"><strong>${prodCost.toFixed(2)} EGP</strong></td></tr>
+                                <tfoot><tr><td><strong>الإجمالي</strong></td><td style="direction:ltr;text-align:left;color:var(--primary);"><strong>${prodCost.toFixed(2)} EGP</strong></td></tfoot>
                             </table>
                         </div>
                     ` : '<p style="color:var(--gray-500);text-align:center;padding:1rem;">لا توجد منتجات</p>'}
@@ -3248,9 +3227,9 @@
                             <div style="color:var(--gray-600);font-size:0.85rem;margin-top:0.2rem;">
                                 ${dev?.type || ''} | ${sess.customerName} | ${elapsed} دقيقة
                             </div>
-                            <div style="direction:ltr;text-align:left;">
-                                <span style="font-weight:800;color:var(--primary);">${calculateCurrentCost(sess).toFixed(2)} EGP</span>
-                            </div>
+                        </div>
+                        <div style="direction:ltr;text-align:left;">
+                            <span style="font-weight:800;color:var(--primary);">${calculateCurrentCost(sess).toFixed(2)} EGP</span>
                         </div>
                     </div>
                 `;
@@ -3305,7 +3284,7 @@
                         renderAll();
                         showToast('success', 'تم الاستعادة', '✓ تم استعادة البيانات');
                     } catch(err) {
-                        showToast('error', 'خطأ', '❌ ملف غير صالح!');
+                        showToast('error', 'خطأ', '❌ ملف غير صالح');
                     }
                 };
                 reader.readAsText(file);
@@ -3315,7 +3294,7 @@
         // Close modals on outside click
         ['sessionModal','activeSessionModal','addProductModal','extendTimeModal','selectSessionModal','invoiceModal'].forEach(id => {
             document.getElementById(id).addEventListener('click', (e) => {
-                if (e.target.id === id) window[id === 'close' + id.charAt(0).toUpperCase() + id.slice(1)];
+                if (e.target.id === id) window[id === 'close' + id.charAt(0).toUpperCase() + id.slice(1)]();
             });
         });
 
