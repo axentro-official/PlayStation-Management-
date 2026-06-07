@@ -2030,9 +2030,12 @@
         let alertedSessions = new Set();
         let notificationPermissionGranted = false;
 
-        // ✅ NEW: Professional Sound Management Variables
+        // ✅ Professional Sound Management Variables
         let isManagingSession = false; // Track if user is in management view
         let alertSoundPlayed = new Set(); // Track which sessions had alert sound played (once only)
+
+        // ✅ NEW: Alert threshold - when to play alert before expiration (in minutes)
+        const ALERT_BEFORE_EXPIRATION_MINUTES = 2; // 🔔 Alert plays when 2 minutes remaining
 
         // Custom Dialog System
         let customDialogResolver = null;
@@ -2079,12 +2082,10 @@
         // ===== SERVICE WORKER - PROPER REGISTRATION =====
         function registerServiceWorkerProperly() {
             if ('serviceWorker' in navigator) {
-                // ✅ Use the EXTERNAL sw.js file - NOT a blob
                 navigator.serviceWorker.register('sw.js')
                     .then(registration => {
                         console.log('✅ Service Worker registered successfully:', registration.scope);
                         
-                        // Check for updates
                         registration.addEventListener('updatefound', () => {
                             const newWorker = registration.installing;
                             newWorker.addEventListener('statechange', () => {
@@ -2096,7 +2097,6 @@
                     })
                     .catch(error => {
                         console.log('❌ SW registration failed:', error);
-                        // Fallback: Try with full path
                         navigator.serviceWorker.register('./sw.js')
                             .then(() => console.log('✅ SW registered with ./ path'))
                             .catch(err => console.log('❌ SW still failed:', err));
@@ -2108,31 +2108,23 @@
 
         // ===== PWA INSTALL - IMPROVED & FIXED =====
         function setupInstallPrompt() {
-            // Show banner after delay
             setTimeout(() => showInstallBanner(), 3000);
 
-            // Listen for install prompt event
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
                 console.log('✅ beforeinstallprompt fired - PWA can be installed!');
-                
-                // Show custom install button/UI
                 showInstallBanner();
             });
 
-            // Listen for successful installation
             window.addEventListener('appinstalled', () => {
                 console.log('🎉 PWA was installed!');
                 deferredPrompt = null;
                 hideInstallBanner();
                 showToast('success', 'تم التثبيت بنجاح!', 'التطبيق جاهز للاستخدام 🎉');
-                
-                // Save that it's installed
                 localStorage.setItem('pwaInstalled', 'true');
             });
 
-            // Check if already installed
             if (window.matchMedia('(display-mode: standalone)').matches || 
                 window.matchMedia('(display-mode: fullscreen)').matches ||
                 window.navigator.standalone === true) {
@@ -2144,7 +2136,6 @@
         function showInstallBanner() {
             const banner = document.getElementById('installBanner');
             if (banner) {
-                // Don't show if already installed or in standalone mode
                 if (localStorage.getItem('pwaInstalled') === 'true' ||
                     window.matchMedia('(display-mode: standalone)').matches ||
                     window.navigator.standalone === true) {
@@ -2170,7 +2161,6 @@
         }
 
         async function installApp() {
-            // ✅ Method 1: Use the deferred prompt (best method)
             if (deferredPrompt) {
                 try {
                     deferredPrompt.prompt();
@@ -2191,7 +2181,6 @@
                     showManualInstallInstructions();
                 }
             } else {
-                // ✅ Method 2: No deferred prompt - show manual instructions
                 showManualInstallInstructions();
             }
         }
@@ -2275,7 +2264,7 @@
             }
         }
 
-        // ===== GLOBAL ALERT CHECKER - ✅ IMPROVED WITH PROFESSIONAL SOUND LOGIC =====
+        // ===== GLOBAL ALERT CHECKER - ✅ FINAL VERSION WITH SMART ALERT LOGIC =====
         function startGlobalAlertChecker() {
             if (globalAlertInterval) clearInterval(globalAlertInterval);
             
@@ -2301,25 +2290,41 @@
                 const elapsedMs = now - startTime;
                 const elapsedMinutes = Math.floor(elapsedMs / 1000 / 60);
                 
-                // ✅ LOGIC 1: BEFORE 1 MINUTE - ALERT SOUND (ONCE ONLY)
-                if (elapsedMinutes >= totalDuration - 1 && elapsedMinutes < totalDuration) {
+                // ✅ Calculate remaining time
+                const remainingMinutes = totalDuration - elapsedMinutes;
+                
+                // ============================================
+                // ✅ LOGIC 1: ALERT - When approaching end (SMART)
+                // Plays ONCE when remaining time <= threshold
+                // Works for ANY duration (1 hour, 2 hours, 30 mins, etc.)
+                // ============================================
+                if (remainingMinutes > 0 && remainingMinutes <= ALERT_BEFORE_EXPIRATION_MINUTES) {
                     // Check if we already played alert for this session
                     if (!alertSoundPlayed.has(`alert-${session.id}`)) {
-                        // Mark as played
+                        // Mark as played (so it only plays ONCE)
                         alertSoundPlayed.add(`alert-${session.id}`);
                         
-                        // Play alert sound ONCE
-                        playProfessionalSound('warning'); // This is the "alert" sound
+                        // Play alert sound
+                        playProfessionalSound('warning'); // 🔔 Alert sound
                         
-                        // Show warning toast
-                        showToast('warning', '⚠️ تنبيه', `جلسة ${session.customerName} - دقيقة واحدة متبقية`);
+                        // Show warning toast with remaining time info
+                        showToast(
+                            'warning', 
+                            '⏰ تنبيه - الوقت ينتهي!', 
+                            `جلسة ${session.customerName}\n📍 متبقي ${remainingMinutes} دقيقة`
+                        );
                         
                         // Send browser notification
-                        sendBrowserNotif(session, 'تنبيه', 0);
+                        sendBrowserNotif(session, `تنبيه: متبقي ${remainingMinutes} دقيقة`, 0);
+                        
+                        console.log(`🔔 Alert played for session ${session.id} - ${remainingMinutes} minutes remaining`);
                     }
                 }
                 
-                // ✅ LOGIC 2: TIME EXPIRED - ALARM SOUND (CONTINUOUS)
+                // ============================================
+                // ✅ LOGIC 2: ALARM - When time has expired
+                // Plays CONTINUOUSLY until session ends or user manages it
+                // ============================================
                 else if (elapsedMinutes >= totalDuration) {
                     // Only trigger if not already alerted for expiration
                     if (!alertedSessions.has(session.id)) {
@@ -2329,7 +2334,6 @@
                     
                     // Keep playing alarm continuously (unless user is managing)
                     if (!isManagingSession) {
-                        // Ensure alarm loop is running
                         if (!alertInterval) {
                             startAlertLoop();
                         }
@@ -2372,17 +2376,14 @@
 
         // ===== ✅ NEW FUNCTION: Stop All Sounds Except Timer =====
         function stopAllSoundsExceptTimer() {
-            // Stop alarm loop
             stopAlertLoop();
             
-            // Pause and reset alarm audio
             const alarmAudio = document.getElementById('alarmSound');
             if (alarmAudio) {
                 alarmAudio.pause();
                 alarmAudio.currentTime = 0;
             }
             
-            // Note: We DON'T stop timer sound here - it will be controlled by updateActiveDisplay
             console.log('🔇 All sounds stopped except timer (management mode)');
         }
 
@@ -2851,10 +2852,10 @@
             
             currentManagingSessionId = id;
             
-            // ✅ KEY: Set managing mode to TRUE
+            // ✅ Set managing mode to TRUE
             isManagingSession = true;
             
-            // ✅ KEY: Stop all sounds except timer when entering management
+            // ✅ Stop all sounds except timer when entering management
             stopAllSoundsExceptTimer();
             
             const dev = appData.devices.find(d => d.id === session.deviceId);
@@ -2895,8 +2896,6 @@
                     document.getElementById('activeRemainingTime').textContent = '⚠️ انتهى!';
                     document.getElementById('remainingTimeRow').style.display = 'flex';
                     
-                    // ✅ Only play critical sound if NOT in management mode
-                    // In management mode, we only use visual warnings, no alarm
                     if (!isManagingSession) {
                         playProfessionalSound('critical');
                         startAlertLoop();
@@ -2906,7 +2905,6 @@
                     document.getElementById('activeRemainingTime').textContent = `${remaining} دقيقة`;
                     document.getElementById('remainingTimeRow').style.display = 'flex';
                     
-                    // ✅ Only play warning sound if NOT in management mode
                     if (!isManagingSession && remaining <= 2) {
                         playProfessionalSound('warning');
                     }
@@ -2942,13 +2940,11 @@
                 const alarmAudio = document.getElementById('alarmSound');
                 
                 if (type === 'critical') {
-                    // 🔴 Alarm sound - for time expiration
                     if (alarmAudio) {
                         alarmAudio.currentTime = 0;
                         alarmAudio.play().catch(e => console.log('Alarm play error:', e));
                     }
                 } else if (type === 'warning') {
-                    // 🟡 Timer tick sound - for warnings (alert before expiration)
                     if (timerAudio) {
                         timerAudio.currentTime = 0;
                         timerAudio.play().catch(e => console.log('Timer play error:', e));
@@ -2969,7 +2965,6 @@
                 clearInterval(alertInterval);
                 alertInterval = null;
             }
-            // Stop the alarm sound
             const alarmAudio = document.getElementById('alarmSound');
             if (alarmAudio) {
                 alarmAudio.pause();
@@ -2982,7 +2977,7 @@
             if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
             stopAlertLoop();
             
-            // ✅ KEY: Reset managing state when closing
+            // ✅ Reset managing state when closing
             isManagingSession = false;
             
             document.getElementById('activeSessionModal').classList.remove('active');
@@ -3095,7 +3090,6 @@
                 }
             }
             
-            // ✅ Clean up tracking sets for completed session
             alertedSessions.delete(s.id);
             alertSoundPlayed.delete(`alert-${s.id}`);
             
