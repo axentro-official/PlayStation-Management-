@@ -1996,6 +1996,14 @@
         </div>
     </div>
 
+    <!-- ✅ PROFESSIONAL SOUND EFFECTS - MP3 FILES -->
+    <audio id="timerSound" preload="auto">
+        <source src="Timer.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="alarmSound" preload="auto" loop>
+        <source src="alarm.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
         // ===== DATA STORE =====
         let appData = {
@@ -2015,9 +2023,6 @@
         let timerInterval = null;
         let pendingProductId = null;
         let alertInterval = null;
-
-        // Audio Context
-        let audioContext = null;
 
         // Background tracking
         let deferredPrompt = null;
@@ -2452,7 +2457,6 @@
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('appContainer').classList.add('active');
                 showToast('success', 'مرحباً بك!', 'تم تسجيل الدخول 🎉');
-                initAudioContext();
             } else {
                 document.getElementById('errorMsg').textContent = '❌ رمز غير صحيح';
                 document.getElementById('errorMsg').classList.add('show');
@@ -2802,7 +2806,6 @@
             document.getElementById('activeCustomerName').textContent = session.customerName;
             document.getElementById('activeSessionType').textContent = session.sessionType === 'open' ? '⏳ مفتوح' : '⏰ محدد';
             
-            initAudioContext();
             updateActiveDisplay(session);
             
             if (timerInterval) clearInterval(timerInterval);
@@ -2866,91 +2869,25 @@
             }
         }
 
-        // ===== PROFESSIONAL AUDIO SYSTEM =====
-        function initAudioContext() {
-            try {
-                if (!audioContext) {
-                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                if (audioContext.state === 'suspended') audioContext.resume();
-                return audioContext;
-            } catch(e) {
-                console.error('Audio init error:', e);
-                return null;
-            }
-        }
-
+        // ===== ✅ PROFESSIONAL AUDIO SYSTEM - USING MP3 FILES =====
         function playProfessionalSound(type = 'critical') {
             try {
-                const ctx = initAudioContext();
-                if (!ctx) return;
-                
-                const now = ctx.currentTime;
-                
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                
-                osc.connect(gain);
-                gain.connect(ctx.destination);
+                const timerAudio = document.getElementById('timerSound');
+                const alarmAudio = document.getElementById('alarmSound');
                 
                 if (type === 'critical') {
-                    osc.frequency.setValueAtTime(880, now);
-                    osc.frequency.setValueAtTime(880, now + 0.1);
-                    osc.frequency.setValueAtTime(660, now + 0.2);
-                    osc.frequency.setValueAtTime(880, now + 0.3);
-                    osc.frequency.setValueAtTime(1100, now + 0.5);
-                    osc.frequency.setValueAtTime(880, now + 0.7);
-                    
-                    gain.gain.setValueAtTime(0, now);
-                    gain.gain.linearRampToValueAtTime(0.8, now + 0.05);
-                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
-                    
-                    osc.type = 'square';
-                    osc.start(now);
-                    osc.stop(now + 0.8);
-                    
-                    const osc2 = ctx.createOscillator();
-                    const gain2 = ctx.createGain();
-                    osc2.connect(gain2);
-                    gain2.connect(ctx.destination);
-                    
-                    osc2.frequency.value = 440;
-                    osc2.type = 'sawtooth';
-                    gain2.gain.setValueAtTime(0.3, now);
-                    gain2.gain.linearRampToValueAtTime(0.01, now + 0.6);
-                    
-                    osc2.start(now + 0.1);
-                    osc2.stop(now + 0.6);
-                    
+                    // 🔴 Alarm sound - for time expiration
+                    if (alarmAudio) {
+                        alarmAudio.currentTime = 0;
+                        alarmAudio.play().catch(e => console.log('Alarm play error:', e));
+                    }
                 } else if (type === 'warning') {
-                    osc.frequency.value = 660;
-                    osc.type = 'sine';
-                    
-                    gain.gain.setValueAtTime(0, now);
-                    gain.gain.linearRampToValueAtTime(0.7, now + 0.15);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
-                    
-                    osc.start(now);
-                    osc.stop(now + 0.4);
-                    
-                    setTimeout(() => {
-                        const o = ctx.createOscillator();
-                        const g = ctx.createGain();
-                        o.connect(g);
-                        g.connect(ctx.destination);
-                        
-                        o.frequency.value = 880;
-                        o.type = 'sine';
-                        
-                        g.gain.setValueAtTime(0, ctx.currentTime);
-                        g.gain.linearRampToValueAtTime(0.6, ctx.currentTime + 0.2);
-                        g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
-                        
-                        o.start(ctx.currentTime);
-                        o.stop(ctx.currentTime + 0.35);
-                    }, 150);
+                    // 🟡 Timer tick sound - for warnings
+                    if (timerAudio) {
+                        timerAudio.currentTime = 0;
+                        timerAudio.play().catch(e => console.log('Timer play error:', e));
+                    }
                 }
-                
             } catch(e) {
                 console.error('Sound error:', e);
             }
@@ -2965,6 +2902,12 @@
             if (alertInterval) {
                 clearInterval(alertInterval);
                 alertInterval = null;
+            }
+            // Stop the alarm sound
+            const alarmAudio = document.getElementById('alarmSound');
+            if (alarmAudio) {
+                alarmAudio.pause();
+                alarmAudio.currentTime = 0;
             }
         }
 
@@ -3131,7 +3074,7 @@
                     ${s.products?.length ? `
                         <div class="invoice-products-container">
                             <table class="invoice-products-table">
-                                <thead><tr><th>المنتج</th><th>السعر</th></tr>
+                                <thead><tr><th>المنتج</th><th>السعر</th></tr></thead>
                                 <tbody>
                                     ${s.products.map(p => `
                                         <tr><td>${p.name}</td><td style="direction:ltr;text-align:left;">${parseFloat(p.price).toFixed(2)} EGP</td></tr>
