@@ -2391,10 +2391,14 @@
             document.getElementById('totalProductsSold').textContent = appData.transactions.filter(t=>t.type==='product').length;
         }
 
+        // ✅ Format time as 12-hour with AM/PM
         function formatTime(date) {
-            const h = date.getHours();
-            const m = date.getMinutes().toString().padStart(2,'0');
-            return `${h}:${m}`;
+            let hours = date.getHours();
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // Convert 0 to 12
+            return `${hours.toString().padStart(2, '0')}:${minutes} ${ampm}`;
         }
 
         function formatDate(date) {
@@ -2620,21 +2624,14 @@
             return Math.floor((now - startTime) / 1000);
         }
 
+        // ✅ FIXED: Calculate time cost based on ACTUAL time used only
         function calculateTimeCost(session) {
             const elapsedSeconds = calculateElapsedSeconds(session);
             const elapsedMinutes = elapsedSeconds / 60;
-            let totalMinutes = elapsedMinutes;
             
-            if (session.sessionType === 'timed') {
-                // For timed sessions, use max of elapsed or base duration
-                if (session.timeExtensions?.length > 0) {
-                    totalMinutes = session.initialDuration + session.timeExtensions.reduce((sum, e) => sum + e.minutes, 0);
-                } else {
-                    totalMinutes = Math.max(elapsedMinutes, session.duration || 0);
-                }
-            }
-            
-            return (totalMinutes / 60) * session.hourlyRate;
+            // ✅ ALWAYS use actual elapsed time for cost calculation
+            // This fixes the issue where ending early still charges full amount
+            return (elapsedMinutes / 60) * session.hourlyRate;
         }
 
         function calculateCurrentCost(session) {
@@ -2832,6 +2829,7 @@
             const elapsedMinutes = elapsedSeconds / 60;
             const dev = appData.devices.find(d => d.id === s.deviceId);
             
+            // ✅ FIXED: Use actual time cost (not base duration)
             const timeCost = calculateTimeCost(s);
             const prodCost = s.products?.reduce((sum, p) => sum + p.price, 0);
             const final = timeCost + prodCost;
