@@ -1997,11 +1997,19 @@
     </div>
 
     <!-- ✅ PROFESSIONAL SOUND EFFECTS - MP3 FILES -->
-    <audio id="timerSound" preload="auto">
-        <source src="Timer.mp3" type="audio/mpeg">
+    <!-- 🔔 الصوت الأول: alert.mp3 - للتنبيه المبكر (قبل 20%) -->
+    <audio id="alertSound" preload="auto">
+        <source src="alert.mp3" type="audio/mpeg">
     </audio>
+    
+    <!-- 🚨 الصوت الثاني: alarm.mp3 - لإنذار انتهاء الوقت -->
     <audio id="alarmSound" preload="auto" loop>
         <source src="alarm.mp3" type="audio/mpeg">
+    </audio>
+    
+    <!-- 🎵 الصوت الثالث: Timer.mp3 - لخلفية قائمة الإدارة فقط -->
+    <audio id="timerSound" preload="auto" loop>
+        <source src="Timer.mp3" type="audio/mpeg">
     </audio>
 
     <script>
@@ -2306,8 +2314,8 @@
                         // Mark as played (so it only plays ONCE)
                         alertSoundPlayed.add(`alert-${session.id}`);
                         
-                        // Play alert sound
-                        playProfessionalSound('warning'); // 🔔 Alert sound
+                        // ✅ Play ALERT sound (alert.mp3)
+                        playSound('alert'); // 🔔 Alert sound
                         
                         // Show warning toast with remaining time info
                         showToast(
@@ -2337,7 +2345,7 @@
                     // Keep playing alarm continuously (unless user is managing)
                     if (!isManagingSession) {
                         if (!alertInterval) {
-                            startAlertLoop();
+                            startAlarmLoop();
                         }
                     }
                 }
@@ -2353,7 +2361,7 @@
             sendBrowserNotif(session, deviceInfo, overMin);
             
             // Start continuous alarm sound
-            startAlertLoop();
+            startAlarmLoop();
             
             // Show critical toast (only if page is visible and not managing)
             if (document.visibilityState === 'visible' && !isManagingSession) {
@@ -2378,12 +2386,19 @@
 
         // ===== ✅ NEW FUNCTION: Stop All Sounds Except Timer =====
         function stopAllSoundsExceptTimer() {
-            stopAlertLoop();
+            stopAlarmLoop();
             
             const alarmAudio = document.getElementById('alarmSound');
+            const alertAudio = document.getElementById('alertSound');
+            
             if (alarmAudio) {
                 alarmAudio.pause();
                 alarmAudio.currentTime = 0;
+            }
+            
+            if (alertAudio) {
+                alertAudio.pause();
+                alertAudio.currentTime = 0;
             }
             
             console.log('🔇 All sounds stopped except timer (management mode)');
@@ -2860,6 +2875,9 @@
             // ✅ Stop all sounds except timer when entering management
             stopAllSoundsExceptTimer();
             
+            // ✅ START Timer.mp3 when opening management modal
+            playTimerSound(); // 🎵 Play timer sound
+            
             const dev = appData.devices.find(d => d.id === session.deviceId);
             
             document.getElementById('activeDeviceInfo').textContent = dev ? `شاشة ${dev.number} (${dev.type})` : '-';
@@ -2900,8 +2918,8 @@
                     
                     // ✅ In management mode - NO sounds, just visual warning
                     if (!isManagingSession) {
-                        playProfessionalSound('critical');
-                        startAlertLoop();
+                        playSound('alarm');
+                        startAlarmLoop();
                     }
                 } else if (remaining <= 5) {
                     document.getElementById('sessionTimerDisplay').classList.add('warning');
@@ -2910,18 +2928,18 @@
                     
                     // ✅ In management mode - NO alert sounds
                     if (!isManagingSession && remaining <= 2) {
-                        playProfessionalSound('warning');
+                        playSound('alert');
                     }
                 } else {
                     document.getElementById('sessionTimerDisplay').classList.remove('warning');
                     document.getElementById('activeRemainingTime').textContent = `${remaining} دقيقة`;
                     document.getElementById('remainingTimeRow').style.display = 'flex';
-                    stopAlertLoop();
+                    stopAlarmLoop();
                 }
             } else {
                 document.getElementById('remainingTimeRow').style.display = 'none';
                 document.getElementById('sessionTimerDisplay').classList.remove('warning');
-                stopAlertLoop();
+                stopAlarmLoop();
             }
             
             const prodsDiv = document.getElementById('sessionProductsItems');
@@ -2938,33 +2956,97 @@
         }
 
         // ===== ✅ PROFESSIONAL AUDIO SYSTEM - USING MP3 FILES =====
-        function playProfessionalSound(type = 'critical') {
+        
+        /**
+         * ✅ MAIN SOUND CONTROLLER - Smart Sound Management
+         * @param {string} type - 'alert' | 'alarm' | 'timer'
+         */
+        function playSound(type = 'alarm') {
             try {
-                const timerAudio = document.getElementById('timerSound');
+                const alertAudio = document.getElementById('alertSound');
                 const alarmAudio = document.getElementById('alarmSound');
+                const timerAudio = document.getElementById('timerSound');
                 
-                if (type === 'critical') {
-                    if (alarmAudio) {
-                        alarmAudio.currentTime = 0;
-                        alarmAudio.play().catch(e => console.log('Alarm play error:', e));
-                    }
-                } else if (type === 'warning') {
-                    if (timerAudio) {
-                        timerAudio.currentTime = 0;
-                        timerAudio.play().catch(e => console.log('Timer play error:', e));
-                    }
+                // Stop all sounds first to prevent overlap
+                stopAllSounds();
+                
+                switch(type) {
+                    case 'alert':
+                        // 🔔 Alert sound - plays ONCE (for early warning)
+                        if (alertAudio) {
+                            alertAudio.currentTime = 0;
+                            alertAudio.play().catch(e => console.log('Alert play error:', e));
+                        }
+                        break;
+                        
+                    case 'alarm':
+                        // 🚨 Alarm sound - continuous loop (for expired time)
+                        if (alarmAudio) {
+                            alarmAudio.currentTime = 0;
+                            alarmAudio.play().catch(e => console.log('Alarm play error:', e));
+                        }
+                        break;
+                        
+                    case 'timer':
+                        // 🎵 Timer sound - background music for management modal
+                        if (timerAudio) {
+                            timerAudio.currentTime = 0;
+                            timerAudio.play().catch(e => console.log('Timer play error:', e));
+                        }
+                        break;
                 }
             } catch(e) {
                 console.error('Sound error:', e);
             }
         }
 
-        function startAlertLoop() {
-            if (alertInterval) clearInterval(alertInterval);
-            alertInterval = setInterval(() => playProfessionalSound('critical'), 1500);
+        /**
+         * ✅ Play Timer Sound Only (for management modal)
+         * This is the ONLY place where Timer.mp3 should play!
+         */
+        function playTimerSound() {
+            try {
+                const timerAudio = document.getElementById('timerSound');
+                if (timerAudio) {
+                    timerAudio.currentTime = 0;
+                    timerAudio.play().catch(e => console.log('Timer play error:', e));
+                    console.log('🎵 Timer sound started (management mode)');
+                }
+            } catch(e) {
+                console.error('Timer sound error:', e);
+            }
         }
 
-        function stopAlertLoop() {
+        /**
+         * ✅ Stop Timer Sound Only
+         */
+        function stopTimerSound() {
+            const timerAudio = document.getElementById('timerSound');
+            if (timerAudio) {
+                timerAudio.pause();
+                timerAudio.currentTime = 0;
+                console.log('🔇 Timer sound stopped');
+            }
+        }
+
+        /**
+         * ✅ Start Alarm Loop (continuous alarm sound)
+         */
+        function startAlarmLoop() {
+            if (alertInterval) clearInterval(alertInterval);
+            alertInterval = setInterval(() => {
+                const alarmAudio = document.getElementById('alarmSound');
+                if (alarmAudio && !isManagingSession) {
+                    alarmAudio.currentTime = 0;
+                    alarmAudio.play().catch(e => {});
+                }
+            }, 1500);
+        }
+
+        /**
+         * ✅ Stop Alarm Loop
+         */
+        function stopAlarmLoop() {
             if (alertInterval) {
                 clearInterval(alertInterval);
                 alertInterval = null;
@@ -2976,10 +3058,41 @@
             }
         }
 
+        /**
+         * ✅ Stop ALL Sounds (complete silence)
+         */
+        function stopAllSounds() {
+            stopAlarmLoop();
+            
+            const alarmAudio = document.getElementById('alarmSound');
+            const alertAudio = document.getElementById('alertSound');
+            const timerAudio = document.getElementById('timerSound');
+            
+            if (alarmAudio) {
+                alarmAudio.pause();
+                alarmAudio.currentTime = 0;
+            }
+            
+            if (alertAudio) {
+                alertAudio.pause();
+                alertAudio.currentTime = 0;
+            }
+            
+            if (timerAudio) {
+                timerAudio.pause();
+                timerAudio.currentTime = 0;
+            }
+            
+            console.log('🔇 All sounds stopped');
+        }
+
         // ✅ CLOSE ACTIVE SESSION MODAL - RESET MANAGEMENT STATE
         function closeActiveSessionModal() {
             if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
-            stopAlertLoop();
+            stopAlarmLoop();
+            
+            // ✅ STOP Timer sound when closing management modal
+            stopTimerSound();
             
             // ✅ Reset managing state when closing
             isManagingSession = false;
