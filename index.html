@@ -10,10 +10,10 @@
     <meta name="mobile-web-app-capable" content="yes">
     <title>محل البلايستيشن - PlayStation Lounge Manager</title>
     
-    <!-- ✅ PWA Manifest - EXTERNAL FILE (NOT INLINE) -->
+    <!-- ✅ PWA Manifest -->
     <link rel="manifest" href="manifest.json">
     
-    <!-- ✅ PWA Icons - CRITICAL FOR INSTALLATION -->
+    <!-- ✅ PWA Icons -->
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
@@ -87,26 +87,15 @@
             flex: 1;
         }
 
-        .install-icon {
-            font-size: 2.2rem;
-            animation: installPulse 2s ease-in-out infinite;
-        }
+        .install-icon { font-size: 2.2rem; animation: installPulse 2s ease-in-out infinite; }
 
         @keyframes installPulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.15); }
         }
 
-        .install-text h3 {
-            font-size: 1rem;
-            font-weight: 800;
-            margin-bottom: 0.15rem;
-        }
-
-        .install-text p {
-            font-size: 0.8rem;
-            opacity: 0.95;
-        }
+        .install-text h3 { font-size: 1rem; font-weight: 800; margin-bottom: 0.15rem; }
+        .install-text p { font-size: 0.8rem; opacity: 0.95; }
 
         .install-btn {
             background: white;
@@ -122,10 +111,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
-        .install-btn:hover {
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-        }
+        .install-btn:hover { transform: translateY(-2px) scale(1.05); box-shadow: 0 6px 20px rgba(0,0,0,0.25); }
 
         .install-dismiss {
             background: rgba(255,255,255,0.2);
@@ -446,6 +432,7 @@
         .stat-value { font-size: 1.4rem; font-weight: 800; color: var(--gray-900); direction: ltr; display: inline-block; }
         .stat-label { color: var(--gray-500); font-size: 0.82rem; }
 
+        /* ✅ DEVICES GRID - NO TYPE SHOWING */
         .devices-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -484,8 +471,14 @@
             border-color: var(--primary);
         }
 
-        .device-number { font-size: 1.1rem; font-weight: 800; color: var(--gray-900); margin-bottom: 0.4rem; }
-        .device-type { color: var(--gray-500); font-size: 0.78rem; font-weight: 600; margin-bottom: 0.65rem; }
+        .device-number { 
+            font-size: 1.3rem; 
+            font-weight: 800; 
+            color: var(--gray-900); 
+            margin-bottom: 0.4rem; 
+        }
+        
+        /* ✅ Removed device-type from card */
 
         .device-status {
             display: inline-flex;
@@ -495,6 +488,7 @@
             border-radius: 20px;
             font-size: 0.72rem;
             font-weight: 700;
+            margin-top: 0.5rem;
         }
 
         .status-available { background: #d1fae5; color: #065f46; }
@@ -591,7 +585,13 @@
             box-shadow: 0 0 0 3px var(--primary-light);
         }
 
-        .type-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
+        /* ✅ Device Type Toggle in Modal */
+        .type-toggle { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 0.85rem; 
+            margin-bottom: 1rem;
+        }
 
         .type-option {
             padding: 0.9rem;
@@ -607,7 +607,13 @@
         .type-option:hover { border-color: var(--primary); background: var(--primary-light); }
         .type-option.selected { border-color: var(--primary); background: var(--primary); color: white; }
 
-        .session-type-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-bottom: 1.15rem; }
+        /* ✅ Session Type Toggle */
+        .session-type-toggle { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 0.85rem; 
+            margin-bottom: 1.15rem; 
+        }
 
         .session-type-option {
             padding: 1rem;
@@ -625,7 +631,8 @@
 
         .duration-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
 
-        .price-calc {
+        /* ✅ Price Input Field */
+        .price-input-group {
             background: linear-gradient(135deg, #fef3c7, #fde68a);
             padding: 1.15rem;
             border-radius: 12px;
@@ -633,7 +640,40 @@
             margin: 1.15rem 0;
         }
 
-        .price-value { font-size: 1.65rem; font-weight: 900; color: #92400e; direction: ltr; display: inline-block; }
+        .price-input-label {
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .price-input-field {
+            width: 150px;
+            padding: 0.7rem;
+            border: 2px solid #f59e0b;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            font-weight: 900;
+            text-align: center;
+            direction: ltr;
+            font-family: inherit;
+        }
+
+        .price-calc {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            padding: 1.15rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 1.15rem 0;
+        }
+
+        .price-value { 
+            font-size: 1.65rem; 
+            font-weight: 900; 
+            color: #065f46; 
+            direction: ltr; 
+            display: inline-block; 
+        }
 
         .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-top: 1.35rem; }
 
@@ -866,7 +906,7 @@
         .qr-link:hover { transform: scale(1.08); }
         .qr-link img { height: 55px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
 
-        /* ===== PROFESSIONAL TOAST NOTIFICATION SYSTEM ===== */
+        /* ===== TOAST NOTIFICATION SYSTEM ===== */
         .toast-container {
             position: fixed;
             top: 1.5rem;
@@ -883,10 +923,7 @@
             background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
             border-radius: 18px;
             padding: 1.1rem 1.35rem;
-            box-shadow: 
-                0 10px 40px rgba(0, 0, 0, 0.12),
-                0 2px 8px rgba(0, 0, 0, 0.04),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
             display: flex;
             align-items: center;
             gap: 0.85rem;
@@ -900,26 +937,15 @@
             backdrop-filter: blur(10px);
         }
 
-        .toast-notification.removing {
-            animation: toastSlideOut 0.4s cubic-bezier(0.55, 0, 1, 0.45) forwards;
-        }
+        .toast-notification.removing { animation: toastSlideOut 0.4s cubic-bezier(0.55, 0, 1, 0.45) forwards; }
 
         @keyframes toastSlideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-120%) scale(0.8) rotate(-3deg);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0) scale(1) rotate(0deg);
-            }
+            from { opacity: 0; transform: translateX(-120%) scale(0.8) rotate(-3deg); }
+            to { opacity: 1; transform: translateX(0) scale(1) rotate(0deg); }
         }
 
         @keyframes toastSlideOut {
-            to {
-                opacity: 0;
-                transform: translateX(120%) scale(0.8) rotate(3deg);
-            }
+            to { opacity: 0; transform: translateX(120%) scale(0.8) rotate(3deg); }
         }
 
         .toast-icon {
@@ -934,100 +960,34 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        .toast-notification.success {
-            border-left-color: var(--success);
-            background: linear-gradient(145deg, #ecfdf5 0%, #ffffff 100%);
-        }
+        .toast-notification.success { border-left-color: var(--success); background: linear-gradient(145deg, #ecfdf5 0%, #ffffff 100%); }
+        .toast-notification.success .toast-icon { background: linear-gradient(135deg, #10b981, #059669); color: white; }
 
-        .toast-notification.success .toast-icon {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
-        }
+        .toast-notification.error { border-left-color: var(--danger); background: linear-gradient(145deg, #fef2f2 0%, #ffffff 100%); }
+        .toast-notification.error .toast-icon { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
 
-        .toast-notification.error {
-            border-left-color: var(--danger);
-            background: linear-gradient(145deg, #fef2f2 0%, #ffffff 100%);
-        }
+        .toast-notification.warning { border-left-color: var(--warning); background: linear-gradient(145deg, #fffbeb 0%, #ffffff 100%); }
+        .toast-notification.warning .toast-icon { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
 
-        .toast-notification.error .toast-icon {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
-        }
-
-        .toast-notification.warning {
-            border-left-color: var(--warning);
-            background: linear-gradient(145deg, #fffbeb 0%, #ffffff 100%);
-        }
-
-        .toast-notification.warning .toast-icon {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
-        }
-
-        .toast-notification.info {
-            border-left-color: var(--primary);
-            background: linear-gradient(145deg, #eff6ff 0%, #ffffff 100%);
-        }
-
-        .toast-notification.info .toast-icon {
-            background: linear-gradient(135deg, var(--primary), #3b82f6);
-            color: white;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
-        }
+        .toast-notification.info { border-left-color: var(--primary); background: linear-gradient(145deg, #eff6ff 0%, #ffffff 100%); }
+        .toast-notification.info .toast-icon { background: linear-gradient(135deg, var(--primary), #3b82f6); color: white; }
 
         .toast-notification.alert-critical {
             background: linear-gradient(145deg, #dc2626 0%, #b91c1c 100%);
             color: white;
             border-left: 5px solid #fff;
-            box-shadow: 
-                0 15px 50px rgba(220, 38, 38, 0.4),
-                0 5px 20px rgba(220, 38, 38, 0.2);
+            box-shadow: 0 15px 50px rgba(220, 38, 38, 0.4);
             animation: criticalToastPulse 1.5s infinite, toastSlideIn 0.5s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         @keyframes criticalToastPulse {
-            0%, 100% { 
-                box-shadow: 
-                    0 0 0 0 rgba(255, 255, 255, 0.5),
-                    0 0 20px 30px rgba(220, 38, 38, 0.4);
-            }
-            50% { 
-                box-shadow: 
-                    0 0 0 10px rgba(255, 255, 255, 0.8),
-                    0 0 40px 60px rgba(220, 38, 38, 0.2);
-            }
-        }
-
-        .toast-notification.alert-critical .toast-icon {
-            background: rgba(255, 255, 255, 0.25);
-            color: white;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-            animation: iconShake 0.5s ease-in-out infinite;
-        }
-
-        @keyframes iconShake {
-            0%, 100% { transform: rotate(0); }
-            25% { transform: rotate(-10deg); }
-            75% { transform: rotate(10deg); }
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5), 0 0 20px 30px rgba(220, 38, 38, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.8), 0 0 40px 60px rgba(220, 38, 38, 0.2); }
         }
 
         .toast-content { flex: 1; min-width: 0; }
-
-        .toast-title {
-            font-weight: 800;
-            font-size: 1rem;
-            margin-bottom: 0.25rem;
-            letter-spacing: -0.02em;
-        }
-
-        .toast-message {
-            font-size: 0.84rem;
-            opacity: 0.9;
-            line-height: 1.5;
-        }
+        .toast-title { font-weight: 800; font-size: 1rem; margin-bottom: 0.25rem; letter-spacing: -0.02em; }
+        .toast-message { font-size: 0.84rem; opacity: 0.9; line-height: 1.5; }
 
         .toast-close {
             background: rgba(0, 0, 0, 0.06);
@@ -1045,10 +1005,7 @@
             justify-content: center;
         }
 
-        .toast-close:hover {
-            background: rgba(0, 0, 0, 0.15);
-            transform: scale(1.1);
-        }
+        .toast-close:hover { background: rgba(0, 0, 0, 0.15); transform: scale(1.1); }
 
         .toast-progress {
             position: absolute;
@@ -1061,12 +1018,9 @@
             animation: toastProgress linear forwards;
         }
 
-        @keyframes toastProgress {
-            from { width: 100%; }
-            to { width: 0%; }
-        }
+        @keyframes toastProgress { from { width: 100%; } to { width: 0%; } }
 
-        /* ===== CUSTOM DIALOG SYSTEM - REPLACES BROWSER CONFIRM/ALERT ===== */
+        /* ===== CUSTOM DIALOG SYSTEM ===== */
         .custom-dialog-overlay {
             position: fixed;
             inset: 0;
@@ -1082,39 +1036,22 @@
             padding: 1rem;
         }
 
-        .custom-dialog-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
+        .custom-dialog-overlay.active { opacity: 1; visibility: visible; }
 
         .custom-dialog {
             background: white;
             border-radius: 24px;
             width: 100%;
             max-width: 420px;
-            box-shadow: 
-                0 25px 80px rgba(0, 0, 0, 0.35),
-                0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35), 0 10px 30px rgba(0, 0, 0, 0.2);
             transform: scale(0.85) translateY(30px);
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             overflow: hidden;
-            animation: dialogGlow 2s ease-in-out infinite alternate;
         }
 
-        @keyframes dialogGlow {
-            from { box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35), 0 0 0 0 rgba(37, 99, 235, 0); }
-            to { box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35), 0 0 0 8px rgba(37, 99, 235, 0.08); }
-        }
+        .custom-dialog-overlay.active .custom-dialog { transform: scale(1) translateY(0); }
 
-        .custom-dialog-overlay.active .custom-dialog {
-            transform: scale(1) translateY(0);
-        }
-
-        .dialog-header {
-            padding: 2rem 2rem 1.5rem;
-            text-align: center;
-            position: relative;
-        }
+        .dialog-header { padding: 2rem 2rem 1.5rem; text-align: center; }
 
         .dialog-icon-wrapper {
             width: 80px;
@@ -1134,58 +1071,13 @@
             50% { transform: translateY(-8px); }
         }
 
-        .dialog-icon-wrapper::before {
-            content: '';
-            position: absolute;
-            inset: -4px;
-            border-radius: 50%;
-            border: 3px dashed currentColor;
-            opacity: 0.3;
-            animation: iconSpin 12s linear infinite;
-        }
+        .dialog-icon-wrapper.confirm { background: linear-gradient(135deg, #dbeafe, #bfdbfe); color: var(--primary); }
+        .dialog-icon-wrapper.warning { background: linear-gradient(135deg, #fef3c7, #fde68a); color: var(--warning); }
+        .dialog-icon-wrapper.danger { background: linear-gradient(135deg, #fee2e2, #fecaca); color: var(--danger); }
+        .dialog-icon-wrapper.success { background: linear-gradient(135deg, #d1fae5, #a7f3d0); color: var(--success); }
 
-        @keyframes iconSpin {
-            to { transform: rotate(360deg); }
-        }
-
-        .dialog-icon-wrapper.confirm {
-            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-            color: var(--primary);
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
-        }
-
-        .dialog-icon-wrapper.warning {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            color: var(--warning);
-            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
-        }
-
-        .dialog-icon-wrapper.danger {
-            background: linear-gradient(135deg, #fee2e2, #fecaca);
-            color: var(--danger);
-            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
-        }
-
-        .dialog-icon-wrapper.success {
-            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
-            color: var(--success);
-            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
-        }
-
-        .dialog-title {
-            font-size: 1.4rem;
-            font-weight: 900;
-            color: var(--gray-900);
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.02em;
-        }
-
-        .dialog-message {
-            font-size: 0.95rem;
-            color: var(--gray-600);
-            line-height: 1.7;
-            font-weight: 500;
-        }
+        .dialog-title { font-size: 1.4rem; font-weight: 900; color: var(--gray-900); margin-bottom: 0.5rem; }
+        .dialog-message { font-size: 0.95rem; color: var(--gray-600); line-height: 1.7; font-weight: 500; }
 
         .dialog-actions {
             padding: 1.5rem 2rem 2rem;
@@ -1209,71 +1101,26 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .dialog-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .dialog-btn:active::before {
-            width: 300px;
-            height: 300px;
         }
 
         .dialog-btn-cancel {
             background: white;
             color: var(--gray-700);
             border: 2px solid var(--gray-200);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
-        .dialog-btn-cancel:hover {
-            background: var(--gray-100);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-        }
+        .dialog-btn-cancel:hover { background: var(--gray-100); transform: translateY(-2px); }
 
         .dialog-btn-confirm {
             background: linear-gradient(135deg, var(--primary), #3b82f6);
             color: white;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
         }
 
-        .dialog-btn-confirm:hover {
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
-        }
+        .dialog-btn-confirm:hover { transform: translateY(-3px) scale(1.03); }
+        .dialog-btn-confirm.danger { background: linear-gradient(135deg, var(--danger), #dc2626); }
+        .dialog-btn-confirm.warning { background: linear-gradient(135deg, var(--warning), #d97706); }
 
-        .dialog-btn-confirm.danger {
-            background: linear-gradient(135deg, var(--danger), #dc2626);
-            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
-        }
-
-        .dialog-btn-confirm.danger:hover {
-            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
-        }
-
-        .dialog-btn-confirm.warning {
-            background: linear-gradient(135deg, var(--warning), #d97706);
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
-        }
-
-        .dialog-btn-confirm.warning:hover {
-            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
-        }
-
-        /* Session Timer */
+        /* Session Timer - PROFESSIONAL */
         .session-timer {
             background: linear-gradient(135deg, #1e293b, #334155);
             color: white;
@@ -1281,7 +1128,7 @@
             border-radius: 14px;
             text-align: center;
             margin: 0.9rem 0;
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 900;
             font-family: 'Courier New', monospace;
             direction: ltr;
@@ -1300,6 +1147,7 @@
             50% { opacity: 0.85; box-shadow: 0 0 50px rgba(239, 68, 68, 0.8); }
         }
 
+        /* ✅ Enhanced Session Details */
         .session-details {
             background: var(--gray-50);
             padding: 0.9rem;
@@ -1318,6 +1166,37 @@
         .session-detail-row:last-child { border-bottom: none; }
         .detail-label { color: var(--gray-600); font-weight: 600; }
         .detail-value { font-weight: 800; color: var(--gray-900); direction: ltr; }
+
+        /* ✅ Time Breakdown Section */
+        .time-breakdown {
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            border: 2px solid var(--primary-light);
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 0.9rem 0;
+        }
+
+        .time-breakdown-title {
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        .time-breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.4rem 0;
+            font-size: 0.85rem;
+            border-bottom: 1px dashed var(--primary-light);
+        }
+
+        .time-breakdown-row:last-child { border-bottom: none; }
+        .time-breakdown-label { color: var(--gray-700); font-weight: 600; }
+        .time-breakdown-value { font-weight: 800; color: var(--primary); direction: ltr; }
 
         /* Invoice */
         .invoice-modal .modal-content { max-width: 620px; }
@@ -1371,10 +1250,7 @@
             border-top: 3px solid var(--primary);
         }
 
-        .invoice-products-container {
-            margin-top: 0.45rem;
-            overflow-x: auto;
-        }
+        .invoice-products-container { margin-top: 0.45rem; overflow-x: auto; }
 
         .invoice-products-table {
             width: 100%;
@@ -1382,20 +1258,14 @@
             border-collapse: collapse;
         }
 
-        .invoice-products-table th,
-        .invoice-products-table td {
+        .invoice-products-table th, .invoice-products-table td {
             padding: 0.55rem 0.65rem;
             font-size: 0.82rem;
             border: 1px solid var(--gray-200);
             text-align: right;
         }
 
-        .invoice-products-table th {
-            background: var(--gray-50);
-            font-weight: 700;
-            white-space: nowrap;
-        }
-
+        .invoice-products-table th { background: var(--gray-50); font-weight: 700; white-space: nowrap; }
         .invoice-products-table tfoot tr { font-weight: 800; background: var(--gray-50); }
 
         /* Responsive */
@@ -1422,7 +1292,7 @@
             
             .devices-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 0.7rem; }
             .device-card { padding: 0.9rem; }
-            .device-number { font-size: 0.95rem; }
+            .device-number { font-size: 1.15rem; }
             .device-status { font-size: 0.68rem; padding: 0.28rem 0.6rem; }
             
             .products-grid { grid-template-columns: 1fr; }
@@ -1435,6 +1305,7 @@
             table { font-size: 0.78rem; min-width: 550px; }
             th, td { padding: 0.6rem 0.45rem; }
             .session-type-toggle { grid-template-columns: 1fr; }
+            .type-toggle { grid-template-columns: 1fr; }
             
             .modal-content { max-width: 100%; margin: 0.4rem; max-height: 93vh; }
             .modal-body { padding: 1.15rem; }
@@ -1443,7 +1314,7 @@
             .login-box { padding: 1.8rem 1.5rem; width: 94%; }
             .pin-dot { width: 46px; height: 46px; font-size: 1.25rem; }
             .num-btn { padding: 15px; font-size: 1.15rem; }
-            .session-timer { font-size: 1.65rem; padding: 1.15rem; }
+            .session-timer { font-size: 1.75rem; padding: 1.15rem; }
             
             .invoice-modal .modal-content { max-width: 100%; margin: 0.2rem; }
             .invoice-body { padding: 1.15rem; }
@@ -1452,11 +1323,7 @@
             .toast-notification { max-width: 100%; font-size: 0.84rem; padding: 0.95rem 1.15rem; }
             .toast-icon { width: 38px; height: 38px; font-size: 1.15rem; }
 
-            .custom-dialog {
-                max-width: 100%;
-                margin: 0.5rem;
-            }
-
+            .custom-dialog { max-width: 100%; margin: 0.5rem; }
             .dialog-header { padding: 1.5rem 1.25rem 1.25rem; }
             .dialog-icon-wrapper { width: 65px; height: 65px; font-size: 2rem; }
             .dialog-title { font-size: 1.2rem; }
@@ -1464,13 +1331,7 @@
             .dialog-actions { padding: 1.25rem 1.25rem 1.5rem; }
             .dialog-btn { padding: 0.85rem 1.25rem; font-size: 0.92rem; }
 
-            .install-banner {
-                padding: 0.8rem 1rem;
-                flex-direction: column;
-                gap: 0.65rem;
-                text-align: center;
-            }
-
+            .install-banner { padding: 0.8rem 1rem; flex-direction: column; gap: 0.65rem; text-align: center; }
             .install-btn { width: 100%; padding: 0.65rem; }
         }
 
@@ -1488,14 +1349,13 @@
             
             .devices-grid { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
             .device-card { padding: 0.8rem; }
-            .device-number { font-size: 0.9rem; }
-            .device-type { font-size: 0.72rem; }
+            .device-number { font-size: 1.1rem; }
             
             .product-image { height: 105px; font-size: 2.8rem; }
             .product-info { padding: 0.9rem; }
             .product-name { font-size: 0.9rem; }
             
-            .session-timer { font-size: 1.45rem; padding: 1rem; }
+            .session-timer { font-size: 1.5rem; padding: 1rem; }
             
             .toast-container { left: 0.5rem; right: 0.5rem; top: 0.5rem; }
             .toast-notification { padding: 0.85rem 1rem; }
@@ -1652,7 +1512,7 @@
                         <thead>
                             <tr>
                                 <th>الجهاز</th>
-                                <th>Screen Type</th>
+                                <th>نوع الجهاز</th>
                                 <th>العميل</th>
                                 <th>نوع الجلسة</th>
                                 <th>البداية</th>
@@ -1801,7 +1661,7 @@
         </footer>
     </div>
 
-    <!-- Session Modal -->
+    <!-- ✅ Session Modal - ENHANCED with Price Input -->
     <div class="modal-overlay" id="sessionModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1814,14 +1674,30 @@
                     <input type="text" class="form-input" id="modalDevice" readonly>
                 </div>
                 
+                <!-- ✅ Device Type Selection -->
                 <div class="form-group">
                     <label class="form-label">نوع الجهاز</label>
-                    <div class="type-toggle">
-                        <div class="type-option selected" data-type="ps4" data-price="50" onclick="selectType(this)">PS4 - 50 EGP/hr</div>
-                        <div class="type-option" data-type="ps5" data-price="80" onclick="selectType(this)">PS5 - 80 EGP/hr</div>
+                    <div class="type-toggle" id="deviceTypeToggle">
+                        <div class="type-option selected" data-type="ps4" onclick="selectDeviceType(this)">
+                            🎮 PS4
+                        </div>
+                        <div class="type-option" data-type="ps5" onclick="selectDeviceType(this)">
+                            🎮 PS5
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ✅ CUSTOM PRICE INPUT -->
+                <div class="price-input-group">
+                    <div class="price-input-label">💰 سعر الساعة (EGP)</div>
+                    <input type="number" class="price-input-field" id="customPriceInput" 
+                           value="50" min="0" step="0.5" oninput="updatePriceFromInput()">
+                    <div style="font-size: 0.8rem; color: #92400e; margin-top: 0.4rem;">
+                        * يمكنك تغيير السعر حسب رغبتك
                     </div>
                 </div>
                 
+                <!-- Session Type -->
                 <div class="form-group">
                     <label class="form-label">نوع الجلسة</label>
                     <div class="session-type-toggle">
@@ -1868,7 +1744,7 @@
         </div>
     </div>
 
-    <!-- Active Session Modal -->
+    <!-- Active Session Modal - ENHANCED -->
     <div class="modal-overlay" id="activeSessionModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1876,17 +1752,35 @@
                 <button class="modal-close" onclick="closeActiveSessionModal()">✕</button>
             </div>
             <div class="modal-body">
+                <!-- ✅ Professional Timer Display -->
                 <div class="session-timer" id="sessionTimerDisplay">00:00:00</div>
                 
                 <div class="session-details">
                     <div class="session-detail-row"><span class="detail-label">الجهاز:</span><span class="detail-value" id="activeDeviceInfo">-</span></div>
+                    <div class="session-detail-row"><span class="detail-label">نوع الجهاز:</span><span class="detail-value" id="activeDeviceType">-</span></div>
                     <div class="session-detail-row"><span class="detail-label">العميل:</span><span class="detail-value" id="activeCustomerName">-</span></div>
                     <div class="session-detail-row"><span class="detail-label">نوع الجلسة:</span><span class="detail-value" id="activeSessionType">-</span></div>
-                    <div class="session-detail-row"><span class="detail-label">الوقت المستخدم:</span><span class="detail-value" id="activeElapsedTime">0 دقيقة</span></div>
-                    <div class="session-detail-row"><span class="detail-label">التكلفة:</span><span class="detail-value" id="activeCurrentCost">0.00 EGP</span></div>
+                    <div class="session-detail-row"><span class="detail-label">⏱ الوقت الفعلي:</span><span class="detail-value" id="activeElapsedTime" style="color: var(--primary);">0:00:00</span></div>
+                    <div class="session-detail-row"><span class="detail-label">التكلفة الحالية:</span><span class="detail-value" id="activeCurrentCost">0.00 EGP</span></div>
                     <div class="session-detail-row" id="remainingTimeRow" style="display:none;">
                         <span class="detail-label">الوقت المتبقي:</span>
-                        <span class="detail-value" id="activeRemainingTime" style="color: var(--danger);">0 دقيقة</span>
+                        <span class="detail-value" id="activeRemainingTime" style="color: var(--danger);">0:00:00</span>
+                    </div>
+                </div>
+
+                <!-- ✅ Time Breakdown Section -->
+                <div class="time-breakdown" id="timeBreakdownSection">
+                    <div class="time-breakdown-title">⏰ تفاصيل الوقت</div>
+                    <div class="time-breakdown-row">
+                        <span class="time-breakdown-label">📌 المدة الأساسية:</span>
+                        <span class="time-breakdown-value" id="baseDurationDisplay">0 دقيقة</span>
+                    </div>
+                    <div class="time-breakdown-row" id="extensionsBreakdown">
+                        <!-- Dynamic extensions will be added here -->
+                    </div>
+                    <div class="time-breakdown-row" style="border-top: 2px solid var(--primary); margin-top: 0.5rem; padding-top: 0.5rem;">
+                        <span class="time-breakdown-label" style="font-weight: 900;">⏱ الإجمالي المستخدم:</span>
+                        <span class="time-breakdown-value" id="totalUsedTimeDisplay" style="font-weight: 900;">0:00:00</span>
                     </div>
                 </div>
 
@@ -1982,7 +1876,7 @@
         </div>
     </div>
 
-    <!-- Invoice Modal -->
+    <!-- Invoice Modal - ENHANCED -->
     <div class="modal-overlay invoice-modal" id="invoiceModal">
         <div class="modal-content">
             <div class="invoice-header">
@@ -1996,18 +1890,15 @@
         </div>
     </div>
 
-    <!-- ✅ PROFESSIONAL SOUND EFFECTS - MP3 FILES -->
-    <!-- 🔔 الصوت الأول: alert.mp3 - للتنبيه المبكر (قبل 20%) -->
+    <!-- ✅ Sound Effects -->
     <audio id="alertSound" preload="auto">
         <source src="alert.mp3" type="audio/mpeg">
     </audio>
     
-    <!-- 🚨 الصوت الثاني: alarm.mp3 - لإنذار انتهاء الوقت -->
     <audio id="alarmSound" preload="auto" loop>
         <source src="alarm.mp3" type="audio/mpeg">
     </audio>
     
-    <!-- 🎵 الصوت الثالث: Timer.mp3 - لخلفية قائمة الإدارة فقط -->
     <audio id="timerSound" preload="auto" loop>
         <source src="Timer.mp3" type="audio/mpeg">
     </audio>
@@ -2025,7 +1916,7 @@
 
         let currentDevice = null;
         let selectedType = 'ps4';
-        let selectedPrice = 50;
+        let selectedPrice = 50; // ✅ Will be updated from input
         let selectedSessionType = 'timed';
         let currentManagingSessionId = null;
         let timerInterval = null;
@@ -2038,14 +1929,14 @@
         let alertedSessions = new Set();
         let notificationPermissionGranted = false;
 
-        // ✅ Professional Sound Management Variables
-        let isManagingSession = false; // Track if user is in management view
-        let alertSoundPlayed = new Set(); // Track which sessions had alert sound played (once only)
+        // Sound Management
+        let isManagingSession = false;
+        let alertSoundPlayed = new Set();
 
-        // ✅ NEW: Smart Alert Threshold - 20% of remaining time (works for ANY duration!)
-        const ALERT_PERCENTAGE_THRESHOLD = 20; // 🔔 Alert when 20% of time remains
+        // Alert Threshold
+        const ALERT_PERCENTAGE_THRESHOLD = 20;
 
-        // Custom Dialog System
+        // Custom Dialog
         let customDialogResolver = null;
 
         // ===== INITIALIZATION =====
@@ -2062,8 +1953,8 @@
                     appData.devices.push({
                         id: i,
                         number: i,
-                        type: i % 3 === 0 ? 'PS5' : 'PS4',
                         status: 'available'
+                        // ✅ Removed default type - user chooses in modal
                     });
                 }
                 saveData();
@@ -2073,8 +1964,6 @@
             checkNotificationPermission();
             startGlobalAlertChecker();
             setupInstallPrompt();
-            
-            // ✅ Register Service Worker ONCE - using external file only
             registerServiceWorkerProperly();
         }
 
@@ -2087,157 +1976,62 @@
             if (saved) appData = JSON.parse(saved);
         }
 
-        // ===== SERVICE WORKER - PROPER REGISTRATION =====
+        // ===== SERVICE WORKER =====
         function registerServiceWorkerProperly() {
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('sw.js')
                     .then(registration => {
-                        console.log('✅ Service Worker registered successfully:', registration.scope);
-                        
-                        registration.addEventListener('updatefound', () => {
-                            const newWorker = registration.installing;
-                            newWorker.addEventListener('statechange', () => {
-                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                    console.log('🔄 New SW available');
-                                }
-                            });
-                        });
+                        console.log('✅ Service Worker registered:', registration.scope);
                     })
                     .catch(error => {
-                        console.log('❌ SW registration failed:', error);
-                        navigator.serviceWorker.register('./sw.js')
-                            .then(() => console.log('✅ SW registered with ./ path'))
-                            .catch(err => console.log('❌ SW still failed:', err));
+                        console.log('❌ SW failed:', error);
                     });
-            } else {
-                console.log('⚠️ Service Workers not supported');
             }
         }
 
-        // ===== PWA INSTALL - IMPROVED & FIXED =====
+        // ===== PWA INSTALL =====
         function setupInstallPrompt() {
             setTimeout(() => showInstallBanner(), 3000);
-
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
-                console.log('✅ beforeinstallprompt fired - PWA can be installed!');
                 showInstallBanner();
             });
-
             window.addEventListener('appinstalled', () => {
-                console.log('🎉 PWA was installed!');
                 deferredPrompt = null;
                 hideInstallBanner();
-                showToast('success', 'تم التثبيت بنجاح!', 'التطبيق جاهز للاستخدام 🎉');
-                localStorage.setItem('pwaInstalled', 'true');
+                showToast('success', 'تم التثبيت!', 'التطبيق جاهز 🎉');
             });
-
-            if (window.matchMedia('(display-mode: standalone)').matches || 
-                window.matchMedia('(display-mode: fullscreen)').matches ||
-                window.navigator.standalone === true) {
-                console.log('✅ App is already running in standalone mode');
-                hideInstallBanner();
-            }
         }
 
         function showInstallBanner() {
             const banner = document.getElementById('installBanner');
-            if (banner) {
-                if (localStorage.getItem('pwaInstalled') === 'true' ||
-                    window.matchMedia('(display-mode: standalone)').matches ||
-                    window.navigator.standalone === true) {
-                    hideInstallBanner();
-                    return;
-                }
-                
+            if (banner && !localStorage.getItem('pwaInstalled')) {
                 banner.classList.remove('hidden');
             }
         }
 
         function hideInstallBanner() {
-            const banner = document.getElementById('installBanner');
-            if (banner) {
-                banner.classList.add('hidden');
-            }
-            localStorage.setItem('installDismissed', Date.now().toString());
+            document.getElementById('installBanner')?.classList.add('hidden');
         }
 
-        function dismissInstall() {
-            hideInstallBanner();
-            showToast('info', 'حسناً', 'يمكنك التثبيت لاحقاً من قائمة المتصفح');
-        }
+        function dismissInstall() { hideInstallBanner(); }
 
         async function installApp() {
             if (deferredPrompt) {
-                try {
-                    deferredPrompt.prompt();
-                    const result = await deferredPrompt.userChoice;
-                    
-                    if (result.outcome === 'accepted') {
-                        showToast('success', 'جاري التثبيت...', '⬇️ يرجى الانتظار');
-                        console.log('User accepted install prompt');
-                    } else {
-                        showToast('info', 'تم الإلغاء', 'يمكنك التثبيت لاحقاً');
-                        console.log('User dismissed install prompt');
-                    }
-                    
-                    deferredPrompt = null;
-                    hideInstallBanner();
-                } catch (error) {
-                    console.error('Install prompt error:', error);
-                    showManualInstallInstructions();
-                }
-            } else {
-                showManualInstallInstructions();
+                deferredPrompt.prompt();
+                const result = await deferredPrompt.userChoice;
+                deferredPrompt = null;
+                hideInstallBanner();
             }
-        }
-
-        function showManualInstallInstructions() {
-            const userAgent = navigator.userAgent.toLowerCase();
-            let instructions = '';
-            
-            if (userAgent.includes('chrome') && !userAgent.includes('edge')) {
-                instructions = `📌 لتثبيت التطبيق:\n\n` +
-                    `1. اضغط على القائمة (⋮) أعلى اليمين\n` +
-                    `2. اختر "تثبيت التطبيق" أو "Install app"\n` +
-                    `3. اضغط "تثبيت"\n\n` +
-                    `✨ سيفتح التطبيق في نافذة مستقلة بدون شريط عنوان!`;
-            } else if (userAgent.includes('safari')) {
-                instructions = `📌 لتثبيت التطبيق:\n\n` +
-                    `1. اضغط على أيقونة المشاركة (📤)\n` +
-                    `2. اختر "إضافة إلى الشاشة الرئيسية"\n` +
-                    `3. اضغط "إضافة"\n\n` +
-                    `✨ سيظهر التطبيق كتطبيق حقيقي!`;
-            } else if (userAgent.includes('firefox')) {
-                instructions = `📌 لتثبيت التطبيق:\n\n` +
-                    `1. عندما ترى أيقونة التثبيت في شريط العنوان\n` +
-                    `2. اضغط عليها\n` +
-                    `3. أكد التثبيت`;
-            } else if (userAgent.includes('samsung')) {
-                instructions = `📌 لتثبيت التطبيق:\n\n` +
-                    `1. اضغط على القائمة (⋮)\n` +
-                    `2. اختر "Add to Home screen"\n` +
-                    `3. اضغط "Add"`;
-            } else {
-                instructions = `📌 لتثبيت التطبيق:\n\n` +
-                    `🔹 Chrome: القائمة → "تثبيت التطبيق"\n\n` +
-                    `🔹 Safari: مشاركة → "إضافة للشاشة الرئيسية"\n\n` +
-                    `🔹 Samsung Internet: القائمة → "Add to Home"`;
-            }
-            
-            showCustomDialog('info', '📱 تثبيت التطبيق', instructions, 'فهمت ✅');
         }
 
         // ===== NOTIFICATIONS =====
         async function checkNotificationPermission() {
             if ('Notification' in window) {
-                const permission = Notification.permission;
-                updateNotifButton(permission === 'granted');
-                notificationPermissionGranted = permission === 'granted';
-            } else {
-                document.getElementById('notifBtn').textContent = '❌ غير مدعوم';
-                document.getElementById('notifBtn').disabled = true;
+                const perm = Notification.permission;
+                notificationPermissionGranted = perm === 'granted';
+                updateNotifButton(notificationPermissionGranted);
             }
         }
 
@@ -2251,34 +2045,23 @@
         }
 
         async function requestNotificationPermission() {
-            if (!('Notification' in window)) {
-                showToast('error', 'خطأ', 'المصفح لا يدعم الإشعارات');
-                return;
-            }
-
-            const perm = await Notification.requestPermission();
-            if (perm === 'granted') {
-                notificationPermissionGranted = true;
-                updateNotifButton(true);
-                showToast('success', 'تم التفعيل', 'سيصلك إشعار عند انتهاء الوقت 🔔');
-                
-                new Notification('🎮 محل البلايستيشن', {
-                    body: 'تم تفعيل الإشعارات! ✅',
-                    icon: 'icon-192.png',
-                    tag: 'test'
-                });
-            } else {
-                showToast('warning', 'لم يتم', 'يرجى السماح بالإشعارات');
+            if ('Notification' in window) {
+                const perm = await Notification.requestPermission();
+                if (perm === 'granted') {
+                    notificationPermissionGranted = true;
+                    updateNotifButton(true);
+                    showToast('success', 'تم التفعيل', 'سيصلك إشعار 🔔');
+                }
             }
         }
 
-        // ===== GLOBAL ALERT CHECKER - ✅ SMART VERSION WITH PERCENTAGE-BASED ALERT =====
+        // ===== GLOBAL ALERT CHECKER =====
         function startGlobalAlertChecker() {
             if (globalAlertInterval) clearInterval(globalAlertInterval);
-            
             globalAlertInterval = setInterval(() => {
                 checkAllSessionsForExpiration();
-            }, 1000);
+                renderSessions(); // ✅ Auto-refresh sessions list
+            }, 1000); // ✅ Update every second
         }
 
         function checkAllSessionsForExpiration() {
@@ -2295,58 +2078,33 @@
                     totalDuration = session.initialDuration + session.timeExtensions.reduce((sum, ext) => sum + ext.minutes, 0);
                 }
                 
+                // ✅ Precise calculation in milliseconds
                 const elapsedMs = now - startTime;
-                const elapsedMinutes = Math.floor(elapsedMs / 1000 / 60);
+                const elapsedSeconds = Math.floor(elapsedMs / 1000);
+                const elapsedMinutes = elapsedSeconds / 60;
                 
-                // ✅ Calculate remaining time
                 const remainingMinutes = totalDuration - elapsedMinutes;
-                
-                // ============================================
-                // ✅ LOGIC 1: SMART ALERT - When approaching end
-                // Uses PERCENTAGE-based threshold (works for ANY duration!)
-                // Plays ONCE when remaining time <= 20% of total duration
-                // ============================================
                 const alertThresholdMinutes = Math.max(1, Math.floor(totalDuration * (ALERT_PERCENTAGE_THRESHOLD / 100)));
                 
+                // Alert at 20%
                 if (remainingMinutes > 0 && remainingMinutes <= alertThresholdMinutes) {
-                    // Check if we already played alert for this session
                     if (!alertSoundPlayed.has(`alert-${session.id}`)) {
-                        // Mark as played (so it only plays ONCE)
                         alertSoundPlayed.add(`alert-${session.id}`);
-                        
-                        // ✅ Play ALERT sound (alert.mp3)
-                        playSound('alert'); // 🔔 Alert sound
-                        
-                        // Show warning toast with remaining time info
-                        showToast(
-                            'warning', 
-                            '⏰ تنبيه - الوقت ينتهي!', 
-                            `جلسة ${session.customerName}\n📍 متبقي ${remainingMinutes} دقيقة`
-                        );
-                        
-                        // Send browser notification
-                        sendBrowserNotif(session, `تنبيه: متبقي ${remainingMinutes} دقيقة`, 0);
-                        
-                        console.log(`🔔 Alert played for session ${session.id} - ${remainingMinutes} minutes remaining (threshold: ${alertThresholdMinutes}min)`);
+                        playSound('alert');
+                        showToast('warning', '⏰ تنبيه!', `جلسة ${session.customerName}\nمتبقي ${Math.ceil(remainingMinutes)} دقيقة`);
+                        sendBrowserNotif(session, `تنبيه: متبقي ${Math.ceil(remainingMinutes)} دقيقة`, 0);
                     }
                 }
                 
-                // ============================================
-                // ✅ LOGIC 2: ALARM - When time has expired
-                // Plays CONTINUOUSLY until session ends or user manages it
-                // ============================================
+                // Alarm when expired
                 else if (elapsedMinutes >= totalDuration) {
-                    // Only trigger if not already alerted for expiration
                     if (!alertedSessions.has(session.id)) {
                         alertedSessions.add(session.id);
                         triggerExpiredAlarm(session, elapsedMinutes, totalDuration);
                     }
                     
-                    // Keep playing alarm continuously (unless user is managing)
-                    if (!isManagingSession) {
-                        if (!alertInterval) {
-                            startAlarmLoop();
-                        }
+                    if (!isManagingSession && !alertInterval) {
+                        startAlarmLoop();
                     }
                 }
             });
@@ -2354,18 +2112,11 @@
 
         function triggerExpiredAlarm(session, elapsedMinutes, totalDuration) {
             const device = appData.devices.find(d => d.id === session.deviceId);
-            const deviceInfo = device ? `شاشة ${device.number}` : '';
-            const overMin = elapsedMinutes - totalDuration;
-            
-            // Send persistent browser notification
-            sendBrowserNotif(session, deviceInfo, overMin);
-            
-            // Start continuous alarm sound
+            sendBrowserNotif(session, device ? `شاشة ${device.number}` : '', elapsedMinutes - totalDuration);
             startAlarmLoop();
             
-            // Show critical toast (only if page is visible and not managing)
             if (document.visibilityState === 'visible' && !isManagingSession) {
-                showToast('alert-critical', '🚨 انتهاء الوقت!', `جلسة ${session.customerName} على ${deviceInfo}\nانتهى منذ ${overMin} دقيقة`, 25000, true);
+                showToast('alert-critical', '🚨 انتهاء الوقت!', `جلسة ${session.customerName}`, 25000, true);
             }
         }
 
@@ -2373,49 +2124,75 @@
             if (notificationPermissionGranted && 'Notification' in window) {
                 try {
                     new Notification('🚨 انتهاء الوقت!', {
-                        body: `العميل: ${session.customerName}\nالجهاز: ${deviceInfo}\n\n⚠️ انتهى منذ ${overMin} دقيقة`,
+                        body: `العميل: ${session.customerName}\nالجهاز: ${deviceInfo}`,
                         icon: 'icon-192.png',
-                        badge: 'icon-192.png',
-                        tag: `expired-${session.id}`,
-                        requireInteraction: true,
-                        renotify: true
+                        tag: `expired-${session.id}`
                     });
-                } catch(e) { console.error('Notif error:', e); }
+                } catch(e) {}
             }
         }
 
-        // ===== ✅ NEW FUNCTION: Stop All Sounds Except Timer =====
+        // ===== SOUND MANAGEMENT =====
         function stopAllSoundsExceptTimer() {
             stopAlarmLoop();
-            
-            const alarmAudio = document.getElementById('alarmSound');
-            const alertAudio = document.getElementById('alertSound');
-            
-            if (alarmAudio) {
-                alarmAudio.pause();
-                alarmAudio.currentTime = 0;
-            }
-            
-            if (alertAudio) {
-                alertAudio.pause();
-                alertAudio.currentTime = 0;
-            }
-            
-            console.log('🔇 All sounds stopped except timer (management mode)');
+            ['alarmSound', 'alertSound'].forEach(id => {
+                const audio = document.getElementById(id);
+                if (audio) { audio.pause(); audio.currentTime = 0; }
+            });
         }
 
-        // ===== PROFESSIONAL TOAST SYSTEM =====
+        function playSound(type = 'alarm') {
+            try {
+                stopAllSounds();
+                const sounds = { alert: 'alertSound', alarm: 'alarmSound', timer: 'timerSound' };
+                const audio = document.getElementById(sounds[type]);
+                if (audio) {
+                    audio.currentTime = 0;
+                    audio.play().catch(e => console.log('Play error:', e));
+                }
+            } catch(e) {}
+        }
+
+        function playTimerSound() {
+            const audio = document.getElementById('timerSound');
+            if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
+        }
+
+        function stopTimerSound() {
+            const audio = document.getElementById('timerSound');
+            if (audio) { audio.pause(); audio.currentTime = 0; }
+        }
+
+        function startAlarmLoop() {
+            if (alertInterval) clearInterval(alertInterval);
+            alertInterval = setInterval(() => {
+                const audio = document.getElementById('alarmSound');
+                if (audio && !isManagingSession) {
+                    audio.currentTime = 0;
+                    audio.play().catch(() => {});
+                }
+            }, 1500);
+        }
+
+        function stopAlarmLoop() {
+            if (alertInterval) { clearInterval(alertInterval); alertInterval = null; }
+            const audio = document.getElementById('alarmSound');
+            if (audio) { audio.pause(); audio.currentTime = 0; }
+        }
+
+        function stopAllSounds() {
+            stopAlarmLoop();
+            ['alarmSound', 'alertSound', 'timerSound'].forEach(id => {
+                const audio = document.getElementById(id);
+                if (audio) { audio.pause(); audio.currentTime = 0; }
+            });
+        }
+
+        // ===== TOAST SYSTEM =====
         function showToast(type, title, message, duration = 5000, persistent = false) {
             const container = document.getElementById('toastContainer');
+            const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️', 'alert-critical': '🚨' };
             
-            const icons = {
-                success: '✅',
-                error: '❌',
-                warning: '⚠️',
-                info: 'ℹ️',
-                'alert-critical': '🚨'
-            };
-
             const toast = document.createElement('div');
             toast.className = `toast-notification ${type}`;
             toast.innerHTML = `
@@ -2427,69 +2204,39 @@
                 <button class="toast-close" onclick="removeToast(this.parentElement)">✕</button>
                 ${!persistent ? `<div class="toast-progress" style="animation-duration: ${duration}ms;"></div>` : ''}
             `;
-
             container.appendChild(toast);
-
-            if (!persistent) {
-                setTimeout(() => removeToast(toast), duration);
-            }
+            if (!persistent) setTimeout(() => removeToast(toast), duration);
         }
 
         function removeToast(el) {
-            if (!el || !el.parentNode) return;
-            el.classList.add('removing');
-            setTimeout(() => el.remove(), 350);
+            if (el?.parentNode) {
+                el.classList.add('removing');
+                setTimeout(() => el.remove(), 350);
+            }
         }
 
-        // ===== CUSTOM DIALOG SYSTEM =====
-        function showCustomDialog(type = 'confirm', title, message, confirmText = 'تأكيد', cancelText = 'إلغاء') {
+        // ===== DIALOG SYSTEM =====
+        function showCustomDialog(type, title, message, confirmText = 'تأكيد', cancelText = 'إلغاء') {
             return new Promise((resolve) => {
                 customDialogResolver = resolve;
-                
                 const overlay = document.getElementById('customDialogOverlay');
-                const iconWrapper = document.getElementById('dialogIconWrapper');
-                const titleEl = document.getElementById('dialogTitle');
-                const messageEl = document.getElementById('dialogMessage');
-                const confirmBtn = document.getElementById('dialogConfirmBtn');
-                const cancelBtn = document.querySelector('.dialog-btn-cancel');
-
-                iconWrapper.className = 'dialog-icon-wrapper ' + type;
-                const icons = {
-                    confirm: '❓',
-                    warning: '⚠️',
-                    danger: '🗑️',
-                    success: '✅',
-                    info: 'ℹ️'
-                };
-                iconWrapper.textContent = icons[type] || '❓';
-
-                titleEl.textContent = title;
-                messageEl.textContent = message;
-                confirmBtn.textContent = confirmText;
-                cancelBtn.textContent = cancelText;
-
-                confirmBtn.className = 'dialog-btn dialog-btn-confirm';
-                if (type === 'danger') confirmBtn.classList.add('danger');
-                else if (type === 'warning') confirmBtn.classList.add('warning');
-
+                document.getElementById('dialogIconWrapper').className = `dialog-icon-wrapper ${type}`;
+                document.getElementById('dialogIconWrapper').textContent = { confirm: '❓', warning: '⚠️', danger: '🗑️', success: '✅', info: 'ℹ️' }[type] || '❓';
+                document.getElementById('dialogTitle').textContent = title;
+                document.getElementById('dialogMessage').textContent = message;
+                document.getElementById('dialogConfirmBtn').textContent = confirmText;
+                document.querySelector('.dialog-btn-cancel').textContent = cancelText;
                 overlay.classList.add('active');
             });
         }
 
         function closeCustomDialog(result) {
-            const overlay = document.getElementById('customDialogOverlay');
-            overlay.classList.remove('active');
-            
-            if (customDialogResolver) {
-                customDialogResolver(result);
-                customDialogResolver = null;
-            }
+            document.getElementById('customDialogOverlay').classList.remove('active');
+            if (customDialogResolver) { customDialogResolver(result); customDialogResolver = null; }
         }
 
         document.getElementById('customDialogOverlay')?.addEventListener('click', (e) => {
-            if (e.target.id === 'customDialogOverlay') {
-                closeCustomDialog(false);
-            }
+            if (e.target.id === 'customDialogOverlay') closeCustomDialog(false);
         });
 
         // ===== LOGIN =====
@@ -2500,11 +2247,9 @@
             btn.addEventListener('click', () => {
                 const num = btn.dataset.num;
                 const action = btn.dataset.action;
-                
                 if (action === 'delete') enteredPin = enteredPin.slice(0, -1);
                 else if (action === 'submit') { validatePin(); return; }
                 else if (num && enteredPin.length < 4) enteredPin += num;
-                
                 updatePinDisplay();
                 if (enteredPin.length === 4) setTimeout(validatePin, 180);
             });
@@ -2523,7 +2268,7 @@
                 sessionStorage.setItem('isLoggedIn', 'true');
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('appContainer').classList.add('active');
-                showToast('success', 'مرحباً بك!', 'تم تسجيل الدخول 🎉');
+                showToast('success', 'مرحباً!', 'تم تسجيل الدخول 🎉');
             } else {
                 document.getElementById('errorMsg').textContent = '❌ رمز غير صحيح';
                 document.getElementById('errorMsg').classList.add('show');
@@ -2531,44 +2276,26 @@
             }
         }
 
-        // ===== LOGOUT WITH CUSTOM DIALOG =====
         async function handleLogout() {
-            const result = await showCustomDialog(
-                'warning', 
-                '⏻ تأكيد الخروج', 
-                'هل أنت متأكد من تسجيل الخروج؟\nسيتم إنهاء جميع العمليات الحالية.',
-                'نعم، خروج',
-                'إلغاء'
-            );
-            
+            const result = await showCustomDialog('warning', '⏻ تأكيد الخروج', 'هل أنت متأكد؟', 'نعم', 'إلغاء');
             if (result) {
                 sessionStorage.removeItem('isLoggedIn');
                 document.getElementById('appContainer').classList.remove('active');
                 document.getElementById('loginScreen').classList.remove('hidden');
                 enteredPin = '';
                 updatePinDisplay();
-                showToast('info', 'تم الخروج', 'نتقابل قريباً 👋');
             }
         }
 
-        // ===== RESET DATA WITH CUSTOM DIALOG =====
         async function handleResetData() {
-            const result = await showCustomDialog(
-                'danger',
-                '🗑 مسح البيانات',
-                '⚠️ تحذير خطير!\n\nهل أنت متأكد تماماً من حذف جميع البيانات؟\n\nهذا الإجراء لا يمكن التراجع عنه!',
-                'نعم، امسح الكل!',
-                'إلغاء'
-            );
-            
+            const result = await showCustomDialog('danger', '🗑 مسح البيانات', 'هل أنت متأكد؟', 'نعم، امسح الكل!', 'إلغاء');
             if (result) {
                 localStorage.removeItem('playstationLounge');
-                showToast('success', 'تم المسح', '✓ تم حذف جميع البيانات بنجاح');
+                showToast('success', 'تم المسح', '✓ تم حذف البيانات');
                 setTimeout(() => location.reload(), 1500);
             }
         }
 
-        // ===== NAVIGATION =====
         function showSection(id) {
             document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
@@ -2587,10 +2314,10 @@
         }
 
         function renderDevices() {
+            // ✅ No type showing on cards
             document.getElementById('devicesGrid').innerHTML = appData.devices.map(d => `
                 <div class="device-card ${d.status}" onclick="openSessionModal(${d.id})">
                     <div class="device-number">شاشة ${d.number}</div>
-                    <div class="device-type">${d.type}</div>
                     <div class="device-status status-${d.status}">
                         ${d.status === 'available' ? '✓ متاح' : d.status === 'in-use' ? '▶ مشغل' : '🔧 صيانة'}
                     </div>
@@ -2601,7 +2328,7 @@
         function renderProducts() {
             const grid = document.getElementById('productsGrid');
             if (!appData.products.length) {
-                grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--gray-400);font-size:0.95rem;">📦 لا توجد منتجات بعد</p>';
+                grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--gray-400);">📦 لا توجد منتجات</p>';
                 return;
             }
             grid.innerHTML = appData.products.map(p => `
@@ -2622,7 +2349,7 @@
         function renderClients() {
             const grid = document.getElementById('clientsGrid');
             if (!appData.clients.length) {
-                grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:1.8rem;color:(var(--gray-400);">لا يوجد عملاء</p>';
+                grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:1.8rem;color:var(--gray-400);">لا يوجد عملاء</p>';
                 return;
             }
             grid.innerHTML = appData.clients.map(c => `
@@ -2674,6 +2401,21 @@
             return date.toISOString().split('T')[0];
         }
 
+        // ✅ Format time as HH:MM:SS
+        function formatTimeHMS(totalSeconds) {
+            const h = Math.floor(totalSeconds / 3600);
+            const m = Math.floor((totalSeconds % 3600) / 60);
+            const s = Math.floor(totalSeconds % 60);
+            return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        }
+
+        // ✅ Format time as X دقيقة Y ثانية
+        function formatTimeDetailed(totalSeconds) {
+            const m = Math.floor(totalSeconds / 60);
+            const s = Math.floor(totalSeconds % 60);
+            return `${m} دقيقة ${s} ثانية`;
+        }
+
         function renderSessions() {
             const tbody = document.getElementById('sessionsTableBody');
             const active = appData.sessions.filter(s => s.status === 'active');
@@ -2687,7 +2429,9 @@
                 const dev = appData.devices.find(d => d.id === s.deviceId);
                 const start = new Date(s.startTime);
                 const now = new Date();
-                const elapsed = Math.floor((now - start) / 60000);
+                // ✅ Precise calculation
+                const elapsedMs = now - start;
+                const elapsedSeconds = Math.floor(elapsedMs / 1000);
                 const typeLabel = s.sessionType === 'open' ? 'مفتوح' : 'محدد';
                 
                 let durationText = '-';
@@ -2698,19 +2442,19 @@
                     }
                     durationText = `${dur} دقيقة`;
                 } else {
-                    durationText = `${elapsed} دقيقة`;
+                    durationText = formatTimeDetailed(elapsedSeconds);
                 }
                 
                 return `<tr>
                     <td>${dev?.number || '-'}</td>
-                    <td>${s.type}</td>
+                    <td>${s.type || '-'}</td>
                     <td>${s.customerName || '-'}</td>
                     <td><span class="badge badge-${s.sessionType === 'open' ? 'info' : 'warning'}">${typeLabel}</span></td>
                     <td>${formatTime(start)}</td>
                     <td><strong style="color:var(--primary);">${durationText}</strong></td>
                     <td>${calculateCurrentCost(s).toFixed(2)} EGP</td>
                     <td><span class="badge badge-success">نشطة</span></td>
-                    <td><button class="add-btn" style="background:var(--primary);font-size:0.78rem;padding:0.38rem 0.75rem;" onclick="manageSession(${s.id})">إدارة</button></td>
+                    <td><button class="add-btn" style="background:var(--primary);font-size:0.78rem;" onclick="manageSession(${s.id})">إدارة</button></td>
                 </tr>`;
             }).join('');
         }
@@ -2721,7 +2465,6 @@
                 tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--gray-400);padding:1.8rem;">لا توجد معاملات</td></tr>';
                 return;
             }
-            
             tbody.innerHTML = appData.transactions.slice(-30).reverse().map(t => {
                 const typeLabel = t.type === 'session' ? 'جلسة' : 'منتج';
                 return `<tr>
@@ -2736,7 +2479,7 @@
             }).join('');
         }
 
-        // ===== SESSION MODAL =====
+        // ===== SESSION MODAL - ENHANCED =====
         function openSessionModal(deviceId) {
             const device = appData.devices.find(d => d.id === deviceId);
             if (!device || device.status !== 'available') {
@@ -2745,21 +2488,29 @@
             }
             
             currentDevice = deviceId;
-            selectedType = device.type.toLowerCase();
-            selectedPrice = selectedType === 'ps5' ? 80 : 50;
+            selectedType = 'ps4'; // Default
+            selectedPrice = 50; // Default price
             selectedSessionType = 'timed';
             
-            document.getElementById('modalDevice').value = `شاشة ${device.number} - ${device.type}`;
+            document.getElementById('modalDevice').value = `شاشة ${device.number}`;
+            
+            // Reset selections
+            document.querySelectorAll('#deviceTypeToggle .type-option').forEach(o => {
+                o.classList.toggle('selected', o.dataset.type === 'ps4');
+            });
+            document.querySelectorAll('.session-type-option').forEach(o => {
+                o.classList.toggle('selected', o.dataset.sessiontype === 'timed');
+            });
+            
+            // Reset inputs
             document.getElementById('sessionHours').value = 1;
             document.getElementById('sessionMinutes').value = 0;
             document.getElementById('customerName').value = '';
-            
-            document.querySelectorAll('.type-option').forEach(o => o.classList.toggle('selected', o.dataset.type === selectedType));
-            document.querySelectorAll('.session-type-option').forEach(o => o.classList.toggle('selected', o.dataset.sessiontype === 'timed'));
+            document.getElementById('customPriceInput').value = 50;
             
             document.getElementById('timedSessionFields').style.display = 'block';
             document.getElementById('openSessionInfo').style.display = 'none';
-            document.getElementById('hourlyRateDisplay').textContent = selectedPrice;
+            document.getElementById('hourlyRateDisplay').textContent = '50';
             
             calcPrice();
             document.getElementById('sessionModal').classList.add('active');
@@ -2770,12 +2521,29 @@
             currentDevice = null;
         }
 
-        function selectType(el) {
-            document.querySelectorAll('.type-option').forEach(o => o.classList.remove('selected'));
+        // ✅ Select Device Type
+        function selectDeviceType(el) {
+            document.querySelectorAll('#deviceTypeToggle .type-option').forEach(o => o.classList.remove('selected'));
             el.classList.add('selected');
             selectedType = el.dataset.type;
-            selectedPrice = parseInt(el.dataset.price);
+            
+            // Update default price based on type
+            if (selectedType === 'ps5') {
+                document.getElementById('customPriceInput').value = 80;
+                selectedPrice = 80;
+            } else {
+                document.getElementById('customPriceInput').value = 50;
+                selectedPrice = 50;
+            }
             document.getElementById('hourlyRateDisplay').textContent = selectedPrice;
+            calcPrice();
+        }
+
+        // ✅ Update Price From Custom Input
+        function updatePriceFromInput() {
+            const inputVal = parseFloat(document.getElementById('customPriceInput').value) || 0;
+            selectedPrice = inputVal;
+            document.getElementById('hourlyRateDisplay').textContent = selectedPrice.toFixed(2);
             calcPrice();
         }
 
@@ -2821,14 +2589,14 @@
             const session = {
                 id: Date.now(),
                 deviceId: currentDevice,
-                type: selectedType.toUpperCase(),
+                type: selectedType.toUpperCase(), // PS4 or PS5
                 customerName: customerName || 'عميل بدون اسم',
                 sessionType: selectedSessionType,
                 duration: duration,
-                startTime: new Date().toISOString(),
+                startTime: new Date().toISOString(), // ✅ Precise timestamp
                 initialDuration: duration,
                 price: price,
-                hourlyRate: selectedPrice,
+                hourlyRate: selectedPrice, // ✅ Custom price
                 status: 'active',
                 products: [],
                 timeExtensions: []
@@ -2845,94 +2613,101 @@
             showToast('success', 'تم!', `✓ تم بدء جلسة ${selectedSessionType === 'open' ? 'مفتوحة' : 'محددة'}!`);
         }
 
+        // ✅ PRECISE TIME CALCULATION
+        function calculateElapsedSeconds(session) {
+            const startTime = new Date(session.startTime).getTime();
+            const now = Date.now();
+            return Math.floor((now - startTime) / 1000);
+        }
+
         function calculateTimeCost(session) {
-            const elapsed = Math.floor((new Date() - new Date(session.startTime)) / 60000);
-            let total = elapsed;
+            const elapsedSeconds = calculateElapsedSeconds(session);
+            const elapsedMinutes = elapsedSeconds / 60;
+            let totalMinutes = elapsedMinutes;
             
-            if (session.timeExtensions?.length > 0) {
-                total = session.initialDuration + session.timeExtensions.reduce((sum, e) => sum + e.minutes, 0);
-            } else if (session.sessionType === 'timed') {
-                total = Math.max(elapsed, session.duration);
+            if (session.sessionType === 'timed') {
+                // For timed sessions, use max of elapsed or base duration
+                if (session.timeExtensions?.length > 0) {
+                    totalMinutes = session.initialDuration + session.timeExtensions.reduce((sum, e) => sum + e.minutes, 0);
+                } else {
+                    totalMinutes = Math.max(elapsedMinutes, session.duration || 0);
+                }
             }
             
-            return (total / 60) * session.hourlyRate;
+            return (totalMinutes / 60) * session.hourlyRate;
         }
 
         function calculateCurrentCost(session) {
             return calculateTimeCost(session) + (session.products?.reduce((sum, p) => sum + p.price, 0));
         }
 
-        // ✅ MANAGE SESSION - WITH SOUND CONTROL
+        // ✅ MANAGE SESSION - ENHANCED
         function manageSession(id) {
             const session = appData.sessions.find(s => s.id === id);
             if (!session) return;
             
             currentManagingSessionId = id;
-            
-            // ✅ Set managing mode to TRUE
             isManagingSession = true;
-            
-            // ✅ Stop all sounds except timer when entering management
             stopAllSoundsExceptTimer();
-            
-            // ✅ START Timer.mp3 when opening management modal
-            playTimerSound(); // 🎵 Play timer sound
+            playTimerSound();
             
             const dev = appData.devices.find(d => d.id === session.deviceId);
             
-            document.getElementById('activeDeviceInfo').textContent = dev ? `شاشة ${dev.number} (${dev.type})` : '-';
+            document.getElementById('activeDeviceInfo').textContent = dev ? `شاشة ${dev.number}` : '-';
+            document.getElementById('activeDeviceType').textContent = session.type || '-'; // Show PS4/PS5 here
             document.getElementById('activeCustomerName').textContent = session.customerName;
             document.getElementById('activeSessionType').textContent = session.sessionType === 'open' ? '⏳ مفتوح' : '⏰ محدد';
             
             updateActiveDisplay(session);
             
             if (timerInterval) clearInterval(timerInterval);
-            timerInterval = setInterval(() => updateActiveDisplay(session), 1000);
+            timerInterval = setInterval(() => updateActiveDisplay(session), 1000); // ✅ Update every second
             
             document.getElementById('activeSessionModal').classList.add('active');
         }
 
         function updateActiveDisplay(session) {
-            const elapsed = Math.floor((new Date() - new Date(session.startTime)) / 1000);
-            const h = Math.floor(elapsed / 3600);
-            const m = Math.floor((elapsed % 3600) / 60);
-            const s = elapsed % 60;
+            // ✅ Precise elapsed time in seconds
+            const elapsedSeconds = calculateElapsedSeconds(session);
+            const elapsedMinutes = elapsedSeconds / 60;
             
-            document.getElementById('sessionTimerDisplay').textContent = 
-                `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+            // Update main timer display (HH:MM:SS)
+            document.getElementById('sessionTimerDisplay').textContent = formatTimeHMS(elapsedSeconds);
             
-            document.getElementById('activeElapsedTime').textContent = `${Math.floor(elapsed/60)} دقيقة`;
+            // Update details
+            document.getElementById('activeElapsedTime').textContent = formatTimeHMS(elapsedSeconds);
             document.getElementById('activeCurrentCost').textContent = `${calculateCurrentCost(session).toFixed(2)} EGP`;
             
+            // ✅ Update time breakdown section
+            updateTimeBreakdown(session, elapsedSeconds);
+            
             if (session.sessionType === 'timed') {
-                let totalAllowed = session.duration;
+                let totalAllowed = session.duration || 0;
                 if (session.timeExtensions?.length > 0) {
                     totalAllowed = session.initialDuration + session.timeExtensions.reduce((s,e) => s + e.minutes, 0);
                 }
-                const remaining = totalAllowed - Math.floor(elapsed/60);
+                const remainingSeconds = (totalAllowed * 60) - elapsedSeconds;
                 
-                if (remaining <= 0) {
+                if (remainingSeconds <= 0) {
                     document.getElementById('sessionTimerDisplay').classList.add('warning');
                     document.getElementById('activeRemainingTime').textContent = '⚠️ انتهى!';
                     document.getElementById('remainingTimeRow').style.display = 'flex';
                     
-                    // ✅ In management mode - NO sounds, just visual warning
                     if (!isManagingSession) {
                         playSound('alarm');
                         startAlarmLoop();
                     }
-                } else if (remaining <= 5) {
+                } else if (remainingSeconds <= 300) { // 5 minutes
                     document.getElementById('sessionTimerDisplay').classList.add('warning');
-                    document.getElementById('activeRemainingTime').textContent = `${remaining} دقيقة`;
+                    document.getElementById('activeRemainingTime').textContent = formatTimeHMS(remainingSeconds);
                     document.getElementById('remainingTimeRow').style.display = 'flex';
                     
-                    // ✅ In management mode - NO alert sounds
-                    if (!isManagingSession && remaining <= 2) {
+                    if (!isManagingSession && remainingSeconds <= 120) {
                         playSound('alert');
                     }
                 } else {
                     document.getElementById('sessionTimerDisplay').classList.remove('warning');
-                    document.getElementById('activeRemainingTime').textContent = `${remaining} دقيقة`;
+                    document.getElementById('activeRemainingTime').textContent = formatTimeHMS(remainingSeconds);
                     document.getElementById('remainingTimeRow').style.display = 'flex';
                     stopAlarmLoop();
                 }
@@ -2942,6 +2717,7 @@
                 stopAlarmLoop();
             }
             
+            // Products list
             const prodsDiv = document.getElementById('sessionProductsItems');
             if (session.products?.length > 0) {
                 prodsDiv.innerHTML = session.products.map(p => `
@@ -2955,148 +2731,37 @@
             }
         }
 
-        // ===== ✅ PROFESSIONAL AUDIO SYSTEM - USING MP3 FILES =====
-        
-        /**
-         * ✅ MAIN SOUND CONTROLLER - Smart Sound Management
-         * @param {string} type - 'alert' | 'alarm' | 'timer'
-         */
-        function playSound(type = 'alarm') {
-            try {
-                const alertAudio = document.getElementById('alertSound');
-                const alarmAudio = document.getElementById('alarmSound');
-                const timerAudio = document.getElementById('timerSound');
-                
-                // Stop all sounds first to prevent overlap
-                stopAllSounds();
-                
-                switch(type) {
-                    case 'alert':
-                        // 🔔 Alert sound - plays ONCE (for early warning)
-                        if (alertAudio) {
-                            alertAudio.currentTime = 0;
-                            alertAudio.play().catch(e => console.log('Alert play error:', e));
-                        }
-                        break;
-                        
-                    case 'alarm':
-                        // 🚨 Alarm sound - continuous loop (for expired time)
-                        if (alarmAudio) {
-                            alarmAudio.currentTime = 0;
-                            alarmAudio.play().catch(e => console.log('Alarm play error:', e));
-                        }
-                        break;
-                        
-                    case 'timer':
-                        // 🎵 Timer sound - background music for management modal
-                        if (timerAudio) {
-                            timerAudio.currentTime = 0;
-                            timerAudio.play().catch(e => console.log('Timer play error:', e));
-                        }
-                        break;
-                }
-            } catch(e) {
-                console.error('Sound error:', e);
-            }
-        }
-
-        /**
-         * ✅ Play Timer Sound Only (for management modal)
-         * This is the ONLY place where Timer.mp3 should play!
-         */
-        function playTimerSound() {
-            try {
-                const timerAudio = document.getElementById('timerSound');
-                if (timerAudio) {
-                    timerAudio.currentTime = 0;
-                    timerAudio.play().catch(e => console.log('Timer play error:', e));
-                    console.log('🎵 Timer sound started (management mode)');
-                }
-            } catch(e) {
-                console.error('Timer sound error:', e);
-            }
-        }
-
-        /**
-         * ✅ Stop Timer Sound Only
-         */
-        function stopTimerSound() {
-            const timerAudio = document.getElementById('timerSound');
-            if (timerAudio) {
-                timerAudio.pause();
-                timerAudio.currentTime = 0;
-                console.log('🔇 Timer sound stopped');
-            }
-        }
-
-        /**
-         * ✅ Start Alarm Loop (continuous alarm sound)
-         */
-        function startAlarmLoop() {
-            if (alertInterval) clearInterval(alertInterval);
-            alertInterval = setInterval(() => {
-                const alarmAudio = document.getElementById('alarmSound');
-                if (alarmAudio && !isManagingSession) {
-                    alarmAudio.currentTime = 0;
-                    alarmAudio.play().catch(e => {});
-                }
-            }, 1500);
-        }
-
-        /**
-         * ✅ Stop Alarm Loop
-         */
-        function stopAlarmLoop() {
-            if (alertInterval) {
-                clearInterval(alertInterval);
-                alertInterval = null;
-            }
-            const alarmAudio = document.getElementById('alarmSound');
-            if (alarmAudio) {
-                alarmAudio.pause();
-                alarmAudio.currentTime = 0;
-            }
-        }
-
-        /**
-         * ✅ Stop ALL Sounds (complete silence)
-         */
-        function stopAllSounds() {
-            stopAlarmLoop();
+        // ✅ UPDATE TIME BREAKDOWN SECTION
+        function updateTimeBreakdown(session, elapsedSeconds) {
+            // Base duration
+            const baseMinutes = session.initialDuration || session.duration || 0;
+            document.getElementById('baseDurationDisplay').textContent = 
+                `${baseMinutes} دقيقة (${(baseMinutes/60).toFixed(1)} ساعة)`;
             
-            const alarmAudio = document.getElementById('alarmSound');
-            const alertAudio = document.getElementById('alertSound');
-            const timerAudio = document.getElementById('timerSound');
-            
-            if (alarmAudio) {
-                alarmAudio.pause();
-                alarmAudio.currentTime = 0;
+            // Extensions
+            const extensionsDiv = document.getElementById('extensionsBreakdown');
+            if (session.timeExtensions?.length > 0) {
+                extensionsDiv.innerHTML = session.timeExtensions.map((ext, idx) => `
+                    <div class="time-breakdown-row">
+                        <span class="time-breakdown-label">➕ الإضافة ${idx + 1}:</span>
+                        <span class="time-breakdown-value">${ext.minutes} دقيقة (${ext.cost.toFixed(2)} EGP)</span>
+                    </div>
+                `).join('');
+                extensionsDiv.style.display = 'block';
+            } else {
+                extensionsDiv.innerHTML = '';
+                extensionsDiv.style.display = 'none';
             }
             
-            if (alertAudio) {
-                alertAudio.pause();
-                alertAudio.currentTime = 0;
-            }
-            
-            if (timerAudio) {
-                timerAudio.pause();
-                timerAudio.currentTime = 0;
-            }
-            
-            console.log('🔇 All sounds stopped');
+            // Total used time
+            document.getElementById('totalUsedTimeDisplay').textContent = formatTimeHMS(elapsedSeconds);
         }
 
-        // ✅ CLOSE ACTIVE SESSION MODAL - RESET MANAGEMENT STATE
         function closeActiveSessionModal() {
             if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
             stopAlarmLoop();
-            
-            // ✅ STOP Timer sound when closing management modal
             stopTimerSound();
-            
-            // ✅ Reset managing state when closing
             isManagingSession = false;
-            
             document.getElementById('activeSessionModal').classList.remove('active');
             currentManagingSessionId = null;
         }
@@ -3137,13 +2802,15 @@
             const cost = (mins / 60) * s.hourlyRate;
             
             if (!s.timeExtensions) s.timeExtensions = [];
-            s.timeExtensions.push({ timestamp: new Date().toISOString(), minutes: mins, cost: cost });
+            s.timeExtensions.push({ 
+                timestamp: new Date().toISOString(), 
+                minutes: mins, 
+                cost: cost 
+            });
             if (s.sessionType === 'timed') s.duration = (s.duration || 0) + mins;
             
-            // ✅ Reset alert tracking for this session after extending time
             alertedSessions.delete(s.id);
             alertSoundPlayed.delete(`alert-${s.id}`);
-            alertSoundPlayed.delete(`warn-${s.id}`);
             
             saveData();
             closeExtendTimeModal();
@@ -3155,12 +2822,14 @@
             document.getElementById('extendTimeModal').classList.remove('active');
         }
 
-        // ===== INVOICE =====
+        // ===== INVOICE - ENHANCED WITH DETAILED TIME =====
         function endActiveSessionAndShowInvoice() {
             const s = appData.sessions.find(x => x.id === currentManagingSessionId);
             if (!s) return;
             
-            const elapsed = Math.floor((new Date() - new Date(s.startTime)) / 60000);
+            // ✅ Precise calculation
+            const elapsedSeconds = calculateElapsedSeconds(s);
+            const elapsedMinutes = elapsedSeconds / 60;
             const dev = appData.devices.find(d => d.id === s.deviceId);
             
             const timeCost = calculateTimeCost(s);
@@ -3170,7 +2839,8 @@
             s.status = 'completed';
             s.endTime = new Date().toISOString();
             s.finalCost = final;
-            s.totalMinutes = elapsed;
+            s.totalMinutes = Math.floor(elapsedMinutes); // Store actual minutes
+            s.totalSeconds = elapsedSeconds; // ✅ Store precise seconds
             
             const idx = appData.devices.findIndex(d => d.id === s.deviceId);
             if (idx !== -1) appData.devices[idx].status = 'available';
@@ -3179,7 +2849,7 @@
                 date: new Date().toISOString(),
                 type: 'session',
                 customerName: s.customerName,
-                description: `${s.type} - ${elapsed} دقيقة`,
+                description: `${s.type} - ${Math.floor(elapsedMinutes)} دقيقة`,
                 amount: timeCost,
                 screenNumber: dev?.number
             });
@@ -3212,26 +2882,33 @@
             
             saveData();
             closeActiveSessionModal();
-            generateInvoice(s, dev, final, elapsed, timeCost, prodCost);
+            generateInvoice(s, dev, final, elapsedSeconds, timeCost, prodCost);
             renderAll();
         }
 
-        function generateInvoice(s, dev, final, elapsed, timeCost, prodCost) {
+        function generateInvoice(s, dev, final, elapsedSeconds, timeCost, prodCost) {
             const start = new Date(s.startTime);
             const end = new Date(s.endTime);
+            const elapsedMinutes = Math.floor(elapsedSeconds / 60);
+            const elapsedSecondsRemainder = elapsedSeconds % 60;
             
+            // Extensions HTML
             let extHTML = '';
             if (s.timeExtensions?.length > 0) {
                 const extCost = s.timeExtensions.reduce((sum, e) => sum + e.cost, 0);
                 extHTML = `
                     <div class="invoice-section">
                         <div class="invoice-section-title">⏰ الوقت الإضافي</div>
-                        ${s.timeExtensions.map(e => `
+                        ${s.timeExtensions.map((e, idx) => `
                             <div class="invoice-row">
-                                <span>+${e.minutes} دقيقة</span>
+                                <span>➕ الإضافة ${idx + 1}: +${e.minutes} دقيقة</span>
                                 <span style="direction:ltr">${e.cost.toFixed(2)} EGP</span>
                             </div>
                         `).join('')}
+                        <div class="invoice-row" style="font-weight:800;border-top:2px solid var(--warning);margin-top:0.5rem;padding-top:0.5rem;">
+                            <span>إجمالي الإضافات:</span>
+                            <span style="direction:ltr;color:var(--warning);">${extCost.toFixed(2)} EGP</span>
+                        </div>
                     </div>
                 `;
             }
@@ -3240,16 +2917,17 @@
                 <div class="invoice-section">
                     <div class="invoice-section-title">📋 معلومات الجلسة</div>
                     <div class="invoice-row"><span>رقم الشاشة:</span><strong>${dev?.number || '-'}</strong></div>
-                    <div class="invoice-row"><span>نوع الجهاز:</span><strong>${s.type}</strong></div>
+                    <div class="invoice-row"><span>نوع الجهاز:</span><strong>${s.type || '-'}</strong></div>
                     <div class="invoice-row"><span>العميل:</span><strong>${s.customerName}</strong></div>
                     <div class="invoice-row"><span>نوع الجلسة:</span><strong>${s.sessionType === 'open' ? 'مفتوح' : 'محدد'}</strong></div>
                 </div>
                 
                 <div class="invoice-section">
-                    <div class="invoice-section-title">⏱ تفاصيل الوقت</div>
+                    <div class="invoice-section-title">⏱ تفاصيل الوقت الدقيقة</div>
                     <div class="invoice-row"><span>البداية:</span><span style="direction:ltr;">${formatTime(start)}</span></div>
                     <div class="invoice-row"><span>النهاية:</span><span style="direction:ltr;">${formatTime(end)}</span></div>
-                    <div class="invoice-row"><span>المدة:</span><strong>${elapsed} دقيقة (${(elapsed/60).toFixed(1)} ساعة)</strong></div>
+                    <div class="invoice-row"><span>📌 المدة الأساسية:</span><strong>${s.initialDuration || s.duration || 0} دقيقة (${((s.initialDuration || s.duration || 0)/60).toFixed(1)} ساعة)</strong></div>
+                    <div class="invoice-row"><span>⏱ الوقت الفعلي المستخدم:</span><strong style="color:var(--primary);">${elapsedMinutes} دقيقة ${elapsedSecondsRemainder} ثانية</strong></div>
                     <div class="invoice-row"><span>سعر/ساعة:</span><span style="direction:ltr;">${s.hourlyRate} EGP</span></div>
                     <div class="invoice-row"><span>تكلفة الوقت:</span><span style="direction:ltr;font-weight:700;">${timeCost.toFixed(2)} EGP</span></div>
                 </div>
@@ -3330,13 +3008,13 @@
             
             document.getElementById('activeSessionsList').innerHTML = active.map(sess => {
                 const dev = appData.devices.find(d => d.id === sess.deviceId);
-                const elapsed = Math.floor((new Date() - new Date(sess.startTime)) / 60000);
+                const elapsed = calculateElapsedSeconds(sess);
                 return `
-                    <div class="session-list-item" onclick="addProductToSession(${sess.id})">
+                    <div class="session-list-item" onclick="addProductToSession(${sess.id})" style="padding:1rem;background:var(--gray-50);border-radius:12px;margin-bottom:0.75rem;cursor:pointer;">
                         <div>
                             <strong style="font-size:1rem;">🖥 شاشة ${dev?.number || ''}</strong>
                             <div style="color:var(--gray-600);font-size:0.85rem;margin-top:0.2rem;">
-                                ${dev?.type || ''} | ${sess.customerName} | ${elapsed} دقيقة
+                                ${sess.type || ''} | ${sess.customerName} | ${formatTimeDetailed(elapsed)}
                             </div>
                         </div>
                         <div style="direction:ltr;text-align:left;">
