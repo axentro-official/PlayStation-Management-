@@ -10,10 +10,10 @@
     <meta name="mobile-web-app-capable" content="yes">
     <title>محل البلايستيشن - PlayStation Lounge Manager</title>
     
-    <!-- ✅ PWA Manifest -->
+    <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
     
-    <!-- ✅ PWA Icons -->
+    <!-- PWA Icons -->
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
@@ -55,7 +55,7 @@
             overflow-x: hidden;
         }
 
-        /* ===== INSTALL BANNER - HIDDEN IN PWA ===== */
+        /* ===== INSTALL BANNER ===== */
         .install-banner {
             position: fixed;
             bottom: 0;
@@ -74,14 +74,7 @@
         }
 
         .install-banner.hidden { display: none !important; }
-
-        /* ✅ NEW: Hide banner completely in PWA mode */
-        .install-banner.pwa-hidden { 
-            display: none !important; 
-            visibility: hidden !important;
-            opacity: 0 !important;
-            pointer-events: none !important;
-        }
+        .install-banner.pwa-hidden { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }
 
         @keyframes slideUpBanner {
             from { transform: translateY(100%); opacity: 0; }
@@ -135,8 +128,6 @@
             justify-content: center;
             transition: all 0.2s;
         }
-
-        .install-dismiss:hover { background: rgba(255,255,255,0.35); }
 
         /* ===== LOGIN SCREEN ===== */
         .login-screen {
@@ -210,7 +201,6 @@
             font-weight: 700;
             color: var(--primary);
             background: var(--gray-50);
-            direction: ltr;
             transition: all 0.3s ease;
         }
 
@@ -247,9 +237,6 @@
             max-width: 300px;
             margin: 0 auto;
             direction: ltr;
-            position: relative;
-            z-index: 10;
-            pointer-events: auto !important;
         }
 
         .num-btn {
@@ -262,11 +249,7 @@
             cursor: pointer;
             transition: all 0.2s ease;
             font-family: inherit;
-            direction: ltr;
             -webkit-tap-highlight-color: transparent;
-            position: relative;
-            z-index: 10;
-            pointer-events: auto !important;
         }
 
         .num-btn:hover {
@@ -343,15 +326,12 @@
             font-size: 0.85rem;
         }
 
-        .logout-btn:hover { background: #fecaca; transform: translateY(-1px); }
-
         .nav-tabs {
             max-width: 1400px;
             margin: 0.85rem auto 0;
             display: flex;
             gap: 0.45rem;
             overflow-x: auto;
-            padding-bottom: 0.4rem;
             scrollbar-width: none;
         }
 
@@ -440,7 +420,6 @@
         .stat-value { font-size: 1.4rem; font-weight: 800; color: var(--gray-900); direction: ltr; display: inline-block; }
         .stat-label { color: var(--gray-500); font-size: 0.82rem; }
 
-        /* ✅ DEVICES GRID - NO TYPE SHOWING */
         .devices-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -485,8 +464,6 @@
             color: var(--gray-900); 
             margin-bottom: 0.4rem; 
         }
-        
-        /* ✅ Removed device-type from card */
 
         .device-status {
             display: inline-flex;
@@ -593,7 +570,6 @@
             box-shadow: 0 0 0 3px var(--primary-light);
         }
 
-        /* ✅ Device Type Toggle in Modal */
         .type-toggle { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
@@ -615,7 +591,6 @@
         .type-option:hover { border-color: var(--primary); background: var(--primary-light); }
         .type-option.selected { border-color: var(--primary); background: var(--primary); color: white; }
 
-        /* ✅ Session Type Toggle */
         .session-type-toggle { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
@@ -639,7 +614,6 @@
 
         .duration-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
 
-        /* ✅ Price Input Field */
         .price-input-group {
             background: linear-gradient(135deg, #fef3c7, #fde68a);
             padding: 1.15rem;
@@ -737,11 +711,6 @@
             align-items: center;
             gap: 0.45rem;
             font-size: 0.85rem;
-        }
-
-        .add-product-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.3);
         }
 
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.85rem; }
@@ -914,7 +883,7 @@
         .qr-link:hover { transform: scale(1.08); }
         .qr-link img { height: 55px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
 
-        /* ===== TOAST NOTIFICATION SYSTEM ===== */
+        /* Toast */
         .toast-container {
             position: fixed;
             top: 1.5rem;
@@ -977,9 +946,6 @@
         .toast-notification.warning { border-left-color: var(--warning); background: linear-gradient(145deg, #fffbeb 0%, #ffffff 100%); }
         .toast-notification.warning .toast-icon { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
 
-        .toast-notification.info { border-left-color: var(--primary); background: linear-gradient(145deg, #eff6ff 0%, #ffffff 100%); }
-        .toast-notification.info .toast-icon { background: linear-gradient(135deg, var(--primary), #3b82f6); color: white; }
-
         .toast-notification.alert-critical {
             background: linear-gradient(145deg, #dc2626 0%, #b91c1c 100%);
             color: white;
@@ -1013,8 +979,6 @@
             justify-content: center;
         }
 
-        .toast-close:hover { background: rgba(0, 0, 0, 0.15); transform: scale(1.1); }
-
         .toast-progress {
             position: absolute;
             bottom: 0;
@@ -1028,7 +992,7 @@
 
         @keyframes toastProgress { from { width: 100%; } to { width: 0%; } }
 
-        /* ===== CUSTOM DIALOG SYSTEM ===== */
+        /* Dialog */
         .custom-dialog-overlay {
             position: fixed;
             inset: 0;
@@ -1117,18 +1081,14 @@
             border: 2px solid var(--gray-200);
         }
 
-        .dialog-btn-cancel:hover { background: var(--gray-100); transform: translateY(-2px); }
-
         .dialog-btn-confirm {
             background: linear-gradient(135deg, var(--primary), #3b82f6);
             color: white;
         }
 
-        .dialog-btn-confirm:hover { transform: translateY(-3px) scale(1.03); }
         .dialog-btn-confirm.danger { background: linear-gradient(135deg, var(--danger), #dc2626); }
-        .dialog-btn-confirm.warning { background: linear-gradient(135deg, var(--warning), #d97706); }
 
-        /* Session Timer - PROFESSIONAL */
+        /* Session Timer */
         .session-timer {
             background: linear-gradient(135deg, #1e293b, #334155);
             color: white;
@@ -1155,7 +1115,6 @@
             50% { opacity: 0.85; box-shadow: 0 0 50px rgba(239, 68, 68, 0.8); }
         }
 
-        /* ✅ Enhanced Session Details */
         .session-details {
             background: var(--gray-50);
             padding: 0.9rem;
@@ -1175,7 +1134,6 @@
         .detail-label { color: var(--gray-600); font-weight: 600; }
         .detail-value { font-weight: 800; color: var(--gray-900); direction: ltr; }
 
-        /* ✅ Time Breakdown Section */
         .time-breakdown {
             background: linear-gradient(135deg, #eff6ff, #dbeafe);
             border: 2px solid var(--primary-light);
@@ -1388,7 +1346,7 @@
     </style>
 </head>
 <body>
-    <!-- Install Banner - Will be hidden in PWA mode -->
+    <!-- Install Banner -->
     <div class="install-banner" id="installBanner" style="pointer-events: none;">
         <div class="install-banner-content">
             <div class="install-icon">📱</div>
@@ -1649,7 +1607,7 @@
                             <div class="setting-icon" style="background:#dbeafe;color:var(--primary)">🔔</div>
                             <div>
                                 <div class="setting-title">إشعارات التنبيه</div>
-                                <div class="setting-desc">تنبيهات احترافية مثل التطبيقات الحقيقية</div>
+                                <div class="setting-desc">تنبيهات احترافية تعمل في الخلفية</div>
                             </div>
                         </div>
                         <div class="setting-actions">
@@ -1669,7 +1627,7 @@
         </footer>
     </div>
 
-    <!-- ✅ Session Modal - ENHANCED with Price Input -->
+    <!-- Session Modal -->
     <div class="modal-overlay" id="sessionModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1682,7 +1640,6 @@
                     <input type="text" class="form-input" id="modalDevice" readonly>
                 </div>
                 
-                <!-- ✅ Device Type Selection -->
                 <div class="form-group">
                     <label class="form-label">نوع الجهاز</label>
                     <div class="type-toggle" id="deviceTypeToggle">
@@ -1695,7 +1652,6 @@
                     </div>
                 </div>
 
-                <!-- ✅ CUSTOM PRICE INPUT -->
                 <div class="price-input-group">
                     <div class="price-input-label">💰 سعر الساعة (EGP)</div>
                     <input type="number" class="price-input-field" id="customPriceInput" 
@@ -1705,7 +1661,6 @@
                     </div>
                 </div>
                 
-                <!-- Session Type -->
                 <div class="form-group">
                     <label class="form-label">نوع الجلسة</label>
                     <div class="session-type-toggle">
@@ -1752,7 +1707,7 @@
         </div>
     </div>
 
-    <!-- Active Session Modal - ENHANCED -->
+    <!-- Active Session Modal -->
     <div class="modal-overlay" id="activeSessionModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1760,7 +1715,6 @@
                 <button class="modal-close" onclick="closeActiveSessionModal()">✕</button>
             </div>
             <div class="modal-body">
-                <!-- ✅ Professional Timer Display -->
                 <div class="session-timer" id="sessionTimerDisplay">00:00:00</div>
                 
                 <div class="session-details">
@@ -1776,7 +1730,6 @@
                     </div>
                 </div>
 
-                <!-- ✅ Time Breakdown Section -->
                 <div class="time-breakdown" id="timeBreakdownSection">
                     <div class="time-breakdown-title">⏰ تفاصيل الوقت</div>
                     <div class="time-breakdown-row">
@@ -1784,7 +1737,6 @@
                         <span class="time-breakdown-value" id="baseDurationDisplay">0 دقيقة</span>
                     </div>
                     <div class="time-breakdown-row" id="extensionsBreakdown">
-                        <!-- Dynamic extensions will be added here -->
                     </div>
                     <div class="time-breakdown-row" style="border-top: 2px solid var(--primary); margin-top: 0.5rem; padding-top: 0.5rem;">
                         <span class="time-breakdown-label" style="font-weight: 900;">⏱ الإجمالي المستخدم:</span>
@@ -1884,7 +1836,7 @@
         </div>
     </div>
 
-    <!-- Invoice Modal - ENHANCED -->
+    <!-- Invoice Modal -->
     <div class="modal-overlay invoice-modal" id="invoiceModal">
         <div class="modal-content">
             <div class="invoice-header">
@@ -1898,17 +1850,13 @@
         </div>
     </div>
 
-    <!-- ✅ Sound Effects -->
+    <!-- Audio Elements -->
     <audio id="alertSound" preload="auto">
         <source src="alert.mp3" type="audio/mpeg">
     </audio>
     
     <audio id="alarmSound" preload="auto" loop>
         <source src="alarm.mp3" type="audio/mpeg">
-    </audio>
-    
-    <audio id="timerSound" preload="auto" loop>
-        <source src="Timer.mp3" type="audio/mpeg">
     </audio>
 
     <script>
@@ -1947,7 +1895,10 @@
         // Custom Dialog
         let customDialogResolver = null;
 
-        // ✅ NEW: Check if running as PWA (Installed App)
+        // ✅ Service Worker Registration
+        let serviceWorkerRegistration = null;
+
+        // ===== CHECK IF RUNNING AS PWA =====
         function isRunningAsPWA() {
             return window.matchMedia('(display-mode: standalone)').matches || 
                    window.navigator.standalone === true ||
@@ -1958,12 +1909,10 @@
         function init() {
             loadData();
             
-            // ✅ FIX: Hide install banner if running as PWA
+            // ✅ Hide install banner if PWA
             if (isRunningAsPWA()) {
                 const banner = document.getElementById('installBanner');
-                if (banner) {
-                    banner.classList.add('pwa-hidden');
-                }
+                if (banner) banner.classList.add('pwa-hidden');
                 localStorage.setItem('pwaInstalled', 'true');
             }
             
@@ -1999,39 +1948,133 @@
             if (saved) appData = JSON.parse(saved);
         }
 
-        // ===== SERVICE WORKER =====
-        function registerServiceWorkerProperly() {
+        // ===== SERVICE WORKER WITH INLINE FALLBACK =====
+        async function registerServiceWorkerProperly() {
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js')
-                    .then(registration => {
-                        console.log('✅ Service Worker registered:', registration.scope);
+                try {
+                    // Try to register external SW first
+                    serviceWorkerRegistration = await navigator.serviceWorker.register('sw.js');
+                    console.log('✅ External SW registered:', serviceWorkerRegistration.scope);
+                    
+                    // Setup background sync for notifications
+                    setupBackgroundSync();
+                    
+                } catch (error) {
+                    console.log('❌ External SW failed, using inline:', error);
+                    
+                    // ✅ Create inline Service Worker as fallback
+                    const swCode = `
+                        const CACHE_NAME = 'ps-lounge-v1';
                         
-                        // ✅ Check for updates
-                        registration.addEventListener('updatefound', () => {
-                            const newWorker = registration.installing;
-                            newWorker.addEventListener('statechange', () => {
-                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                    // New version available
-                                    console.log('✅ New version available');
-                                }
-                            });
+                        self.addEventListener('install', (event) => {
+                            event.waitUntil(
+                                caches.open(CACHE_NAME)
+                                    .then(cache => cache.addAll([
+                                        '/',
+                                        '/index.html'
+                                    ]))
+                                    .then(() => self.skipWaiting())
+                            );
                         });
-                    })
-                    .catch(error => {
-                        console.log('❌ SW failed:', error);
-                    });
+                        
+                        self.addEventListener('activate', (event) => {
+                            event.waitUntil(self.clients.claim());
+                        });
+                        
+                        self.addEventListener('fetch', (event) => {
+                            event.respondWith(
+                                caches.match(event.request)
+                                    .then(response => response || fetch(event.request))
+                            );
+                        });
+                        
+                        // ✅ Handle push notifications
+                        self.addEventListener('push', (event) => {
+                            if (event.data) {
+                                const data = event.data.json();
+                                
+                                const options = {
+                                    body: data.body,
+                                    icon: data.icon || '/icon-192.png',
+                                    badge: data.badge || '/icon-192.png',
+                                    vibrate: data.vibrate || [100, 50, 100],
+                                    tag: data.tag || 'notification-' + Date.now(),
+                                    requireInteraction: data.requireInteraction || false,
+                                    actions: data.actions || []
+                                };
+                                
+                                event.waitUntil(
+                                    self.registration.showNotification(data.title, options)
+                                );
+                            }
+                        });
+                        
+                        // ✅ Handle notification click
+                        self.addEventListener('notificationclick', (event) => {
+                            event.notification.close();
+                            
+                            event.waitUntil(
+                                clients.matchAll({ type: 'window', includeUncontrolled: true })
+                                    .then(clientList => {
+                                        for (const client of clientList) {
+                                            if (client.url.includes(self.location.origin) && 'focus' in client) {
+                                                return client.focus();
+                                            }
+                                        }
+                                        if (clients.openWindow) {
+                                            return clients.openWindow('/');
+                                        }
+                                    })
+                            );
+                        });
+                    `;
+                    
+                    const blob = new Blob([swCode], { type: 'application/javascript' });
+                    const swUrl = URL.createObjectURL(blob);
+                    
+                    try {
+                        serviceWorkerRegistration = await navigator.serviceWorker.register(swUrl, { scope: '/' });
+                        console.log('✅ Inline SW registered:', serviceWorkerRegistration.scope);
+                        setupBackgroundSync();
+                    } catch (innerError) {
+                        console.log('❌ Inline SW also failed:', innerError);
+                    }
+                }
             }
         }
 
-        // ===== PWA INSTALL - FIXED =====
+        // ✅ Background Sync for Notifications
+        function setupBackgroundSync() {
+            if (!serviceWorkerRegistration) return;
+            
+            // Request permission for background sync
+            if ('sync' in serviceWorkerRegistration) {
+                try {
+                    serviceWorkerRegistration.sync.register('check-sessions').catch(err => {
+                        console.log('Sync registration failed:', err);
+                    });
+                } catch(e) {}
+            }
+            
+            // Periodic Background Sync (if supported)
+            if ('periodicSync' in serviceWorkerRegistration) {
+                try {
+                    serviceWorkerRegistration.periodicSync.register('periodic-check', {
+                        minInterval: 60 * 1000 // Every minute
+                    }).catch(err => {
+                        console.log('Periodic sync failed:', err);
+                    });
+                } catch(e) {}
+            }
+        }
+
+        // ===== PWA INSTALL =====
         function setupInstallPrompt() {
-            // ✅ Don't show banner if already installed or running as PWA
             if (isRunningAsPWA() || localStorage.getItem('pwaInstalled')) {
                 hideInstallBanner();
                 return;
             }
             
-            // Show banner after 3 seconds only in browser
             setTimeout(() => {
                 if (!isRunningAsPWA() && !localStorage.getItem('pwaInstalled')) {
                     showInstallBanner();
@@ -2042,7 +2085,6 @@
                 e.preventDefault();
                 deferredPrompt = e;
                 
-                // ✅ Only show in browser, not in PWA
                 if (!isRunningAsPWA()) {
                     showInstallBanner();
                 }
@@ -2057,7 +2099,6 @@
         }
 
         function showInstallBanner() {
-            // ✅ CRITICAL: Never show if PWA
             if (isRunningAsPWA()) return;
             
             const banner = document.getElementById('installBanner');
@@ -2103,7 +2144,7 @@
                 notificationPermissionGranted = perm === 'granted';
                 updateNotifButton(notificationPermissionGranted);
                 
-                // ✅ Request permission on page load if not granted
+                // Auto-request on load
                 if (perm === 'default') {
                     await requestNotificationPermission();
                 }
@@ -2135,74 +2176,94 @@
                     notificationPermissionGranted = true;
                     updateNotifButton(true);
                     
-                    // ✅ Test notification
+                    // ✅ Test notification using Service Worker if available
                     sendProfessionalNotification(
                         'test',
                         '✅ تم تفعيل الإشعارات!',
-                        'ستصلك إشعارات عند انتهاء الوقت',
+                        'ستصلك إشعارات عند انتهاء الوقت\nحتى لو خرجت من التطبيق!',
                         'info'
                     );
                     
-                    showToast('success', 'تم التفعيل', 'الإشعارات تعمل الآن 🔔');
+                    showToast('success', 'تم التفعيل', 'الإشعارات تعمل الآن 🔔\nحتى في الخلفية!');
                     return true;
                 } else {
                     notificationPermissionGranted = false;
                     updateNotifButton(false);
-                    showToast('warning', 'لم يتم التفعيل', 'يرى السماح بالإشعارات');
+                    showToast('warning', 'لم يتم التفعيل', 'يرجى السماح بالإشعارات');
                     return false;
                 }
             } catch (error) {
-                console.log('Notification error:', error);
+                console.log('Notification permission error:', error);
                 return false;
             }
         }
 
-        // ✅ PROFESSIONAL NOTIFICATION FUNCTION
-        function sendProfessionalNotification(sessionId, title, message, type = 'warning', deviceNumber = '', customerName = '') {
-            if (!notificationPermissionGranted || !('Notification' in window)) {
+        // ✅ PROFESSIONAL NOTIFICATION FUNCTION - Works in Background!
+        async function sendProfessionalNotification(sessionId, title, message, type = 'warning', deviceNumber = '', customerName = '') {
+            if (!notificationPermissionGranted) {
                 console.log('Notifications not permitted');
-                return;
+                return false;
             }
             
             try {
-                // ✅ Get session details for rich notification
+                // ✅ Build rich notification body
                 let body = message;
-                let icon = 'icon-192.png';
-                let badge = 'icon-192.png';
-                let tag = `ps-session-${sessionId}-${Date.now()}`;
-                
-                // ✅ Build professional notification body
                 if (deviceNumber && customerName) {
                     body = `🖥 الشاشة: ${deviceNumber}\n👤 العميل: ${customerName}\n\n${message}`;
                 }
                 
-                // ✅ Create rich notification with actions
-                const notification = new Notification(title, {
+                // ✅ Determine vibration pattern based on type
+                let vibratePattern = [100];
+                if (type === 'critical') {
+                    vibratePattern = [200, 100, 200, 100, 200]; // Stronger for critical
+                }
+                
+                // ✅ Determine if notification should persist
+                let requireInteraction = (type === 'critical');
+                
+                // ✅ Create notification options
+                const notificationOptions = {
                     body: body,
-                    icon: icon,
-                    badge: badge,
-                    tag: tag,
+                    icon: 'icon-192.png',
+                    badge: 'icon-192.png',
                     dir: 'rtl',
                     lang: 'ar',
-                    requireInteraction: type === 'critical', // Keep showing until user interacts
+                    tag: `ps-session-${sessionId}-${Date.now()}`,
+                    requireInteraction: requireInteraction,
                     silent: false,
-                    
-                    // ✅ Vibration pattern for mobile
-                    vibrate: type === 'critical' ? [200, 100, 200] : [100],
-                    
-                    // ✅ Actions (on supported platforms)
-                    actions: type === 'critical' ? [
+                    vibrate: vibratePattern,
+                    renotify: type === 'critical',
+                    data: {
+                        sessionId: sessionId,
+                        url: window.location.href
+                    },
+                    actions: [
                         { action: 'open', title: 'فتح التطبيق' },
                         { action: 'dismiss', title: 'إغلاق' }
-                    ] : []
-                });
+                    ]
+                };
                 
-                // ✅ Handle notification click
+                // ✅ Try to use Service Worker for background support
+                if (serviceWorkerRegistration && 'showNotification' in serviceWorkerRegistration) {
+                    // Send via Service Worker (works even when app is closed!)
+                    try {
+                        await serviceWorkerRegistration.showNotification(title, notificationOptions);
+                        console.log('✅ Notification sent via Service Worker (works in background!)');
+                        return true;
+                    } catch (swError) {
+                        console.log('SW notification failed, falling back:', swError);
+                    }
+                }
+                
+                // ✅ Fallback: Use regular Notification API
+                const notification = new Notification(title, notificationOptions);
+                
+                // ✅ Handle click
                 notification.onclick = function(event) {
                     event.preventDefault();
                     window.focus();
                     
-                    // ✅ Open the specific session if exists
+                    // Open specific session if exists
                     if (sessionId && sessionId !== 'test') {
                         const session = appData.sessions.find(s => s.id == sessionId);
                         if (session) {
@@ -2216,14 +2277,16 @@
                 // ✅ Auto-close after time (except critical)
                 if (type !== 'critical') {
                     setTimeout(() => {
-                        notification.close();
-                    }, 15000); // Close after 15 seconds
+                        try { notification.close(); } catch(e) {}
+                    }, 15000);
                 }
                 
                 console.log('✅ Professional notification sent:', title);
+                return true;
                 
             } catch (error) {
-                console.log('❌ Notification failed:', error);
+                console.log('❌ Notification error:', error);
+                return false;
             }
         }
 
@@ -2231,20 +2294,28 @@
         function startGlobalAlertChecker() {
             if (globalAlertInterval) clearInterval(globalAlertInterval);
             
-            // ✅ Check every second for precise timing
-            globalAlertInterval = setInterval(() => {
-                checkAllSessionsForExpiration();
+            // ✅ Check every second
+            globalAlertInterval = setInterval(async () => {
+                // ✅ Only run checks if there are active sessions
+                const activeSessions = appData.sessions.filter(s => s.status === 'active');
+                if (activeSessions.length === 0) {
+                    // ✅ Stop alarm loop if no active sessions (fixes the sound issue!)
+                    stopAlarmLoop();
+                    return;
+                }
+                
+                await checkAllSessionsForExpiration();
                 renderSessions();
             }, 1000);
         }
 
-        function checkAllSessionsForExpiration() {
+        async function checkAllSessionsForExpiration() {
             const activeSessions = appData.sessions.filter(s => s.status === 'active' && s.sessionType === 'timed');
             if (activeSessions.length === 0) return;
             
             const now = Date.now();
             
-            activeSessions.forEach(session => {
+            for (const session of activeSessions) {
                 const startTime = new Date(session.startTime).getTime();
                 let totalDuration = session.duration || 0;
                 
@@ -2262,18 +2333,20 @@
                 const device = appData.devices.find(d => d.id === session.deviceId);
                 const deviceNum = device ? device.number : '?';
                 
-                // ✅ Alert at 20% remaining - PROFESSIONAL NOTIFICATION
+                // ✅ Alert at 20% remaining
                 if (remainingMinutes > 0 && remainingMinutes <= alertThresholdMinutes) {
                     if (!alertSoundPlayed.has(`alert-${session.id}`)) {
                         alertSoundPlayed.add(`alert-${session.id}`);
                         
                         playSound('alert');
                         
-                        // ✅ In-app toast
-                        showToast('warning', '⏰ تنبيه!', `جلسة ${session.customerName}\nالشاشة ${deviceNum}\nمتبقي ${Math.ceil(remainingMinutes)} دقيقة`);
+                        // In-app toast (only if visible)
+                        if (document.visibilityState === 'visible') {
+                            showToast('warning', '⏰ تنبيه!', `جلسة ${session.customerName}\nالشاشة ${deviceNum}\nمتبقي ${Math.ceil(remainingMinutes)} دقيقة`);
+                        }
                         
-                        // ✅ Professional system notification (works even when app is closed!)
-                        sendProfessionalNotification(
+                        // ✅ System notification (works in background!)
+                        await sendProfessionalNotification(
                             session.id,
                             '⏰ تنبيه - وقت قريب من الانتهاء!',
                             `متبقي ${Math.ceil(remainingMinutes)} دقيقة`,
@@ -2284,15 +2357,25 @@
                     }
                 }
                 
-                // ✅ EXPIRED - CRITICAL NOTIFICATION
+                // ✅ EXPIRED - Critical notification
                 else if (elapsedMinutes >= totalDuration) {
                     if (!alertedSessions.has(session.id)) {
                         alertedSessions.add(session.id);
                         
-                        triggerExpiredAlarm(session, elapsedMinutes, totalDuration);
+                        // In-app alert (only if visible and not managing)
+                        if (document.visibilityState === 'visible' && !isManagingSession) {
+                            showToast('alert-critical', '🚨 انتهاء الوقت!', `الشاشة: ${deviceNum}\nالعميل: ${session.customerName}`, 25000, true);
+                            
+                            // Play sound only when visible
+                            playSound('alarm');
+                            startAlarmLoop();
+                        } else if (!isManagingSession) {
+                            // Don't play sound in background, just send notification
+                            stopAlarmLoop();
+                        }
                         
                         // ✅ Critical notification that stays until interacted with
-                        sendProfessionalNotification(
+                        await sendProfessionalNotification(
                             session.id,
                             '🚨 انتهاء الوقت - هام جداً!',
                             `الوقت انتهى!\nالشاشة: ${deviceNum}\nالعميل: ${session.customerName}`,
@@ -2301,27 +2384,8 @@
                             session.customerName
                         );
                     }
-                    
-                    if (!isManagingSession && !alertInterval) {
-                        startAlarmLoop();
-                    }
                 }
-            });
-        }
-
-        function triggerExpiredAlarm(session, elapsedMinutes, totalDuration) {
-            const device = appData.devices.find(d => d.id === session.deviceId);
-            
-            startAlarmLoop();
-            
-            if (document.visibilityState === 'visible' && !isManagingSession) {
-                showToast('alert-critical', '🚨 انتهاء الوقت!', `الشاشة: ${device?.number || '?'}\nالعميل: ${session.customerName}`, 25000, true);
             }
-        }
-
-        // ✅ Keep this for compatibility but use the new function above
-        function sendBrowserNotif(session, deviceInfo, overMin) {
-            // This is now handled by sendProfessionalNotification
         }
 
         // ===== SOUND MANAGEMENT =====
@@ -2334,6 +2398,12 @@
         }
 
         function playSound(type = 'alarm') {
+            // ✅ Only play sounds when page is visible (fixes background sound issue!)
+            if (document.visibilityState !== 'visible') {
+                console.log('Skipping sound - page not visible');
+                return;
+            }
+            
             try {
                 stopAllSounds();
                 const sounds = { alert: 'alertSound', alarm: 'alarmSound', timer: 'timerSound' };
@@ -2346,6 +2416,8 @@
         }
 
         function playTimerSound() {
+            if (document.visibilityState !== 'visible') return;
+            
             const audio = document.getElementById('timerSound');
             if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
         }
@@ -2356,18 +2428,31 @@
         }
 
         function startAlarmLoop() {
+            // ✅ Only start alarm loop if page is visible
+            if (document.visibilityState !== 'visible') {
+                console.log('Not starting alarm loop - page not visible');
+                return;
+            }
+            
             if (alertInterval) clearInterval(alertInterval);
+            
             alertInterval = setInterval(() => {
-                const audio = document.getElementById('alarmSound');
-                if (audio && !isManagingSession) {
-                    audio.currentTime = 0;
-                    audio.play().catch(() => {});
+                // Double-check visibility before playing
+                if (document.visibilityState === 'visible' && !isManagingSession) {
+                    const audio = document.getElementById('alarmSound');
+                    if (audio) {
+                        audio.currentTime = 0;
+                        audio.play().catch(() => {});
+                    }
                 }
             }, 1500);
         }
 
         function stopAlarmLoop() {
-            if (alertInterval) { clearInterval(alertInterval); alertInterval = null; }
+            if (alertInterval) { 
+                clearInterval(alertInterval); 
+                alertInterval = null; 
+            }
             const audio = document.getElementById('alarmSound');
             if (audio) { audio.pause(); audio.currentTime = 0; }
         }
@@ -2582,7 +2667,7 @@
             document.getElementById('totalProductsSold').textContent = appData.transactions.filter(t=>t.type==='product').length;
         }
 
-        // ✅ Format time as 12-hour with AM/PM
+        // Format time as 12-hour with AM/PM
         function formatTime(date) {
             let hours = date.getHours();
             const minutes = date.getMinutes().toString().padStart(2, '0');
