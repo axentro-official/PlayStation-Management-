@@ -10,10 +10,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <title>محل البلايستيشن - PlayStation Lounge Manager</title>
     
-    <!-- ✅ PWA Manifest -->
     <link rel="manifest" href="manifest.json">
-    
-    <!-- ✅ PWA Icons -->
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
@@ -55,7 +52,6 @@
             overflow-x: hidden;
         }
 
-        /* ===== INSTALL BANNER - HIDDEN IN PWA ===== */
         .install-banner {
             position: fixed;
             bottom: 0;
@@ -74,14 +70,20 @@
         }
 
         .install-banner.hidden { display: none !important; }
-        .install-banner.pwa-hidden { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }
+        .install-banner.pwa-hidden { display: none !important; }
 
         @keyframes slideUpBanner {
             from { transform: translateY(100%); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
 
-        .install-banner-content { display: flex; align-items: center; gap: 0.9rem; flex: 1; }
+        .install-banner-content {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            flex: 1;
+        }
+
         .install-icon { font-size: 2.2rem; animation: installPulse 2s ease-in-out infinite; }
 
         @keyframes installPulse {
@@ -106,8 +108,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
-        .install-btn:hover { transform: translateY(-2px) scale(1.05); box-shadow: 0 6px 20px rgba(0,0,0,0.25); }
-
+        .install-btn:hover { transform: translateY(-2px) scale(1.05); }
         .install-dismiss {
             background: rgba(255,255,255,0.2);
             border: none;
@@ -120,12 +121,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
         }
 
-        .install-dismiss:hover { background: rgba(255,255,255,0.35); }
-
-        /* ===== LOGIN SCREEN ===== */
         .login-screen {
             position: fixed;
             inset: 0;
@@ -197,7 +194,6 @@
             font-weight: 700;
             color: var(--primary);
             background: var(--gray-50);
-            direction: ltr;
             transition: all 0.3s ease;
         }
 
@@ -234,9 +230,6 @@
             max-width: 300px;
             margin: 0 auto;
             direction: ltr;
-            position: relative;
-            z-index: 10;
-            pointer-events: auto !important;
         }
 
         .num-btn {
@@ -249,11 +242,6 @@
             cursor: pointer;
             transition: all 0.2s ease;
             font-family: inherit;
-            direction: ltr;
-            -webkit-tap-highlight-color: transparent;
-            position: relative;
-            z-index: 10;
-            pointer-events: auto !important;
         }
 
         .num-btn:hover {
@@ -266,7 +254,6 @@
         .num-btn.delete { background: #fef2f2; border-color: #fecaca; color: var(--danger); }
         .num-btn.submit { background: var(--primary); color: white; border-color: var(--primary); grid-column: span 3; }
 
-        /* ===== MAIN APP ===== */
         .app-container {
             min-height: 100vh;
             display: flex;
@@ -330,8 +317,6 @@
             font-size: 0.85rem;
         }
 
-        .logout-btn:hover { background: #fecaca; transform: translateY(-1px); }
-
         .nav-tabs {
             max-width: 1400px;
             margin: 0.85rem auto 0;
@@ -356,8 +341,6 @@
             border-radius: 10px;
             transition: all 0.2s ease;
             white-space: nowrap;
-            -webkit-tap-highlight-color: transparent;
-            flex-shrink: 0;
         }
 
         .nav-tab:hover { background: var(--gray-100); color: var(--primary); }
@@ -444,7 +427,6 @@
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
             overflow: hidden;
-            -webkit-tap-highlight-color: transparent;
         }
 
         .device-card::before {
@@ -465,8 +447,13 @@
             border-color: var(--primary);
         }
 
-        .device-number { font-size: 1.3rem; font-weight: 800; color: var(--gray-900); margin-bottom: 0.4rem; }
-        
+        .device-number { 
+            font-size: 1.3rem; 
+            font-weight: 800; 
+            color: var(--gray-900); 
+            margin-bottom: 0.4rem; 
+        }
+
         .device-status {
             display: inline-flex;
             align-items: center;
@@ -482,7 +469,6 @@
         .status-in-use { background: var(--primary-light); color: var(--primary); }
         .status-maintenance { background: #fee2e2; color: #991b1b; }
 
-        /* Modal */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -541,8 +527,6 @@
             font-size: 1.1rem;
         }
 
-        .modal-close:hover { background: rgba(255,255,255,0.35); transform: rotate(90deg); }
-
         .modal-body { padding: 1.35rem; }
 
         .form-group { margin-bottom: 1.15rem; }
@@ -572,7 +556,12 @@
             box-shadow: 0 0 0 3px var(--primary-light);
         }
 
-        .type-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-bottom: 1rem; }
+        .type-toggle { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 0.85rem; 
+            margin-bottom: 1rem;
+        }
 
         .type-option {
             padding: 0.9rem;
@@ -585,10 +574,14 @@
             font-size: 0.88rem;
         }
 
-        .type-option:hover { border-color: var(--primary); background: var(--primary-light); }
         .type-option.selected { border-color: var(--primary); background: var(--primary); color: white; }
 
-        .session-type-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-bottom: 1.15rem; }
+        .session-type-toggle { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 0.85rem; 
+            margin-bottom: 1.15rem; 
+        }
 
         .session-type-option {
             padding: 1rem;
@@ -601,7 +594,6 @@
             font-size: 0.88rem;
         }
 
-        .session-type-option:hover { border-color: var(--primary); background: var(--primary-light); }
         .session-type-option.selected { border-color: var(--success); background: #d1fae5; color: #065f46; }
 
         .duration-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
@@ -613,8 +605,6 @@
             text-align: center;
             margin: 1.15rem 0;
         }
-
-        .price-input-label { font-weight: 700; color: #92400e; margin-bottom: 0.5rem; font-size: 0.9rem; }
 
         .price-input-field {
             width: 150px;
@@ -636,7 +626,13 @@
             margin: 1.15rem 0;
         }
 
-        .price-value { font-size: 1.65rem; font-weight: 900; color: #065f46; direction: ltr; display: inline-block; }
+        .price-value { 
+            font-size: 1.65rem; 
+            font-weight: 900; 
+            color: #065f46; 
+            direction: ltr; 
+            display: inline-block; 
+        }
 
         .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-top: 1.35rem; }
 
@@ -653,51 +649,10 @@
             align-items: center;
             justify-content: center;
             gap: 0.45rem;
-            -webkit-tap-highlight-color: transparent;
         }
 
         .btn-cancel { background: var(--gray-100); color: var(--gray-600); }
-        .btn-cancel:hover { background: var(--gray-200); }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--success), #059669);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(16, 185, 129, 0.3);
-        }
-
-        .products-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.35rem;
-            flex-wrap: wrap;
-            gap: 0.85rem;
-        }
-
-        .add-product-btn {
-            background: linear-gradient(135deg, var(--primary), #3b82f6);
-            color: white;
-            border: none;
-            padding: 0.7rem 1.15rem;
-            border-radius: 12px;
-            font-family: inherit;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.45rem;
-            font-size: 0.85rem;
-        }
-
-        .add-product-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.3);
-        }
+        .btn-primary { background: linear-gradient(135deg, var(--success), #059669); color: white; }
 
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.85rem; }
 
@@ -710,8 +665,6 @@
             transition: all 0.3s ease;
         }
 
-        .product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
-
         .product-image {
             height: 120px;
             background: linear-gradient(135deg, var(--primary-light), #bfdbfe);
@@ -723,16 +676,6 @@
 
         .product-info { padding: 1rem; }
         .product-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.4rem; }
-        .product-desc { color: var(--gray-500); font-size: 0.82rem; margin-bottom: 0.85rem; }
-
-        .product-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-top: 0.9rem;
-            border-top: 1px dashed var(--gray-200);
-        }
-
         .product-price { font-size: 1.2rem; font-weight: 900; color: var(--primary); direction: ltr; display: inline-block; }
 
         .add-btn {
@@ -747,8 +690,6 @@
             transition: all 0.2s ease;
             font-size: 0.82rem;
         }
-
-        .add-btn:hover { background: var(--primary-dark); transform: scale(1.05); }
 
         .table-container {
             background: white;
@@ -769,8 +710,7 @@
             font-size: 0.84rem;
         }
 
-        th { background: var(--gray-50); font-weight: 700; color: var(--gray-700); font-size: 0.8rem; }
-        tr:hover { background: var(--gray-50); }
+        th { background: var(--gray-50); font-weight: 700; color: var(--gray-700); }
 
         .badge {
             display: inline-block;
@@ -781,8 +721,6 @@
         }
 
         .badge-success { background: #d1fae5; color: #065f46; }
-        .badge-danger { background: #fee2e2; color: #991b1b; }
-        .badge-warning { background: #fef3c7; color: #92400e; }
         .badge-info { background: var(--primary-light); color: var(--primary); }
 
         .clients-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0.85rem; }
@@ -793,83 +731,32 @@
             padding: 1.25rem;
             box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             border: 1px solid var(--gray-200);
-            transition: all 0.3s ease;
         }
 
-        .client-card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.1); }
-
-        .client-header { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 0.85rem; }
-
-        .client-avatar {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, var(--primary), #3b82f6);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .session-timer {
+            background: linear-gradient(135deg, #1e293b, #334155);
             color: white;
-            font-weight: 800;
-            font-size: 1.15rem;
-        }
-
-        .client-name { font-weight: 700; font-size: 1rem; }
-        .client-phone { color: var(--gray-500); font-size: 0.82rem; direction: ltr; display: inline-block; }
-
-        .client-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
-
-        .client-stat {
-            background: var(--gray-50);
-            padding: 0.6rem;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .client-stat-value { font-weight: 800; font-size: 1rem; color: var(--primary); direction: ltr; display: inline-block; }
-        .client-stat-label { font-size: 0.72rem; color: var(--gray-500); }
-
-        .settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 0.85rem; }
-
-        .setting-card {
-            background: white;
-            border-radius: 16px;
             padding: 1.35rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            border: 1px solid var(--gray-200);
-        }
-
-        .setting-header { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 0.85rem; padding-bottom: 0.85rem; border-bottom: 1px solid var(--gray-200); }
-
-        .setting-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.15rem;
-        }
-
-        .setting-title { font-weight: 700; font-size: 0.95rem; }
-        .setting-desc { color: var(--gray-500); font-size: 0.82rem; margin-bottom: 0.85rem; }
-        .setting-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
-
-        .app-footer {
-            background: white;
-            border-top: 1px solid var(--gray-200);
-            padding: 1.25rem;
+            border-radius: 14px;
             text-align: center;
-            margin-top: auto;
+            margin: 0.9rem 0;
+            font-size: 2.2rem;
+            font-weight: 900;
+            font-family: 'Courier New', monospace;
+            direction: ltr;
+            letter-spacing: 3px;
         }
 
-        .footer-text { color: var(--gray-500); font-size: 0.82rem; margin-bottom: 0.4rem; font-weight: 600; }
-        .footer-team { color: var(--gray-400); font-size: 0.78rem; margin-bottom: 0.85rem; }
+        .session-timer.warning {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            animation: timerPulse 1s infinite;
+        }
 
-        .qr-link { display: inline-block; transition: transform 0.3s ease; }
-        .qr-link:hover { transform: scale(1.08); }
-        .qr-link img { height: 55px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+        @keyframes timerPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.85; }
+        }
 
-        /* ===== TOAST NOTIFICATION SYSTEM ===== */
         .toast-container {
             position: fixed;
             top: 1.5rem;
@@ -886,104 +773,20 @@
             background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
             border-radius: 18px;
             padding: 1.1rem 1.35rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
             display: flex;
             align-items: center;
             gap: 0.85rem;
             animation: toastSlideIn 0.5s cubic-bezier(0.22, 1, 0.36, 1);
             pointer-events: all;
-            position: relative;
-            overflow: hidden;
-            max-width: 420px;
-            margin: 0 auto;
             border-left: 5px solid var(--primary);
-            backdrop-filter: blur(10px);
         }
-
-        .toast-notification.removing { animation: toastSlideOut 0.4s cubic-bezier(0.55, 0, 1, 0.45) forwards; }
 
         @keyframes toastSlideIn {
-            from { opacity: 0; transform: translateX(-120%) scale(0.8) rotate(-3deg); }
-            to { opacity: 1; transform: translateX(0) scale(1) rotate(0deg); }
+            from { opacity: 0; transform: translateX(-120%) scale(0.8); }
+            to { opacity: 1; transform: translateX(0) scale(1); }
         }
 
-        @keyframes toastSlideOut {
-            to { opacity: 0; transform: translateX(120%) scale(0.8) rotate(3deg); }
-        }
-
-        .toast-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.35rem;
-            flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .toast-notification.success { border-left-color: var(--success); background: linear-gradient(145deg, #ecfdf5 0%, #ffffff 100%); }
-        .toast-notification.success .toast-icon { background: linear-gradient(135deg, #10b981, #059669); color: white; }
-
-        .toast-notification.error { border-left-color: var(--danger); background: linear-gradient(145deg, #fef2f2 0%, #ffffff 100%); }
-        .toast-notification.error .toast-icon { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
-
-        .toast-notification.warning { border-left-color: var(--warning); background: linear-gradient(145deg, #fffbeb 0%, #ffffff 100%); }
-        .toast-notification.warning .toast-icon { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
-
-        .toast-notification.info { border-left-color: var(--primary); background: linear-gradient(145deg, #eff6ff 0%, #ffffff 100%); }
-        .toast-notification.info .toast-icon { background: linear-gradient(135deg, var(--primary), #3b82f6); color: white; }
-
-        .toast-notification.alert-critical {
-            background: linear-gradient(145deg, #dc2626 0%, #b91c1c 100%);
-            color: white;
-            border-left: 5px solid #fff;
-            box-shadow: 0 15px 50px rgba(220, 38, 38, 0.4);
-            animation: criticalToastPulse 1.5s infinite, toastSlideIn 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        @keyframes criticalToastPulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5), 0 0 20px 30px rgba(220, 38, 38, 0.4); }
-            50% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.8), 0 0 40px 60px rgba(220, 38, 38, 0.2); }
-        }
-
-        .toast-content { flex: 1; min-width: 0; }
-        .toast-title { font-weight: 800; font-size: 1rem; margin-bottom: 0.25rem; letter-spacing: -0.02em; }
-        .toast-message { font-size: 0.84rem; opacity: 0.9; line-height: 1.5; }
-
-        .toast-close {
-            background: rgba(0, 0, 0, 0.06);
-            border: none;
-            color: inherit;
-            font-size: 1.25rem;
-            cursor: pointer;
-            padding: 0.2rem 0.35rem;
-            border-radius: 8px;
-            transition: all 0.2s;
-            line-height: 1;
-            min-width: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .toast-close:hover { background: rgba(0, 0, 0, 0.15); transform: scale(1.1); }
-
-        .toast-progress {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 3px;
-            background: currentColor;
-            opacity: 0.25;
-            border-radius: 0 0 3px 3px;
-            animation: toastProgress linear forwards;
-        }
-
-        @keyframes toastProgress { from { width: 100%; } to { width: 0%; } }
-
-        /* ===== CUSTOM DIALOG SYSTEM ===== */
         .custom-dialog-overlay {
             position: fixed;
             inset: 0;
@@ -996,7 +799,6 @@
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 1rem;
         }
 
         .custom-dialog-overlay.active { opacity: 1; visibility: visible; }
@@ -1006,7 +808,7 @@
             border-radius: 24px;
             width: 100%;
             max-width: 420px;
-            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35), 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35);
             transform: scale(0.85) translateY(30px);
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             overflow: hidden;
@@ -1014,317 +816,15 @@
 
         .custom-dialog-overlay.active .custom-dialog { transform: scale(1) translateY(0); }
 
-        .dialog-header { padding: 2rem 2rem 1.5rem; text-align: center; }
-
-        .dialog-icon-wrapper {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 1.25rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            position: relative;
-            animation: iconFloat 3s ease-in-out infinite;
-        }
-
-        @keyframes iconFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        .dialog-icon-wrapper.confirm { background: linear-gradient(135deg, #dbeafe, #bfdbfe); color: var(--primary); }
-        .dialog-icon-wrapper.warning { background: linear-gradient(135deg, #fef3c7, #fde68a); color: var(--warning); }
-        .dialog-icon-wrapper.danger { background: linear-gradient(135deg, #fee2e2, #fecaca); color: var(--danger); }
-        .dialog-icon-wrapper.success { background: linear-gradient(135deg, #d1fae5, #a7f3d0); color: var(--success); }
-
-        .dialog-title { font-size: 1.4rem; font-weight: 900; color: var(--gray-900); margin-bottom: 0.5rem; }
-        .dialog-message { font-size: 0.95rem; color: var(--gray-600); line-height: 1.7; font-weight: 500; }
-
-        .dialog-actions {
-            padding: 1.5rem 2rem 2rem;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.85rem;
-            background: var(--gray-50);
-            border-top: 1px solid var(--gray-200);
-        }
-
-        .dialog-btn {
-            padding: 1rem 1.5rem;
-            border: none;
-            border-radius: 14px;
-            font-family: inherit;
-            font-size: 1rem;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .dialog-btn-cancel {
-            background: white;
-            color: var(--gray-700);
-            border: 2px solid var(--gray-200);
-        }
-
-        .dialog-btn-cancel:hover { background: var(--gray-100); transform: translateY(-2px); }
-
-        .dialog-btn-confirm {
-            background: linear-gradient(135deg, var(--primary), #3b82f6);
-            color: white;
-        }
-
-        .dialog-btn-confirm:hover { transform: translateY(-3px) scale(1.03); }
-        .dialog-btn-confirm.danger { background: linear-gradient(135deg, var(--danger), #dc2626); }
-        .dialog-btn-confirm.warning { background: linear-gradient(135deg, var(--warning), #d97706); }
-
-        /* Session Timer - PROFESSIONAL */
-        .session-timer {
-            background: linear-gradient(135deg, #1e293b, #334155);
-            color: white;
-            padding: 1.35rem;
-            border-radius: 14px;
-            text-align: center;
-            margin: 0.9rem 0;
-            font-size: 2.2rem;
-            font-weight: 900;
-            font-family: 'Courier New', monospace;
-            direction: ltr;
-            letter-spacing: 3px;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
-        }
-
-        .session-timer.warning {
-            background: linear-gradient(135deg, #dc2626, #ef4444);
-            animation: timerPulse 1s infinite;
-            box-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
-        }
-
-        @keyframes timerPulse {
-            0%, 100% { opacity: 1; box-shadow: 0 0 30px rgba(239, 68, 68, 0.5); }
-            50% { opacity: 0.85; box-shadow: 0 0 50px rgba(239, 68, 68, 0.8); }
-        }
-
-        .session-details {
-            background: var(--gray-50);
-            padding: 0.9rem;
-            border-radius: 12px;
-            margin: 0.9rem 0;
-            font-size: 0.86rem;
-        }
-
-        .session-detail-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.45rem 0;
-            border-bottom: 1px dashed var(--gray-200);
-        }
-
-        .session-detail-row:last-child { border-bottom: none; }
-        .detail-label { color: var(--gray-600); font-weight: 600; }
-        .detail-value { font-weight: 800; color: var(--gray-900); direction: ltr; }
-
-        .time-breakdown {
-            background: linear-gradient(135deg, #eff6ff, #dbeafe);
-            border: 2px solid var(--primary-light);
-            border-radius: 12px;
-            padding: 1rem;
-            margin: 0.9rem 0;
-        }
-
-        .time-breakdown-title {
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 0.75rem;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 0.45rem;
-        }
-
-        .time-breakdown-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.4rem 0;
-            font-size: 0.85rem;
-            border-bottom: 1px dashed var(--primary-light);
-        }
-
-        .time-breakdown-row:last-child { border-bottom: none; }
-        .time-breakdown-label { color: var(--gray-700); font-weight: 600; }
-        .time-breakdown-value { font-weight: 800; color: var(--primary); direction: ltr; }
-
-        /* Invoice */
-        .invoice-modal .modal-content { max-width: 620px; }
-
-        .invoice-header {
-            text-align: center;
-            padding: 1.5rem 1.35rem;
-            background: linear-gradient(135deg, var(--dark), #1e293b);
-            color: white;
-            border-radius: 20px 20px 0 0;
-        }
-
-        .invoice-title { font-size: 1.5rem; font-weight: 900; margin-bottom: 0.35rem; }
-        .invoice-subtitle { font-size: 0.85rem; opacity: 0.9; }
-
-        .invoice-body { padding: 1.35rem; }
-
-        .invoice-section {
-            margin-bottom: 1.15rem;
-            padding-bottom: 0.9rem;
-            border-bottom: 2px dashed var(--gray-200);
-        }
-
-        .invoice-section:last-child { border-bottom: none; }
-
-        .invoice-section-title {
-            font-size: 1rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 0.6rem;
-            display: flex;
-            align-items: center;
-            gap: 0.45rem;
-        }
-
-        .invoice-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.4rem 0;
-            font-size: 0.88rem;
-            flex-wrap: wrap;
-            gap: 0.45rem;
-        }
-
-        .invoice-row.total {
-            font-size: 1.15rem;
-            font-weight: 900;
-            color: var(--success);
-            margin-top: 0.9rem;
-            padding-top: 0.9rem;
-            border-top: 3px solid var(--primary);
-        }
-
-        .invoice-products-container { margin-top: 0.45rem; overflow-x: auto; }
-
-        .invoice-products-table {
-            width: 100%;
-            min-width: 280px;
-            border-collapse: collapse;
-        }
-
-        .invoice-products-table th, .invoice-products-table td {
-            padding: 0.55rem 0.65rem;
-            font-size: 0.82rem;
-            border: 1px solid var(--gray-200);
-            text-align: right;
-        }
-
-        .invoice-products-table th { background: var(--gray-50); font-weight: 700; white-space: nowrap; }
-        .invoice-products-table tfoot tr { font-weight: 800; background: var(--gray-50); }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .main-content { padding: 1.15rem 0.75rem; }
-            .stats-grid { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
-            .devices-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
-            .products-grid { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); }
-        }
-
         @media (max-width: 768px) {
-            .app-header { padding: 0.8rem; }
-            .main-content { padding: 0.9rem 0.5rem; }
-            .brand { font-size: 1.05rem; }
-            .brand-icon { width: 34px; height: 34px; font-size: 1.05rem; }
-            .logout-btn { padding: 0.5rem 0.85rem; font-size: 0.8rem; }
-            .nav-tab { padding: 0.55rem 0.8rem; font-size: 0.78rem; }
-            .section-title { font-size: 1.15rem; }
-            .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.7rem; }
-            .stat-card { padding: 0.9rem; }
-            .stat-value { font-size: 1.25rem; }
-            .devices-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 0.7rem; }
-            .device-card { padding: 0.9rem; }
-            .device-number { font-size: 1.15rem; }
-            .device-status { font-size: 0.68rem; padding: 0.28rem 0.6rem; }
-            .products-grid { grid-template-columns: 1fr; }
-            .clients-grid { grid-template-columns: 1fr; }
-            .settings-grid { grid-template-columns: 1fr; }
-            .btn-group { grid-template-columns: 1fr; }
-            .duration-row { grid-template-columns: 1fr; }
-            table { font-size: 0.78rem; min-width: 550px; }
-            th, td { padding: 0.6rem 0.45rem; }
-            .session-type-toggle { grid-template-columns: 1fr; }
-            .type-toggle { grid-template-columns: 1fr; }
-            .modal-content { max-width: 100%; margin: 0.4rem; max-height: 93vh; }
-            .modal-body { padding: 1.15rem; }
-            .modal-title { font-size: 1.05rem; }
-            .login-box { padding: 1.8rem 1.5rem; width: 94%; }
-            .pin-dot { width: 46px; height: 46px; font-size: 1.25rem; }
-            .num-btn { padding: 15px; font-size: 1.15rem; }
-            .session-timer { font-size: 1.75rem; padding: 1.15rem; }
-            .invoice-modal .modal-content { max-width: 100%; margin: 0.2rem; }
-            .invoice-body { padding: 1.15rem; }
-            .invoice-title { font-size: 1.28rem; }
-            .toast-notification { max-width: 100%; font-size: 0.84rem; padding: 0.95rem 1.15rem; }
-            .toast-icon { width: 38px; height: 38px; font-size: 1.15rem; }
-            .custom-dialog { max-width: 100%; margin: 0.5rem; }
-            .dialog-header { padding: 1.5rem 1.25rem 1.25rem; }
-            .dialog-icon-wrapper { width: 65px; height: 65px; font-size: 2rem; }
-            .dialog-title { font-size: 1.2rem; }
-            .dialog-message { font-size: 0.88rem; }
-            .dialog-actions { padding: 1.25rem 1.25rem 1.5rem; }
-            .dialog-btn { padding: 0.85rem 1.25rem; font-size: 0.92rem; }
-            .install-banner { padding: 0.8rem 1rem; flex-direction: column; gap: 0.65rem; text-align: center; }
-            .install-btn { width: 100%; padding: 0.65rem; }
-        }
-
-        @media (max-width: 480px) {
-            .header-content { flex-direction: column; gap: 0.65rem; }
-            .brand { width: 100%; justify-content: center; }
-            .logout-btn { width: 100%; text-align: center; }
-            .nav-tabs { justify-content: flex-start; }
-            .nav-tab { padding: 0.5rem 0.7rem; font-size: 0.76rem; }
-            .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
-            .stat-card { padding: 0.8rem; }
-            .stat-value { font-size: 1.15rem; }
-            .stat-label { font-size: 0.76rem; }
-            .devices-grid { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
-            .device-card { padding: 0.8rem; }
-            .device-number { font-size: 1.1rem; }
-            .product-image { height: 105px; font-size: 2.8rem; }
-            .product-info { padding: 0.9rem; }
-            .product-name { font-size: 0.9rem; }
-            .session-timer { font-size: 1.5rem; padding: 1rem; }
-            .toast-container { left: 0.5rem; right: 0.5rem; top: 0.5rem; }
-            .toast-notification { padding: 0.85rem 1rem; }
-            .toast-title { font-size: 0.84rem; }
-            .toast-message { font-size: 0.76rem; }
-            .dialog-actions { grid-template-columns: 1fr; }
-        }
-
-        @media print {
-            body * { visibility: hidden; }
-            .invoice-modal, .invoice-modal * { visibility: visible; }
-            .invoice-modal { position: absolute; left: 0; top: 0; width: 100%; background: white; }
-        }
-
-        @supports (padding-top: env(safe-area-inset-top)) {
-            .app-header { padding-top: calc(0.9rem + env(safe-area-inset-top)); }
-            .app-footer { padding-bottom: calc(1.25rem + env(safe-area-inset-bottom)); }
-            .toast-container { top: calc(1rem + env(safe-area-inset-top)); }
-            .install-banner { padding-bottom: calc(0.9rem + env(safe-area-inset-bottom)); }
+            .devices-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+            .session-timer { font-size: 1.5rem; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
 <body>
-    <!-- Install Banner -->
-    <div class="install-banner" id="installBanner" style="pointer-events: none;">
+    <div class="install-banner" id="installBanner">
         <div class="install-banner-content">
             <div class="install-icon">📱</div>
             <div class="install-text">
@@ -1332,38 +832,33 @@
                 <p>تجربة سريعة مثل التطبيقات الحقيقية</p>
             </div>
         </div>
-        <button class="install-btn" id="installBtn" onclick="installApp()" style="pointer-events: auto;">⬇️ تثبيت الآن</button>
-        <button class="install-dismiss" onclick="dismissInstall()" style="pointer-events: auto;">✕</button>
+        <button class="install-btn" id="installBtn" onclick="installApp()">⬇️ تثبيت الآن</button>
+        <button class="install-dismiss" onclick="dismissInstall()">✕</button>
     </div>
 
-    <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- Custom Dialog Container -->
     <div class="custom-dialog-overlay" id="customDialogOverlay">
         <div class="custom-dialog">
-            <div class="dialog-header">
-                <div class="dialog-icon-wrapper" id="dialogIconWrapper">❓</div>
-                <h3 class="dialog-title" id="dialogTitle">عنوان</h3>
-                <p class="dialog-message" id="dialogMessage">رسالة</p>
+            <div class="dialog-header" style="padding:2rem 2rem 1.5rem;text-align:center;">
+                <div class="dialog-icon-wrapper" id="dialogIconWrapper" style="width:80px;height:80px;margin:0 auto 1.25rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:var(--primary);">❓</div>
+                <h3 class="dialog-title" id="dialogTitle" style="font-size:1.4rem;font-weight:900;">عنوان</h3>
+                <p class="dialog-message" id="dialogMessage" style="font-size:0.95rem;color:var(--gray-600);">رسالة</p>
             </div>
-            <div class="dialog-actions">
-                <button class="dialog-btn dialog-btn-cancel" onclick="closeCustomDialog(false)">إلغاء</button>
-                <button class="dialog-btn dialog-btn-confirm" id="dialogConfirmBtn" onclick="closeCustomDialog(true)">تأكيد</button>
+            <div class="dialog-actions" id="dialogActions" style="padding:1.5rem 2rem 2rem;display:grid;grid-template-columns:1fr 1fr;gap:0.85rem;">
+                <button class="dialog-btn dialog-btn-cancel" onclick="closeCustomDialog(false)" style="padding:1rem;border-radius:14px;background:white;border:2px solid var(--gray-200);font-weight:800;">إلغاء</button>
+                <button class="dialog-btn dialog-btn-confirm" id="dialogConfirmBtn" onclick="closeCustomDialog(true)" style="padding:1rem;border-radius:14px;background:linear-gradient(135deg,var(--primary),#3b82f6);color:white;font-weight:800;">تأكيد</button>
             </div>
         </div>
     </div>
 
-    <!-- Login Screen -->
     <div class="login-screen" id="loginScreen">
         <div class="login-box">
             <div class="login-logo">🎮</div>
             <h1 class="login-title">محل البلايستيشن</h1>
             <p class="login-subtitle">PlayStation Lounge Manager</p>
             <div class="error-msg" id="errorMsg"></div>
-            <div class="pin-display">
-                <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
-            </div>
+            <div class="pin-display"><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div></div>
             <div class="numpad">
                 <button class="num-btn" data-num="1">1</button><button class="num-btn" data-num="2">2</button><button class="num-btn" data-num="3">3</button>
                 <button class="num-btn" data-num="4">4</button><button class="num-btn" data-num="5">5</button><button class="num-btn" data-num="6">6</button>
@@ -1374,13 +869,9 @@
         </div>
     </div>
 
-    <!-- Main App -->
     <div class="app-container" id="appContainer">
         <header class="app-header">
-            <div class="header-content">
-                <div class="brand"><div class="brand-icon">🎮</div><span>محل البلايستيشن</span></div>
-                <button class="logout-btn" onclick="handleLogout()">⏻ خروج</button>
-            </div>
+            <div class="header-content"><div class="brand"><div class="brand-icon">🎮</div><span>محل البلايستيشن</span></div><button class="logout-btn" onclick="handleLogout()">⏻ خروج</button></div>
             <nav class="nav-tabs">
                 <button class="nav-tab active" onclick="showSection('dashboard')">📊 لوحة التحكم</button>
                 <button class="nav-tab" onclick="showSection('sessions')">⏱ الجلسات</button>
@@ -1390,8 +881,8 @@
                 <button class="nav-tab" onclick="showSection('settings')">⚙ الإعدادات</button>
             </nav>
         </header>
+
         <main class="main-content">
-            <!-- Dashboard -->
             <section class="view-section active" id="dashboard">
                 <div class="section-header"><h2 class="section-title">📊 لوحة التحكم</h2></div>
                 <div class="stats-grid">
@@ -1403,21 +894,24 @@
                 <div class="section-header"><h2 class="section-title">🎮 خريطة الأجهزة</h2></div>
                 <div class="devices-grid" id="devicesGrid"></div>
             </section>
-            <!-- Sessions -->
+
             <section class="view-section" id="sessions">
                 <div class="section-header"><h2 class="section-title">⏱ إدارة الجلسات</h2></div>
-                <p style="color: var(--gray-500); margin-bottom: 1.35rem; font-size: 0.88rem;">اضغط على أي جهاز متاح لبدء جلسة جديدة</p>
+                <p style="color: var(--gray-500); margin-bottom: 1.35rem;">اضغط على أي جهاز متاح لبدء جلسة جديدة</p>
                 <div class="table-container">
                     <table><thead><tr><th>الجهاز</th><th>نوع الجهاز</th><th>العميل</th><th>نوع الجلسة</th><th>البداية</th><th>⏰ المدة</th><th>السعر</th><th>الحالة</th><th>إجراء</th></tr></thead>
-                    <tbody id="sessionsTableBody"><tr><td colspan="9" style="text-align:center;color:var(--gray-400);padding:1.8rem;">لا توجد جلسات نشطة</td></tr></tbody></table>
+                    <tbody id="sessionsTableBody"><tr><td colspan="9" style="text-align:center;padding:1.8rem;">لا توجد جلسات نشطة</td></tr></tbody></table>
                 </div>
             </section>
-            <!-- Products -->
+
             <section class="view-section" id="products">
-                <div class="products-header"><h2 class="section-title">🛒 المنتجات والباقات</h2><button class="add-product-btn" onclick="openAddProductModal()">➕ إضافة منتج جديد</button></div>
+                <div class="products-header" style="display:flex;justify-content:space-between;margin-bottom:1.35rem;">
+                    <h2 class="section-title">🛒 المنتجات والباقات</h2>
+                    <button class="add-product-btn" onclick="openAddProductModal()" style="background:linear-gradient(135deg,var(--primary),#3b82f6);color:white;border:none;padding:0.7rem 1.15rem;border-radius:12px;font-weight:700;">➕ إضافة منتج جديد</button>
+                </div>
                 <div class="products-grid" id="productsGrid"></div>
             </section>
-            <!-- Reports -->
+
             <section class="view-section" id="reports">
                 <div class="section-header"><h2 class="section-title">📈 التقارير المالية</h2></div>
                 <div class="stats-grid">
@@ -1425,124 +919,228 @@
                     <div class="stat-card"><div class="stat-icon green">✅</div><div class="stat-value" id="completedSessions">0</div><div class="stat-label">جلسات مكتملة</div></div>
                     <div class="stat-card"><div class="stat-icon orange">📦</div><div class="stat-value" id="totalProductsSold">0</div><div class="stat-label">منتجات مباعة</div></div>
                 </div>
-                <div class="table-container"><table><thead><tr><th>Date</th><th>Time</th><th>Type</th><th>Customer</th><th>Details</th><th>Device</th><th>Amount</th></tr></thead>
-                <tbody id="reportsTableBody"><tr><td colspan="7" style="text-align:center;color:var(--gray-400);padding:1.8rem;">لا توجد معاملات</td></tr></tbody></table></div>
+                <div class="table-container">
+                    <table><thead><tr><th>Date</th><th>Time</th><th>Type</th><th>Customer</th><th>Details</th><th>Device</th><th>Amount</th></tr></thead>
+                    <tbody id="reportsTableBody"><tr><td colspan="7" style="text-align:center;padding:1.8rem;">لا توجد معاملات</td></tr></tbody></table>
+                </div>
             </section>
-            <!-- Clients -->
-            <section class="view-section" id="clients">
-                <div class="section-header"><h2 class="section-title">👥 إدارة العملاء</h2></div>
-                <div class="clients-grid" id="clientsGrid"></div>
-            </section>
-            <!-- Settings -->
+
+            <section class="view-section" id="clients"><div class="section-header"><h2 class="section-title">👥 إدارة العملاء</h2></div><div class="clients-grid" id="clientsGrid"></div></section>
+
             <section class="view-section" id="settings">
                 <div class="section-header"><h2 class="section-title">⚙ الإعدادات</h2></div>
-                <div class="settings-grid">
-                    <div class="setting-card"><div class="setting-header"><div class="setting-icon" style="background:#dbeafe;color:var(--primary)">💾</div><div><div class="setting-title">نسخ احتياطي</div><div class="setting-desc">تصدير البيانات كملف JSON</div></div></div><div class="setting-actions"><button class="add-btn" onclick="backupData()">📥 تصدير</button></div></div>
-                    <div class="setting-card"><div class="setting-header"><div class="setting-icon" style="background:#d1fae5;color:var(--success)">📤</div><div><div class="setting-title">استعادة البيانات</div><div class="setting-desc">استيراد من ملف JSON</div></div></div><div class="setting-actions"><label style="cursor:pointer;"><input type="file" accept=".json" onchange="restoreData(event)" style="display:none" id="restoreInput"><button class="add-btn" onclick="document.getElementById('restoreInput').click()">📂 اختيار</button></label></div></div>
-                    <div class="setting-card"><div class="setting-header"><div class="setting-icon" style="background:#fef3c7;color:var(--warning)">⚠</div><div><div class="setting-title">مسح البيانات</div><div class="setting-desc">حذف وإعادة التعيين</div></div></div><div class="setting-actions"><button class="add-btn" style="background:var(--danger);" onclick="handleResetData()">🗑 مسح</button></div></div>
-                    <div class="setting-card"><div class="setting-header"><div class="setting-icon" style="background:#dbeafe;color:var(--primary)">🔔</div><div><div class="setting-title">إشعارات التنبيه</div><div class="setting-desc">تنبيهات احترافية مثل التطبيقات الحقيقية</div></div></div><div class="setting-actions"><button class="add-btn" onclick="requestNotificationPermission()" id="notifBtn">🔔 تفعيل الإشعارات</button></div></div>
+                <div class="settings-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:0.85rem;">
+                    <div class="setting-card" style="background:white;border-radius:16px;padding:1.35rem;"><button class="add-btn" onclick="backupData()">📥 تصدير البيانات</button></div>
+                    <div class="setting-card" style="background:white;border-radius:16px;padding:1.35rem;"><input type="file" accept=".json" onchange="restoreData(event)" style="display:none" id="restoreInput"><button class="add-btn" onclick="document.getElementById('restoreInput').click()">📂 استعادة بيانات</button></div>
+                    <div class="setting-card" style="background:white;border-radius:16px;padding:1.35rem;"><button class="add-btn" style="background:var(--danger);" onclick="handleResetData()">🗑 مسح البيانات</button></div>
+                    <div class="setting-card" style="background:white;border-radius:16px;padding:1.35rem;"><button class="add-btn" id="notifBtn" onclick="requestNotificationPermission()">🔔 تفعيل الإشعارات</button></div>
                 </div>
             </section>
         </main>
-        <footer class="app-footer">
+
+        <footer class="app-footer" style="background:white;border-top:1px solid var(--gray-200);padding:1.25rem;text-align:center;">
             <p class="footer-text">© 2024 Axentro – All Rights Reserved</p>
             <p class="footer-team">By Axentro Team</p>
-            <a href="https://axentro-official.github.io/axentro-website/links.html" target="_blank" class="qr-link"><img src="qr-links.png" alt="QR Code"></a>
+            <a href="https://axentro-official.github.io/axentro-website/links.html" target="_blank" class="qr-link"><img src="qr-links.png" alt="QR Code" style="height:55px;border-radius:10px;"></a>
         </footer>
     </div>
 
     <!-- Modals -->
-    <div class="modal-overlay" id="sessionModal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title">🎮 بدء جلسة جديدة</h3><button class="modal-close" onclick="closeModal()">✕</button></div><div class="modal-body"><div class="form-group"><label class="form-label">الجهاز</label><input type="text" class="form-input" id="modalDevice" readonly></div><div class="form-group"><label class="form-label">نوع الجهاز</label><div class="type-toggle" id="deviceTypeToggle"><div class="type-option selected" data-type="ps4" onclick="selectDeviceType(this)">🎮 PS4</div><div class="type-option" data-type="ps5" onclick="selectDeviceType(this)">🎮 PS5</div></div></div><div class="price-input-group"><div class="price-input-label">💰 سعر الساعة (EGP)</div><input type="number" class="price-input-field" id="customPriceInput" value="50" min="0" step="0.5" oninput="updatePriceFromInput()"><div style="font-size: 0.8rem; color: #92400e; margin-top: 0.4rem;">* يمكنك تغيير السعر حسب رغبتك</div></div><div class="form-group"><label class="form-label">نوع الجلسة</label><div class="session-type-toggle"><div class="session-type-option selected" data-sessiontype="timed" onclick="selectSessionType(this)">⏰ محددة بوقت</div><div class="session-type-option" data-sessiontype="open" onclick="selectSessionType(this)">⏳ وقت مفتوح</div></div></div><div id="timedSessionFields"><div class="form-group"><label class="form-label">مدة الجلسة</label><div class="duration-row"><input type="number" class="form-input" id="sessionHours" placeholder="ساعات" value="1" min="0" oninput="calcPrice()"><input type="number" class="form-input" id="sessionMinutes" placeholder="دقائق" value="0" min="0" max="59" oninput="calcPrice()"></div></div><div class="price-calc"><div class="price-value" id="sessionPrice">50.00 EGP</div></div></div><div id="openSessionInfo" style="display:none;"><div class="price-calc" style="background: linear-gradient(135deg, #dbeafe, #bfdbfe);"><div style="font-weight: 700; color: #1e40af; margin-bottom: 0.4rem;">سيتم الحساب حسب الوقت الفعلي</div><div style="font-size: 0.88rem; color: #3b82f6;">السعر: <span id="hourlyRateDisplay">50</span> EGP / ساعة</div></div></div><div class="form-group"><label class="form-label">اسم العميل (اختياري)</label><input type="text" class="form-input" id="customerName" placeholder="اسم العميل"></div><div class="btn-group"><button class="btn btn-cancel" onclick="closeModal()">إلغاء</button><button class="btn btn-primary" onclick="startSession()">✓ بدء الجلسة</button></div></div></div></div>
+    <div class="modal-overlay" id="sessionModal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title">🎮 بدء جلسة جديدة</h3><button class="modal-close" onclick="closeModal()">✕</button></div><div class="modal-body"><div class="form-group"><label class="form-label">الجهاز</label><input type="text" class="form-input" id="modalDevice" readonly></div><div class="type-toggle" id="deviceTypeToggle"><div class="type-option selected" data-type="ps4" onclick="selectDeviceType(this)">🎮 PS4</div><div class="type-option" data-type="ps5" onclick="selectDeviceType(this)">🎮 PS5</div></div><div class="price-input-group"><div class="price-input-label">💰 سعر الساعة (EGP)</div><input type="number" class="price-input-field" id="customPriceInput" value="50" min="0" step="0.5" oninput="updatePriceFromInput()"></div><div class="session-type-toggle"><div class="session-type-option selected" data-sessiontype="timed" onclick="selectSessionType(this)">⏰ محددة بوقت</div><div class="session-type-option" data-sessiontype="open" onclick="selectSessionType(this)">⏳ وقت مفتوح</div></div><div id="timedSessionFields"><div class="form-group"><label class="form-label">مدة الجلسة</label><div class="duration-row"><input type="number" class="form-input" id="sessionHours" placeholder="ساعات" value="1" min="0" oninput="calcPrice()"><input type="number" class="form-input" id="sessionMinutes" placeholder="دقائق" value="0" min="0" max="59" oninput="calcPrice()"></div></div><div class="price-calc"><div class="price-value" id="sessionPrice">50.00 EGP</div></div></div><div id="openSessionInfo" style="display:none;"><div class="price-calc"><div style="font-weight:700;">سيتم الحساب حسب الوقت الفعلي<br>السعر: <span id="hourlyRateDisplay">50</span> EGP / ساعة</div></div></div><div class="form-group"><label class="form-label">اسم العميل (اختياري)</label><input type="text" class="form-input" id="customerName" placeholder="اسم العميل"></div><div class="btn-group"><button class="btn btn-cancel" onclick="closeModal()">إلغاء</button><button class="btn btn-primary" onclick="startSession()">✓ بدء الجلسة</button></div></div></div></div>
 
-    <div class="modal-overlay" id="activeSessionModal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title">⏱ إدارة الجلسة النشطة</h3><button class="modal-close" onclick="closeActiveSessionModal()">✕</button></div><div class="modal-body"><div class="session-timer" id="sessionTimerDisplay">00:00:00</div><div class="session-details"><div class="session-detail-row"><span class="detail-label">الجهاز:</span><span class="detail-value" id="activeDeviceInfo">-</span></div><div class="session-detail-row"><span class="detail-label">نوع الجهاز:</span><span class="detail-value" id="activeDeviceType">-</span></div><div class="session-detail-row"><span class="detail-label">العميل:</span><span class="detail-value" id="activeCustomerName">-</span></div><div class="session-detail-row"><span class="detail-label">نوع الجلسة:</span><span class="detail-value" id="activeSessionType">-</span></div><div class="session-detail-row"><span class="detail-label">⏱ الوقت الفعلي:</span><span class="detail-value" id="activeElapsedTime" style="color: var(--primary);">0:00:00</span></div><div class="session-detail-row"><span class="detail-label">التكلفة الحالية:</span><span class="detail-value" id="activeCurrentCost">0.00 EGP</span></div><div class="session-detail-row" id="remainingTimeRow" style="display:none;"><span class="detail-label">الوقت المتبقي:</span><span class="detail-value" id="activeRemainingTime" style="color: var(--danger);">0:00:00</span></div></div><div class="time-breakdown" id="timeBreakdownSection"><div class="time-breakdown-title">⏰ تفاصيل الوقت</div><div class="time-breakdown-row"><span class="time-breakdown-label">📌 المدة الأساسية:</span><span class="time-breakdown-value" id="baseDurationDisplay">0 دقيقة</span></div><div class="time-breakdown-row" id="extensionsBreakdown"></div><div class="time-breakdown-row" style="border-top: 2px solid var(--primary); margin-top: 0.5rem; padding-top: 0.5rem;"><span class="time-breakdown-label" style="font-weight: 900;">⏱ الإجمالي المستخدم:</span><span class="time-breakdown-value" id="totalUsedTimeDisplay" style="font-weight: 900;">0:00:00</span></div></div><div id="sessionProductsList" style="margin: 0.9rem 0;"><h4 style="font-weight: 700; margin-bottom: 0.65rem; color: var(--gray-700); font-size: 0.92rem;">🛒 منتجات مضافة لهذه الجلسة:</h4><div id="sessionProductsItems" style="color: var(--gray-500); font-size: 0.86rem;">لا توجد منتجات</div></div><div class="btn-group" style="grid-template-columns: 1fr;"><button class="btn btn-primary" onclick="endActiveSessionAndShowInvoice()" style="background: linear-gradient(135deg, var(--success), #059669);">✓ إنهاء الجلسة والفاتورة</button></div><div class="btn-group" style="margin-top: 0.65rem;" id="extendTimeBtnGroup"><button class="btn" onclick="showExtendTimeOptions()" style="background: var(--warning); color: var(--dark);">➕ وقت إضافي</button><button class="btn btn-cancel" onclick="closeActiveSessionModal()">إغلاق</button></div></div></div></div>
+    <div class="modal-overlay" id="activeSessionModal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title">⏱ إدارة الجلسة النشطة</h3><button class="modal-close" onclick="closeActiveSessionModal()">✕</button></div><div class="modal-body"><div class="session-timer" id="sessionTimerDisplay">00:00:00</div><div class="session-details"><div class="session-detail-row"><span class="detail-label">الجهاز:</span><span class="detail-value" id="activeDeviceInfo">-</span></div><div class="session-detail-row"><span class="detail-label">العميل:</span><span class="detail-value" id="activeCustomerName">-</span></div><div class="session-detail-row"><span class="detail-label">نوع الجلسة:</span><span class="detail-value" id="activeSessionType">-</span></div><div class="session-detail-row"><span class="detail-label">التكلفة الحالية:</span><span class="detail-value" id="activeCurrentCost">0.00 EGP</span></div><div class="session-detail-row" id="remainingTimeRow" style="display:none;"><span class="detail-label">الوقت المتبقي:</span><span class="detail-value" id="activeRemainingTime">0:00:00</span></div></div><div id="sessionProductsList" style="margin:0.9rem 0;"><h4 style="font-weight:700;">🛒 منتجات مضافة:</h4><div id="sessionProductsItems">لا توجد منتجات</div></div><div class="btn-group"><button class="btn btn-primary" onclick="endActiveSessionAndShowInvoice()" style="background:linear-gradient(135deg,var(--success),#059669);">✓ إنهاء الجلسة والفاتورة</button></div><div class="btn-group" style="margin-top:0.65rem;"><button class="btn" onclick="showExtendTimeOptions()" style="background:var(--warning);">➕ وقت إضافي</button><button class="btn btn-cancel" onclick="closeActiveSessionModal()">إغلاق</button></div></div></div></div>
 
-    <div class="modal-overlay" id="addProductModal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title">🛒 إضافة منتج</h3><button class="modal-close" onclick="closeAddProductModal()">✕</button></div><div class="modal-body"><div class="form-group"><label class="form-label">اسم المنتج</label><input type="text" class="form-input" id="productName" placeholder="اسم المنتج"></div><div class="form-group"><label class="form-label">السعر (EGP)</label><input type="number" class="form-input" id="productPrice" placeholder="السعر" min="0" step="0.01"></div><div class="btn-group"><button class="btn btn-cancel" onclick="closeAddProductModal()">إلغاء</button><button class="btn btn-primary" onclick="addNewProduct()">✓ إضافة</button></div></div></div></div>
+    <div class="modal-overlay" id="addProductModal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title">🛒 إضافة منتج</h3><button class="modal-close" onclick="closeAddProductModal()">✕</button></div><div class="modal-body"><div class="form-group"><label class="form-label">اسم المنتج</label><input type="text" class="form-input" id="productName"></div><div class="form-group"><label class="form-label">السعر (EGP)</label><input type="number" class="form-input" id="productPrice" min="0" step="0.01"></div><div class="btn-group"><button class="btn btn-cancel" onclick="closeAddProductModal()">إلغاء</button><button class="btn btn-primary" onclick="addNewProduct()">✓ إضافة</button></div></div></div></div>
 
-    <div class="modal-overlay" id="selectSessionModal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title">🎯 اختيار الجلسة</h3><button class="modal-close" onclick="closeSelectSessionModal()">✕</button></div><div class="modal-body"><p style="margin-bottom: 0.9rem; color: var(--gray-600); font-weight: 600; font-size: 0.88rem;">اختر الجلسة لإضافة المنتج:</p><div id="activeSessionsList"></div></div></div></div>
+    <div class="modal-overlay" id="selectSessionModal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title">🎯 اختيار الجلسة</h3><button class="modal-close" onclick="closeSelectSessionModal()">✕</button></div><div class="modal-body"><div id="activeSessionsList"></div></div></div></div>
 
-    <div class="modal-overlay" id="extendTimeModal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title">⏰ وقت إضافي</h3><button class="modal-close" onclick="closeExtendTimeModal()">✕</button></div><div class="modal-body"><div class="form-group"><label class="form-label">الوقت الإضافي</label><div class="duration-row"><input type="number" class="form-input" id="extendHours" placeholder="ساعات" value="0" min="0"><input type="number" class="form-input" id="extendMinutes" placeholder="دقائق" value="30" min="0" max="59"></div></div><div class="price-calc"><div style="font-weight: 700; color: #92400e; margin-bottom: 0.4rem;">التكلفة الإضافية:</div><div class="price-value" id="extendPriceDisplay">0.00 EGP</div></div><div class="btn-group"><button class="btn btn-cancel" onclick="closeExtendTimeModal()">إلغاء</button><button class="btn btn-primary" onclick="confirmExtendTime()" style="background: linear-gradient(135deg, var(--warning), #d97706);">✓ تأكيد</button></div></div></div></div>
+    <div class="modal-overlay" id="extendTimeModal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title">⏰ وقت إضافي</h3><button class="modal-close" onclick="closeExtendTimeModal()">✕</button></div><div class="modal-body"><div class="duration-row"><input type="number" class="form-input" id="extendHours" placeholder="ساعات" value="0" min="0"><input type="number" class="form-input" id="extendMinutes" placeholder="دقائق" value="30" min="0" max="59"></div><div class="price-calc"><div class="price-value" id="extendPriceDisplay">0.00 EGP</div></div><div class="btn-group"><button class="btn btn-cancel" onclick="closeExtendTimeModal()">إلغاء</button><button class="btn btn-primary" onclick="confirmExtendTime()" style="background:linear-gradient(135deg,var(--warning),#d97706);">✓ تأكيد</button></div></div></div></div>
 
-    <div class="modal-overlay invoice-modal" id="invoiceModal"><div class="modal-content"><div class="invoice-header"><div class="invoice-title">🧾 فاتورة محل البلايستيشن</div><div class="invoice-subtitle">PlayStation Lounge Invoice</div></div><div class="invoice-body" id="invoiceBody"></div><div style="padding: 0 1.35rem 1.35rem;"><button class="btn btn-primary" onclick="closeInvoiceModal()" style="width: 100%;">✕ إغلاق</button></div></div></div>
+    <div class="modal-overlay invoice-modal" id="invoiceModal"><div class="modal-content"><div class="invoice-header" style="text-align:center;padding:1.5rem;background:linear-gradient(135deg,var(--dark),#1e293b);color:white;border-radius:20px 20px 0 0;"><div class="invoice-title" style="font-size:1.5rem;font-weight:900;">🧾 فاتورة محل البلايستيشن</div></div><div class="invoice-body" id="invoiceBody" style="padding:1.35rem;"></div><div style="padding:0 1.35rem 1.35rem;"><button class="btn btn-primary" onclick="closeInvoiceModal()" style="width:100%;">✕ إغلاق</button></div></div></div>
 
-    <audio id="alertSound" preload="auto"><source src="alert.mp3" type="audio/mpeg"></audio>
-    <audio id="alarmSound" preload="auto" loop><source src="alarm.mp3" type="audio/mpeg"></audio>
-    <audio id="timerSound" preload="auto" loop><source src="Timer.mp3" type="audio/mpeg"></audio>
+    <audio id="alertSound"><source src="alert.mp3" type="audio/mpeg"></audio>
+    <audio id="alarmSound"><source src="alarm.mp3" type="audio/mpeg"></audio>
+    <audio id="timerSound"><source src="Timer.mp3" type="audio/mpeg"></audio>
 
     <script>
         // ===== DATA STORE =====
-        let appData = { devices: [], sessions: [], products: [], clients: [], transactions: [], settings: { ps4Price: 50, ps5Price: 80, storeName: 'محل البلايستيشن' } };
-        let currentDevice = null, selectedType = 'ps4', selectedPrice = 50, selectedSessionType = 'timed', currentManagingSessionId = null, timerInterval = null, pendingProductId = null;
-        let deferredPrompt = null, globalAlertInterval = null, alertedSessions = new Set(), notificationPermissionGranted = false;
-        let alertSoundPlayed = new Set();
-        const ALERT_PERCENTAGE_THRESHOLD = 20;
-        let customDialogResolver = null;
+        let appData = {
+            devices: [], sessions: [], products: [], clients: [], transactions: [],
+            settings: { ps4Price: 50, ps5Price: 80, storeName: 'محل البلايستيشن' }
+        };
 
-        // ===== PWA / NOTIFICATION HELPERS =====
-        function isRunningAsPWA() { return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true || document.referrer.includes('android-app://'); }
+        let currentDevice = null, selectedType = 'ps4', selectedPrice = 50, selectedSessionType = 'timed';
+        let currentManagingSessionId = null, timerInterval = null, pendingProductId = null, alertInterval = null;
+        let deferredPrompt = null, globalAlertInterval = null, alertedSessions = new Set(), notificationPermissionGranted = false;
+        let alertSoundPlayed = new Set(), isManagingSession = false, customDialogResolver = null;
+        let wakeLock = null; // For keeping screen awake
+
+        // ===== WAKE LOCK API - Keep screen on when active sessions exist =====
+        async function requestWakeLock() {
+            if ('wakeLock' in navigator && appData.sessions.filter(s => s.status === 'active').length > 0) {
+                try {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    console.log('✅ Wake Lock acquired - screen will stay on');
+                    wakeLock.addEventListener('release', () => console.log('Wake Lock released'));
+                } catch (err) { console.log('Wake Lock error:', err); }
+            }
+        }
+        
+        function releaseWakeLock() {
+            if (wakeLock) { wakeLock.release(); wakeLock = null; }
+        }
+
+        function init() {
+            loadData();
+            if (isRunningAsPWA()) { document.getElementById('installBanner')?.classList.add('pwa-hidden'); localStorage.setItem('pwaInstalled', 'true'); }
+            if (sessionStorage.getItem('isLoggedIn') === 'true') {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('appContainer').classList.add('active');
+            }
+            if (!appData.devices.length) { for (let i = 1; i <= 16; i++) appData.devices.push({ id: i, number: i, status: 'available' }); saveData(); }
+            renderAll(); checkNotificationPermission(); startGlobalAlertChecker(); setupInstallPrompt(); registerServiceWorker();
+            
+            // Listen for messages from service worker
+            if (navigator.serviceWorker) {
+                navigator.serviceWorker.addEventListener('message', event => {
+                    if (event.data && event.data.type === 'PLAY_SOUND') {
+                        const audio = document.getElementById(event.data.sound + 'Sound');
+                        if (audio) audio.play().catch(() => {});
+                    }
+                    if (event.data && event.data.type === 'FOCUS_SESSION' && event.data.sessionId) {
+                        const session = appData.sessions.find(s => s.id == event.data.sessionId);
+                        if (session) manageSession(session.id);
+                        showToast('info', '🎮 جلسة', 'تم فتح إدارة الجلسة');
+                    }
+                });
+            }
+        }
+
+        function isRunningAsPWA() { return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true; }
         function saveData() { localStorage.setItem('playstationLounge', JSON.stringify(appData)); }
         function loadData() { const saved = localStorage.getItem('playstationLounge'); if (saved) appData = JSON.parse(saved); }
 
-        // Professional Notification via Service Worker
-        async function sendProfessionalNotification(sessionId, title, message, type = 'warning', deviceNumber = '', customerName = '') {
-            if (!notificationPermissionGranted) return false;
-            let body = message;
-            if (deviceNumber && customerName) body = `🖥 الشاشة: ${deviceNumber}\n👤 العميل: ${customerName}\n\n${message}`;
-            const options = {
-                body: body, icon: './icon-192.png', badge: './icon-192.png', tag: `ps-session-${sessionId}-${Date.now()}`,
-                requireInteraction: (type === 'critical' || type === 'warning'), silent: false,
-                vibrate: type === 'critical' ? [200, 100, 200, 300, 200] : [100, 50, 100],
-                data: { sessionId: sessionId, url: './index.html', deviceNumber, customerName },
-                actions: [{ action: 'open', title: '🎮 فتح التطبيق' }, { action: 'dismiss', title: 'إغلاق' }]
-            };
-            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-                navigator.serviceWorker.controller.postMessage({ type: 'SHOW_NOTIFICATION', title, options });
-                return true;
-            } else if (Notification.permission === 'granted') { new Notification(title, options); return true; }
-            return false;
+        function registerServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js').then(reg => console.log('✅ SW registered')).catch(err => console.log('❌ SW failed:', err));
+            }
+        }
+
+        // ===== ENHANCED NOTIFICATION (Sends through Service Worker for background) =====
+        async function sendProfessionalNotification(sessionId, title, message, type = 'warning', deviceNumber = '', customerName = '', remainingMinutes = null) {
+            if (!notificationPermissionGranted) return;
+            
+            const payload = { title, message, type, sessionId, deviceNumber, customerName, remainingMinutes };
+            
+            // Send to service worker for background notification
+            if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage({ type: 'SHOW_NOTIFICATION', payload });
+            } else {
+                // Fallback to regular notification
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    let body = message;
+                    if (deviceNumber && customerName) body = `🖥 الشاشة: ${deviceNumber}\n👤 العميل: ${customerName}\n\n${message}`;
+                    new Notification(title, { body, icon: 'icon-192.png', requireInteraction: type === 'critical', vibrate: [200] });
+                }
+            }
+            
+            // Also show in-app toast
+            showToast(type === 'critical' ? 'alert-critical' : 'warning', title, message, 8000, type === 'critical');
+        }
+
+        async function checkNotificationPermission() {
+            if ('Notification' in window) {
+                const perm = Notification.permission;
+                notificationPermissionGranted = perm === 'granted';
+                const btn = document.getElementById('notifBtn');
+                if (btn) btn.textContent = notificationPermissionGranted ? '✅ مفعل' : '🔔 تفعيل الإشعارات';
+                if (perm === 'default') await requestNotificationPermission();
+            }
         }
 
         async function requestNotificationPermission() {
             if (!('Notification' in window)) { showToast('error', 'غير مدعوم', 'متصفحك لا يدعم الإشعارات'); return false; }
-            try {
-                const perm = await Notification.requestPermission();
-                notificationPermissionGranted = (perm === 'granted');
-                const btn = document.getElementById('notifBtn');
-                if (notificationPermissionGranted) { btn.textContent = '✅ مفعل'; btn.style.background = 'var(--success)'; btn.style.color = 'white'; sendProfessionalNotification('test', '✅ تم التفعيل!', 'ستصلك إشعارات عند انتهاء الوقت', 'info'); showToast('success', 'تم التفعيل', 'الإشعارات تعمل الآن 🔔'); }
-                else { btn.textContent = '🔔 تفعيل الإشعارات'; btn.style.background = 'var(--primary)'; btn.style.color = 'white'; showToast('warning', 'لم يتم التفعيل', 'يرجى السماح بالإشعارات'); }
-                return notificationPermissionGranted;
-            } catch(e) { return false; }
+            const perm = await Notification.requestPermission();
+            notificationPermissionGranted = perm === 'granted';
+            const btn = document.getElementById('notifBtn');
+            if (btn) btn.textContent = notificationPermissionGranted ? '✅ مفعل' : '🔔 تفعيل الإشعارات';
+            if (notificationPermissionGranted) sendProfessionalNotification('test', '✅ تم التفعيل!', 'ستصلك إشعارات عند انتهاء الوقت', 'info');
+            return notificationPermissionGranted;
         }
 
-        function playSound(type = 'alert') {
-            try {
-                ['alertSound', 'alarmSound', 'timerSound'].forEach(id => { let a = document.getElementById(id); if(a){ a.pause(); a.currentTime = 0; } });
-                const map = { alert: 'alertSound', alarm: 'alarmSound', timer: 'timerSound' };
-                const audio = document.getElementById(map[type]);
-                if (audio) { audio.play().catch(()=>{}); setTimeout(()=>{ if(audio){ audio.pause(); audio.currentTime = 0; } }, 5000); }
-            } catch(e) {}
+        // ===== GLOBAL ALERT CHECKER WITH WAKE LOCK =====
+        function startGlobalAlertChecker() {
+            if (globalAlertInterval) clearInterval(globalAlertInterval);
+            globalAlertInterval = setInterval(() => {
+                checkAllSessionsForExpiration();
+                renderSessions();
+                // Manage wake lock based on active sessions
+                const hasActive = appData.sessions.filter(s => s.status === 'active').length > 0;
+                if (hasActive && !wakeLock) requestWakeLock();
+                else if (!hasActive && wakeLock) releaseWakeLock();
+            }, 1000);
         }
-        function stopAlarmLoop() {}
-        function startAlarmLoop() {}
 
-        // Toast
+        function checkAllSessionsForExpiration() {
+            const activeSessions = appData.sessions.filter(s => s.status === 'active' && s.sessionType === 'timed');
+            const now = Date.now();
+            
+            activeSessions.forEach(session => {
+                const startTime = new Date(session.startTime).getTime();
+                let totalDuration = session.initialDuration || session.duration || 0;
+                if (session.timeExtensions?.length) totalDuration += session.timeExtensions.reduce((sum, ext) => sum + ext.minutes, 0);
+                
+                const elapsedMs = now - startTime;
+                const elapsedMinutes = elapsedMs / 60000;
+                const remainingMinutes = totalDuration - elapsedMinutes;
+                const device = appData.devices.find(d => d.id === session.deviceId);
+                const deviceNum = device ? device.number : '?';
+                const alertThreshold = Math.max(1, Math.floor(totalDuration * 0.2));
+                
+                // Alert at 20% remaining via Service Worker
+                if (remainingMinutes > 0 && remainingMinutes <= alertThreshold && !alertSoundPlayed.has(`alert-${session.id}`)) {
+                    alertSoundPlayed.add(`alert-${session.id}`);
+                    sendProfessionalNotification(
+                        session.id, '⏰ تنبيه - وقت قريب من الانتهاء!',
+                        `متبقي ${Math.ceil(remainingMinutes)} دقيقة`, 'warning',
+                        deviceNum, session.customerName, Math.ceil(remainingMinutes)
+                    );
+                    playSound('alert');
+                }
+                
+                // EXPIRED - Critical persistent notification
+                if (elapsedMinutes >= totalDuration && !alertedSessions.has(session.id)) {
+                    alertedSessions.add(session.id);
+                    sendProfessionalNotification(
+                        session.id, '🚨 انتهاء الوقت - هام جداً!',
+                        `الوقت انتهى! الرجاء إنهاء الجلسة فوراً`, 'critical',
+                        deviceNum, session.customerName, 0
+                    );
+                    startAlarmLoop();
+                }
+            });
+        }
+
+        function playSound(type) { try { const audio = document.getElementById(type + 'Sound'); if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); } } catch(e) {} }
+        function startAlarmLoop() { if (alertInterval) clearInterval(alertInterval); alertInterval = setInterval(() => { const audio = document.getElementById('alarmSound'); if (audio && !isManagingSession) audio.play().catch(() => {}); }, 1500); }
+        function stopAlarmLoop() { if (alertInterval) { clearInterval(alertInterval); alertInterval = null; } const audio = document.getElementById('alarmSound'); if (audio) { audio.pause(); audio.currentTime = 0; } }
+        function stopAllSounds() { stopAlarmLoop(); ['alarmSound', 'alertSound', 'timerSound'].forEach(id => { const a = document.getElementById(id); if (a) { a.pause(); a.currentTime = 0; } }); }
+
         function showToast(type, title, message, duration = 5000, persistent = false) {
             const container = document.getElementById('toastContainer');
             const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️', 'alert-critical': '🚨' };
             const toast = document.createElement('div');
             toast.className = `toast-notification ${type}`;
-            toast.innerHTML = `<div class="toast-icon">${icons[type] || 'ℹ️'}</div><div class="toast-content"><div class="toast-title">${title}</div><div class="toast-message">${message.replace(/\n/g, '<br>')}</div></div><button class="toast-close" onclick="removeToast(this.parentElement)">✕</button>${!persistent ? `<div class="toast-progress" style="animation-duration: ${duration}ms;"></div>` : ''}`;
+            toast.innerHTML = `<div class="toast-icon">${icons[type] || 'ℹ️'}</div><div class="toast-content"><div class="toast-title">${title}</div><div class="toast-message">${message.replace(/\n/g, '<br>')}</div></div><button class="toast-close" onclick="this.parentElement.remove()">✕</button>${!persistent ? `<div class="toast-progress" style="animation-duration: ${duration}ms;"></div>` : ''}`;
             container.appendChild(toast);
-            if (!persistent) setTimeout(() => removeToast(toast), duration);
+            if (!persistent) setTimeout(() => toast.remove(), duration);
         }
-        function removeToast(el) { if (el?.parentNode) { el.classList.add('removing'); setTimeout(() => el.remove(), 350); } }
 
-        // Dialog
         function showCustomDialog(type, title, message, confirmText = 'تأكيد', cancelText = 'إلغاء') {
             return new Promise((resolve) => {
                 customDialogResolver = resolve;
                 const overlay = document.getElementById('customDialogOverlay');
-                document.getElementById('dialogIconWrapper').className = `dialog-icon-wrapper ${type}`;
-                document.getElementById('dialogIconWrapper').textContent = { confirm: '❓', warning: '⚠️', danger: '🗑️', success: '✅', info: 'ℹ️' }[type] || '❓';
+                document.getElementById('dialogIconWrapper').innerHTML = { confirm: '❓', warning: '⚠️', danger: '🗑️', success: '✅' }[type] || '❓';
                 document.getElementById('dialogTitle').textContent = title;
                 document.getElementById('dialogMessage').textContent = message;
                 document.getElementById('dialogConfirmBtn').textContent = confirmText;
@@ -1552,86 +1150,73 @@
         }
         function closeCustomDialog(result) { document.getElementById('customDialogOverlay').classList.remove('active'); if (customDialogResolver) { customDialogResolver(result); customDialogResolver = null; } }
 
-        // Login
+        // ===== LOGIN =====
         let enteredPin = '';
         const CORRECT_PIN = '1407';
-        document.querySelectorAll('.num-btn').forEach(btn => btn.addEventListener('click', () => {
-            const num = btn.dataset.num, action = btn.dataset.action;
-            if (action === 'delete') enteredPin = enteredPin.slice(0, -1);
-            else if (action === 'submit') { validatePin(); return; }
-            else if (num && enteredPin.length < 4) enteredPin += num;
-            updatePinDisplay();
-            if (enteredPin.length === 4) setTimeout(validatePin, 180);
-        }));
+        document.querySelectorAll('.num-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const num = btn.dataset.num, action = btn.dataset.action;
+                if (action === 'delete') enteredPin = enteredPin.slice(0, -1);
+                else if (action === 'submit') { validatePin(); return; }
+                else if (num && enteredPin.length < 4) enteredPin += num;
+                updatePinDisplay();
+                if (enteredPin.length === 4) setTimeout(validatePin, 180);
+            });
+        });
         function updatePinDisplay() { document.querySelectorAll('.pin-dot').forEach((dot, i) => { dot.textContent = i < enteredPin.length ? enteredPin[i] : ''; dot.classList.toggle('filled', i < enteredPin.length); }); document.getElementById('errorMsg').classList.remove('show'); }
-        function validatePin() {
-            if (enteredPin === CORRECT_PIN) { sessionStorage.setItem('isLoggedIn', 'true'); document.getElementById('loginScreen').classList.add('hidden'); document.getElementById('appContainer').classList.add('active'); showToast('success', 'مرحباً!', 'تم تسجيل الدخول 🎉'); }
-            else { document.getElementById('errorMsg').textContent = '❌ رمز غير صحيح'; document.getElementById('errorMsg').classList.add('show'); setTimeout(() => { enteredPin = ''; updatePinDisplay(); }, 1000); }
-        }
-        async function handleLogout() { if (await showCustomDialog('warning', '⏻ تأكيد الخروج', 'هل أنت متأكد؟', 'نعم', 'إلغاء')) { sessionStorage.removeItem('isLoggedIn'); document.getElementById('appContainer').classList.remove('active'); document.getElementById('loginScreen').classList.remove('hidden'); enteredPin = ''; updatePinDisplay(); } }
+        function validatePin() { if (enteredPin === CORRECT_PIN) { sessionStorage.setItem('isLoggedIn', 'true'); document.getElementById('loginScreen').classList.add('hidden'); document.getElementById('appContainer').classList.add('active'); showToast('success', 'مرحباً!', 'تم تسجيل الدخول 🎉'); } else { document.getElementById('errorMsg').textContent = '❌ رمز غير صحيح'; document.getElementById('errorMsg').classList.add('show'); setTimeout(() => { enteredPin = ''; updatePinDisplay(); }, 1000); } }
+        async function handleLogout() { if (await showCustomDialog('warning', '⏻ تأكيد الخروج', 'هل أنت متأكد؟', 'نعم', 'إلغاء')) { sessionStorage.removeItem('isLoggedIn'); document.getElementById('appContainer').classList.remove('active'); document.getElementById('loginScreen').classList.remove('hidden'); enteredPin = ''; updatePinDisplay(); releaseWakeLock(); } }
         async function handleResetData() { if (await showCustomDialog('danger', '🗑 مسح البيانات', 'هل أنت متأكد؟', 'نعم، امسح الكل!', 'إلغاء')) { localStorage.removeItem('playstationLounge'); showToast('success', 'تم المسح', '✓ تم حذف البيانات'); setTimeout(() => location.reload(), 1500); } }
-
         function showSection(id) { document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active')); document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active')); document.getElementById(id).classList.add('active'); event.target.classList.add('active'); }
 
-        // Render functions (simplified, same logic)
+        function renderAll() { renderDevices(); renderProducts(); renderClients(); updateStats(); renderReports(); renderSessions(); }
         function renderDevices() { document.getElementById('devicesGrid').innerHTML = appData.devices.map(d => `<div class="device-card ${d.status}" onclick="openSessionModal(${d.id})"><div class="device-number">شاشة ${d.number}</div><div class="device-status status-${d.status}">${d.status === 'available' ? '✓ متاح' : d.status === 'in-use' ? '▶ مشغل' : '🔧 صيانة'}</div></div>`).join(''); }
-        function renderProducts() { const grid = document.getElementById('productsGrid'); if (!appData.products.length) { grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--gray-400);">📦 لا توجد منتجات</p>'; return; } grid.innerHTML = appData.products.map(p => `<div class="product-card"><div class="product-image">📦</div><div class="product-info"><div class="product-name">${p.name}</div><div class="product-desc">منتج عام</div><div class="product-footer"><div class="product-price">${parseFloat(p.price).toFixed(2)} EGP</div><button class="add-btn" onclick="openSelectSessionModal(${p.id})">+ إضافة</button></div></div></div>`).join(''); }
-        function renderClients() { const grid = document.getElementById('clientsGrid'); if (!appData.clients.length) { grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:1.8rem;color:var(--gray-400);">لا يوجد عملاء</p>'; return; } grid.innerHTML = appData.clients.map(c => `<div class="client-card"><div class="client-header"><div class="client-avatar">${c.name.charAt(0)}</div><div><div class="client-name">${c.name}</div><div class="client-phone">${c.phone || '-'}</div></div></div><div class="client-stats"><div class="client-stat"><div class="client-stat-value">${c.visits || 0}</div><div class="client-stat-label">زيارة</div></div><div class="client-stat"><div class="client-stat-value">${parseFloat(c.total || 0).toFixed(2)} EGP</div><div class="client-stat-label">إنفاق</div></div></div></div>`).join(''); }
-        function updateStats() { const available = appData.devices.filter(d => d.status === 'available').length; const active = appData.sessions.filter(s => s.status === 'active').length; const todayRev = appData.transactions.filter(t => new Date(t.date).toDateString() === new Date().toDateString()).reduce((s, t) => s + t.amount, 0); document.getElementById('availableDevices').textContent = available; document.getElementById('activeSessions').textContent = active; document.getElementById('totalClients').textContent = appData.clients.length; document.getElementById('todayRevenue').textContent = parseFloat(todayRev).toFixed(2) + ' EGP'; document.getElementById('totalRevenue').textContent = parseFloat(appData.transactions.reduce((s,t)=>s+t.amount,0)).toFixed(2)+' EGP'; document.getElementById('completedSessions').textContent = appData.sessions.filter(s=>s.status==='completed').length; document.getElementById('totalProductsSold').textContent = appData.transactions.filter(t=>t.type==='product').length; }
-        function formatTime(date) { let h = date.getHours(); const m = date.getMinutes().toString().padStart(2,'0'); const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return `${h.toString().padStart(2,'0')}:${m} ${ap}`; }
-        function formatDate(date) { return date.toISOString().split('T')[0]; }
-        function formatTimeHMS(sec) { const h = Math.floor(sec/3600); const m = Math.floor((sec%3600)/60); const s = Math.floor(sec%60); return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; }
-        function formatTimeDetailed(sec) { return `${Math.floor(sec/60)} دقيقة ${Math.floor(sec%60)} ثانية`; }
-        function renderSessions() { const tbody = document.getElementById('sessionsTableBody'); const active = appData.sessions.filter(s => s.status === 'active'); if (!active.length) { tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--gray-400);padding:1.8rem;">لا توجد جلسات نشطة</td></tr>'; return; } tbody.innerHTML = active.map(s => { const dev = appData.devices.find(d=>d.id===s.deviceId); const start = new Date(s.startTime); const now = new Date(); const elapsed = Math.floor((now-start)/1000); const typeLabel = s.sessionType === 'open' ? 'مفتوح' : 'محدد'; let durationText = '-'; if(s.sessionType==='timed') { let dur = s.duration||0; if(s.timeExtensions?.length>0) dur = s.initialDuration + s.timeExtensions.reduce((sum,e)=>sum+e.minutes,0); durationText = `${dur} دقيقة`; } else durationText = formatTimeDetailed(elapsed); const cost = calculateCurrentCost(s); return `<tr><td>${dev?.number||'-'}</td><td>${s.type||'-'}</td><td>${s.customerName||'-'}</td><td><span class="badge badge-${s.sessionType==='open'?'info':'warning'}">${typeLabel}</span></td><td>${formatTime(start)}</td><td><strong style="color:var(--primary);">${durationText}</strong></td><td>${cost.toFixed(2)} EGP</td><td><span class="badge badge-success">نشطة</span></td><td><button class="add-btn" style="background:var(--primary);font-size:0.78rem;" onclick="manageSession(${s.id})">إدارة</button></td></tr>`; }).join(''); }
-        function renderReports() { const tbody = document.getElementById('reportsTableBody'); if (!appData.transactions.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--gray-400);padding:1.8rem;">لا توجد معاملات</td></tr>'; return; } tbody.innerHTML = appData.transactions.slice(-30).reverse().map(t => `<tr><td>${formatDate(new Date(t.date))}</td><td>${formatTime(new Date(t.date))}</td><td><span class="badge badge-${t.type==='session'?'success':'warning'}">${t.type==='session'?'جلسة':'منتج'}</span></td><td>${t.customerName||'-'}</td><td>${t.description||'-'}</td><td>${t.screenNumber||'-'}</td><td style="font-weight:800;color:var(--success);">+${parseFloat(t.amount).toFixed(2)} EGP</td></tr>`).join(''); }
-        function calculateElapsedSeconds(session) { return Math.floor((Date.now() - new Date(session.startTime).getTime())/1000); }
-        function calculateTimeCost(session) { const mins = calculateElapsedSeconds(session)/60; return (mins/60)*session.hourlyRate; }
-        function calculateCurrentCost(session) { return calculateTimeCost(session) + (session.products?.reduce((s,p)=>s+p.price,0)||0); }
+        function renderProducts() { const grid = document.getElementById('productsGrid'); if (!appData.products.length) { grid.innerHTML = '<p style="text-align:center;padding:2rem;">📦 لا توجد منتجات</p>'; return; } grid.innerHTML = appData.products.map(p => `<div class="product-card"><div class="product-image">📦</div><div class="product-info"><div class="product-name">${p.name}</div><div class="product-footer" style="display:flex;justify-content:space-between;margin-top:0.5rem;"><div class="product-price">${parseFloat(p.price).toFixed(2)} EGP</div><button class="add-btn" onclick="openSelectSessionModal(${p.id})">+ إضافة</button></div></div></div>`).join(''); }
+        function renderClients() { const grid = document.getElementById('clientsGrid'); if (!appData.clients.length) { grid.innerHTML = '<p style="text-align:center;padding:1.8rem;">لا يوجد عملاء</p>'; return; } grid.innerHTML = appData.clients.map(c => `<div class="client-card"><div class="client-header" style="display:flex;gap:0.85rem;"><div class="client-avatar" style="width:44px;height:44px;background:linear-gradient(135deg,var(--primary),#3b82f6);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:800;">${c.name.charAt(0)}</div><div><div class="client-name" style="font-weight:700;">${c.name}</div></div></div><div class="client-stats" style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-top:0.85rem;"><div class="client-stat" style="background:var(--gray-50);padding:0.6rem;border-radius:10px;text-align:center;"><div class="client-stat-value" style="font-weight:800;">${c.visits || 0}</div><div class="client-stat-label" style="font-size:0.72rem;">زيارة</div></div><div class="client-stat" style="background:var(--gray-50);padding:0.6rem;border-radius:10px;text-align:center;"><div class="client-stat-value" style="font-weight:800;">${parseFloat(c.total || 0).toFixed(2)} EGP</div><div class="client-stat-label" style="font-size:0.72rem;">إنفاق</div></div></div></div>`).join(''); }
+        function updateStats() { document.getElementById('availableDevices').textContent = appData.devices.filter(d => d.status === 'available').length; document.getElementById('activeSessions').textContent = appData.sessions.filter(s => s.status === 'active').length; document.getElementById('totalClients').textContent = appData.clients.length; document.getElementById('todayRevenue').textContent = parseFloat(appData.transactions.filter(t => new Date(t.date).toDateString() === new Date().toDateString()).reduce((s, t) => s + t.amount, 0)).toFixed(2) + ' EGP'; document.getElementById('totalRevenue').textContent = parseFloat(appData.transactions.reduce((s, t) => s + t.amount, 0)).toFixed(2) + ' EGP'; document.getElementById('completedSessions').textContent = appData.sessions.filter(s => s.status === 'completed').length; document.getElementById('totalProductsSold').textContent = appData.transactions.filter(t => t.type === 'product').length; }
+        function renderSessions() { const tbody = document.getElementById('sessionsTableBody'); const active = appData.sessions.filter(s => s.status === 'active'); if (!active.length) { tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:1.8rem;">لا توجد جلسات نشطة</td></tr>'; return; } tbody.innerHTML = active.map(s => { const dev = appData.devices.find(d => d.id === s.deviceId); const start = new Date(s.startTime); const elapsedSeconds = Math.floor((Date.now() - start) / 1000); let durationText = s.sessionType === 'timed' ? `${s.duration || 0} دقيقة` : `${Math.floor(elapsedSeconds / 60)} دقيقة`; return `<tr><td>${dev?.number || '-'}</td><td>${s.type || '-'}</td><td>${s.customerName || '-'}</td><td><span class="badge badge-${s.sessionType === 'open' ? 'info' : 'success'}">${s.sessionType === 'open' ? 'مفتوح' : 'محدد'}</span></td><td>${start.toLocaleTimeString('ar-EG')}</td><td><strong>${durationText}</strong></td><td>${calculateCurrentCost(s).toFixed(2)} EGP</td><td><span class="badge badge-success">نشطة</span></td><td><button class="add-btn" onclick="manageSession(${s.id})">إدارة</button></td></tr>`; }).join(''); }
+        function renderReports() { const tbody = document.getElementById('reportsTableBody'); if (!appData.transactions.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:1.8rem;">لا توجد معاملات</td></tr>'; return; } tbody.innerHTML = appData.transactions.slice(-30).reverse().map(t => `<tr><td>${new Date(t.date).toLocaleDateString()}</td><td>${new Date(t.date).toLocaleTimeString()}</td><td><span class="badge badge-${t.type === 'session' ? 'success' : 'warning'}">${t.type === 'session' ? 'جلسة' : 'منتج'}</span></td><td>${t.customerName || '-'}</td><td>${t.description || '-'}</td><td>${t.screenNumber || '-'}</td><td style="font-weight:800;color:var(--success);">+${parseFloat(t.amount).toFixed(2)} EGP</td></tr>`).join(''); }
+        function calculateElapsedSeconds(session) { return Math.floor((Date.now() - new Date(session.startTime).getTime()) / 1000); }
+        function calculateTimeCost(session) { return (calculateElapsedSeconds(session) / 3600) * session.hourlyRate; }
+        function calculateCurrentCost(session) { return calculateTimeCost(session) + (session.products?.reduce((sum, p) => sum + p.price, 0) || 0); }
 
-        // Session modal
-        function openSessionModal(deviceId) { const device = appData.devices.find(d=>d.id===deviceId); if(device?.status !=='available') { showToast('error','غير متاح','هذا الجهاز غير متاح!'); return; } currentDevice=deviceId; selectedType='ps4'; selectedPrice=50; selectedSessionType='timed'; document.getElementById('modalDevice').value=`شاشة ${device.number}`; document.querySelectorAll('#deviceTypeToggle .type-option').forEach(o=>o.classList.toggle('selected',o.dataset.type==='ps4')); document.querySelectorAll('.session-type-option').forEach(o=>o.classList.toggle('selected',o.dataset.sessiontype==='timed')); document.getElementById('sessionHours').value=1; document.getElementById('sessionMinutes').value=0; document.getElementById('customerName').value=''; document.getElementById('customPriceInput').value=50; document.getElementById('timedSessionFields').style.display='block'; document.getElementById('openSessionInfo').style.display='none'; document.getElementById('hourlyRateDisplay').textContent='50'; calcPrice(); document.getElementById('sessionModal').classList.add('active'); }
-        function closeModal() { document.getElementById('sessionModal').classList.remove('active'); currentDevice=null; }
-        function selectDeviceType(el) { document.querySelectorAll('#deviceTypeToggle .type-option').forEach(o=>o.classList.remove('selected')); el.classList.add('selected'); selectedType=el.dataset.type; selectedPrice = selectedType==='ps5'?80:50; document.getElementById('customPriceInput').value=selectedPrice; document.getElementById('hourlyRateDisplay').textContent=selectedPrice; calcPrice(); }
-        function updatePriceFromInput() { selectedPrice = parseFloat(document.getElementById('customPriceInput').value)||0; document.getElementById('hourlyRateDisplay').textContent=selectedPrice.toFixed(2); calcPrice(); }
-        function selectSessionType(el) { document.querySelectorAll('.session-type-option').forEach(o=>o.classList.remove('selected')); el.classList.add('selected'); selectedSessionType=el.dataset.sessiontype; if(selectedSessionType==='timed'){ document.getElementById('timedSessionFields').style.display='block'; document.getElementById('openSessionInfo').style.display='none'; }else{ document.getElementById('timedSessionFields').style.display='none'; document.getElementById('openSessionInfo').style.display='block'; } }
-        function calcPrice() { const h=parseInt(document.getElementById('sessionHours').value)||0; const m=parseInt(document.getElementById('sessionMinutes').value)||0; const price=((h*60)+m)/60*selectedPrice; document.getElementById('sessionPrice').textContent=price.toFixed(2)+' EGP'; }
-        function startSession() { const customerName = document.getElementById('customerName').value.trim()||'عميل بدون اسم'; let duration=0, price=0; if(selectedSessionType==='timed'){ const h=parseInt(document.getElementById('sessionHours').value)||0; const m=parseInt(document.getElementById('sessionMinutes').value)||0; duration=(h*60)+m; if(duration<=0){ showToast('error','خطأ','يرجى إدخال مدة صحيحة'); return; } price=(duration/60)*selectedPrice; } const session={ id:Date.now(), deviceId:currentDevice, type:selectedType.toUpperCase(), customerName, sessionType:selectedSessionType, duration, startTime:new Date().toISOString(), initialDuration:duration, price, hourlyRate:selectedPrice, status:'active', products:[], timeExtensions:[] }; appData.sessions.push(session); const idx=appData.devices.findIndex(d=>d.id===currentDevice); if(idx!==-1) appData.devices[idx].status='in-use'; saveData(); closeModal(); renderAll(); showToast('success','تم!',`✓ تم بدء جلسة ${selectedSessionType==='open'?'مفتوحة':'محددة'}!`); }
+        function openSessionModal(deviceId) { const device = appData.devices.find(d => d.id === deviceId); if (device?.status !== 'available') { showToast('error', 'غير متاح', 'هذا الجهاز غير متاح!'); return; } currentDevice = deviceId; selectedType = 'ps4'; selectedPrice = 50; selectedSessionType = 'timed'; document.getElementById('modalDevice').value = `شاشة ${device.number}`; document.querySelectorAll('#deviceTypeToggle .type-option').forEach(o => o.classList.toggle('selected', o.dataset.type === 'ps4')); document.querySelectorAll('.session-type-option').forEach(o => o.classList.toggle('selected', o.dataset.sessiontype === 'timed')); document.getElementById('sessionHours').value = 1; document.getElementById('sessionMinutes').value = 0; document.getElementById('customerName').value = ''; document.getElementById('customPriceInput').value = 50; document.getElementById('timedSessionFields').style.display = 'block'; document.getElementById('openSessionInfo').style.display = 'none'; document.getElementById('hourlyRateDisplay').textContent = '50'; calcPrice(); document.getElementById('sessionModal').classList.add('active'); }
+        function closeModal() { document.getElementById('sessionModal').classList.remove('active'); currentDevice = null; }
+        function selectDeviceType(el) { document.querySelectorAll('#deviceTypeToggle .type-option').forEach(o => o.classList.remove('selected')); el.classList.add('selected'); selectedType = el.dataset.type; selectedPrice = selectedType === 'ps5' ? 80 : 50; document.getElementById('customPriceInput').value = selectedPrice; document.getElementById('hourlyRateDisplay').textContent = selectedPrice; calcPrice(); }
+        function updatePriceFromInput() { selectedPrice = parseFloat(document.getElementById('customPriceInput').value) || 0; document.getElementById('hourlyRateDisplay').textContent = selectedPrice.toFixed(2); calcPrice(); }
+        function selectSessionType(el) { document.querySelectorAll('.session-type-option').forEach(o => o.classList.remove('selected')); el.classList.add('selected'); selectedSessionType = el.dataset.sessiontype; document.getElementById('timedSessionFields').style.display = selectedSessionType === 'timed' ? 'block' : 'none'; document.getElementById('openSessionInfo').style.display = selectedSessionType === 'timed' ? 'none' : 'block'; }
+        function calcPrice() { const h = parseInt(document.getElementById('sessionHours').value) || 0; const m = parseInt(document.getElementById('sessionMinutes').value) || 0; const price = ((h * 60) + m) / 60 * selectedPrice; document.getElementById('sessionPrice').textContent = price.toFixed(2) + ' EGP'; }
+        function startSession() { const customerName = document.getElementById('customerName').value.trim() || 'عميل بدون اسم'; let duration = 0; if (selectedSessionType === 'timed') { const h = parseInt(document.getElementById('sessionHours').value) || 0; const m = parseInt(document.getElementById('sessionMinutes').value) || 0; duration = (h * 60) + m; if (duration <= 0) { showToast('error', 'خطأ', 'يرجى إدخال مدة صحيحة'); return; } } const session = { id: Date.now(), deviceId: currentDevice, type: selectedType.toUpperCase(), customerName, sessionType: selectedSessionType, duration, startTime: new Date().toISOString(), initialDuration: duration, price: (duration / 60) * selectedPrice, hourlyRate: selectedPrice, status: 'active', products: [], timeExtensions: [] }; appData.sessions.push(session); const idx = appData.devices.findIndex(d => d.id === currentDevice); if (idx !== -1) appData.devices[idx].status = 'in-use'; saveData(); closeModal(); renderAll(); showToast('success', 'تم!', `✓ تم بدء جلسة ${selectedSessionType === 'open' ? 'مفتوحة' : 'محددة'}!`); requestWakeLock(); }
 
-        function manageSession(id) { const session = appData.sessions.find(s=>s.id===id); if(!session) return; currentManagingSessionId=id; const dev=appData.devices.find(d=>d.id===session.deviceId); document.getElementById('activeDeviceInfo').textContent=dev?`شاشة ${dev.number}`:'-'; document.getElementById('activeDeviceType').textContent=session.type||'-'; document.getElementById('activeCustomerName').textContent=session.customerName; document.getElementById('activeSessionType').textContent=session.sessionType==='open'?'⏳ مفتوح':'⏰ محدد'; if(timerInterval) clearInterval(timerInterval); timerInterval=setInterval(()=>updateActiveDisplay(session),1000); updateActiveDisplay(session); document.getElementById('activeSessionModal').classList.add('active'); }
-        function updateActiveDisplay(session) { const elapsedSec=calculateElapsedSeconds(session); const elapsedMin=elapsedSec/60; document.getElementById('sessionTimerDisplay').textContent=formatTimeHMS(elapsedSec); document.getElementById('activeElapsedTime').textContent=formatTimeHMS(elapsedSec); document.getElementById('activeCurrentCost').textContent=calculateCurrentCost(session).toFixed(2)+' EGP'; let totalAllowed=session.duration||0; if(session.timeExtensions?.length>0) totalAllowed=session.initialDuration+session.timeExtensions.reduce((s,e)=>s+e.minutes,0); const remainingSec=(totalAllowed*60)-elapsedSec; if(session.sessionType==='timed'){ if(remainingSec<=0){ document.getElementById('sessionTimerDisplay').classList.add('warning'); document.getElementById('activeRemainingTime').textContent='⚠️ انتهى!'; document.getElementById('remainingTimeRow').style.display='flex'; if(!isManagingSession) playSound('alert'); }else if(remainingSec<=300){ document.getElementById('sessionTimerDisplay').classList.add('warning'); document.getElementById('activeRemainingTime').textContent=formatTimeHMS(remainingSec); document.getElementById('remainingTimeRow').style.display='flex'; if(!isManagingSession && remainingSec<=120) playSound('alert'); }else{ document.getElementById('sessionTimerDisplay').classList.remove('warning'); document.getElementById('activeRemainingTime').textContent=formatTimeHMS(remainingSec); document.getElementById('remainingTimeRow').style.display='flex'; } } else { document.getElementById('remainingTimeRow').style.display='none'; document.getElementById('sessionTimerDisplay').classList.remove('warning'); } const prodsDiv=document.getElementById('sessionProductsItems'); if(session.products?.length) prodsDiv.innerHTML=session.products.map(p=>`<div style="padding:0.45rem;background:var(--gray-50);border-radius:8px;margin-bottom:0.45rem;display:flex;justify-content:space-between;"><span>${p.name}</span><strong style="direction:ltr;">${parseFloat(p.price).toFixed(2)} EGP</strong></div>`).join(''); else prodsDiv.textContent='لا توجد منتجات'; let baseMin=session.initialDuration||session.duration||0; document.getElementById('baseDurationDisplay').textContent=`${baseMin} دقيقة (${(baseMin/60).toFixed(1)} ساعة)`; const extDiv=document.getElementById('extensionsBreakdown'); if(session.timeExtensions?.length>0){ extDiv.innerHTML=session.timeExtensions.map((ext,idx)=>`<div class="time-breakdown-row"><span class="time-breakdown-label">➕ الإضافة ${idx+1}:</span><span class="time-breakdown-value">${ext.minutes} دقيقة (${ext.cost.toFixed(2)} EGP)</span></div>`).join(''); extDiv.style.display='block'; }else{ extDiv.innerHTML=''; extDiv.style.display='none'; } document.getElementById('totalUsedTimeDisplay').textContent=formatTimeHMS(elapsedSec); }
-        function closeActiveSessionModal() { if(timerInterval) clearInterval(timerInterval); timerInterval=null; document.getElementById('activeSessionModal').classList.remove('active'); currentManagingSessionId=null; }
-        function showExtendTimeOptions() { document.getElementById('extendHours').value=0; document.getElementById('extendMinutes').value=30; calcExtendPrice(); document.getElementById('extendTimeModal').classList.add('active'); }
-        function calcExtendPrice() { const s=appData.sessions.find(x=>x.id===currentManagingSessionId); if(!s) return; const h=parseInt(document.getElementById('extendHours').value)||0; const m=parseInt(document.getElementById('extendMinutes').value)||0; const mins=(h*60)+m; document.getElementById('extendPriceDisplay').textContent=((mins/60)*s.hourlyRate).toFixed(2)+' EGP'; }
-        async function confirmExtendTime() { const s=appData.sessions.find(x=>x.id===currentManagingSessionId); if(!s) return; const h=parseInt(document.getElementById('extendHours').value)||0; const m=parseInt(document.getElementById('extendMinutes').value)||0; const mins=(h*60)+m; if(mins<=0){ showToast('error','خطأ','وقت غير صحيح'); return; } const cost=(mins/60)*s.hourlyRate; if(!s.timeExtensions) s.timeExtensions=[]; s.timeExtensions.push({ timestamp:new Date().toISOString(), minutes: mins, cost }); if(s.sessionType==='timed') s.duration=(s.duration||0)+mins; alertedSessions.delete(s.id); alertSoundPlayed.delete(`alert-${s.id}`); saveData(); closeExtendTimeModal(); updateActiveDisplay(s); showToast('success','تم!',`✓ +${mins} دقيقة (+${cost.toFixed(2)} EGP)`); }
+        function manageSession(id) { const session = appData.sessions.find(s => s.id === id); if (!session) return; currentManagingSessionId = id; isManagingSession = true; stopAllSounds(); const dev = appData.devices.find(d => d.id === session.deviceId); document.getElementById('activeDeviceInfo').textContent = dev ? `شاشة ${dev.number}` : '-'; document.getElementById('activeCustomerName').textContent = session.customerName; document.getElementById('activeSessionType').textContent = session.sessionType === 'open' ? '⏳ مفتوح' : '⏰ محدد'; if (timerInterval) clearInterval(timerInterval); timerInterval = setInterval(() => updateActiveDisplay(session), 1000); document.getElementById('activeSessionModal').classList.add('active'); updateActiveDisplay(session); }
+        function updateActiveDisplay(session) { const elapsedSeconds = calculateElapsedSeconds(session); document.getElementById('sessionTimerDisplay').textContent = `${Math.floor(elapsedSeconds / 3600).toString().padStart(2,'0')}:${Math.floor((elapsedSeconds % 3600) / 60).toString().padStart(2,'0')}:${(elapsedSeconds % 60).toString().padStart(2,'0')}`; document.getElementById('activeCurrentCost').textContent = `${calculateCurrentCost(session).toFixed(2)} EGP`; if (session.sessionType === 'timed') { let totalDuration = session.initialDuration || 0; if (session.timeExtensions?.length) totalDuration += session.timeExtensions.reduce((s, e) => s + e.minutes, 0); const remainingSeconds = (totalDuration * 60) - elapsedSeconds; if (remainingSeconds <= 0) { document.getElementById('sessionTimerDisplay').classList.add('warning'); document.getElementById('activeRemainingTime').textContent = '⚠️ انتهى!'; document.getElementById('remainingTimeRow').style.display = 'flex'; if (!isManagingSession) startAlarmLoop(); } else if (remainingSeconds <= 300) { document.getElementById('sessionTimerDisplay').classList.add('warning'); document.getElementById('activeRemainingTime').textContent = `${Math.floor(remainingSeconds / 3600).toString().padStart(2,'0')}:${Math.floor((remainingSeconds % 3600) / 60).toString().padStart(2,'0')}:${(remainingSeconds % 60).toString().padStart(2,'0')}`; document.getElementById('remainingTimeRow').style.display = 'flex'; } else { document.getElementById('sessionTimerDisplay').classList.remove('warning'); document.getElementById('activeRemainingTime').textContent = `${Math.floor(remainingSeconds / 3600).toString().padStart(2,'0')}:${Math.floor((remainingSeconds % 3600) / 60).toString().padStart(2,'0')}:${(remainingSeconds % 60).toString().padStart(2,'0')}`; document.getElementById('remainingTimeRow').style.display = 'flex'; stopAlarmLoop(); } } const prodsDiv = document.getElementById('sessionProductsItems'); if (session.products?.length) prodsDiv.innerHTML = session.products.map(p => `<div style="padding:0.45rem;background:var(--gray-50);border-radius:8px;margin-bottom:0.45rem;display:flex;justify-content:space-between;"><span>${p.name}</span><strong>${parseFloat(p.price).toFixed(2)} EGP</strong></div>`).join(''); else prodsDiv.textContent = 'لا توجد منتجات'; }
+        function closeActiveSessionModal() { if (timerInterval) clearInterval(timerInterval); timerInterval = null; stopAlarmLoop(); isManagingSession = false; document.getElementById('activeSessionModal').classList.remove('active'); currentManagingSessionId = null; }
+        function showExtendTimeOptions() { document.getElementById('extendHours').value = 0; document.getElementById('extendMinutes').value = 30; calcExtendPrice(); document.getElementById('extendTimeModal').classList.add('active'); }
+        function calcExtendPrice() { const s = appData.sessions.find(x => x.id === currentManagingSessionId); if (!s) return; const mins = (parseInt(document.getElementById('extendHours').value) || 0) * 60 + (parseInt(document.getElementById('extendMinutes').value) || 0); document.getElementById('extendPriceDisplay').textContent = ((mins / 60) * s.hourlyRate).toFixed(2) + ' EGP'; }
+        document.getElementById('extendHours')?.addEventListener('input', calcExtendPrice); document.getElementById('extendMinutes')?.addEventListener('input', calcExtendPrice);
+        function confirmExtendTime() { const s = appData.sessions.find(x => x.id === currentManagingSessionId); if (!s) return; const mins = (parseInt(document.getElementById('extendHours').value) || 0) * 60 + (parseInt(document.getElementById('extendMinutes').value) || 0); if (mins <= 0) { showToast('error', 'خطأ', 'وقت غير صحيح'); return; } const cost = (mins / 60) * s.hourlyRate; if (!s.timeExtensions) s.timeExtensions = []; s.timeExtensions.push({ timestamp: new Date().toISOString(), minutes: mins, cost }); if (s.sessionType === 'timed') s.duration = (s.duration || 0) + mins; alertedSessions.delete(s.id); alertSoundPlayed.delete(`alert-${s.id}`); saveData(); closeExtendTimeModal(); updateActiveDisplay(s); showToast('success', 'تم!', `✓ +${mins} دقيقة (+${cost.toFixed(2)} EGP)`); }
         function closeExtendTimeModal() { document.getElementById('extendTimeModal').classList.remove('active'); }
-        function endActiveSessionAndShowInvoice() { const s=appData.sessions.find(x=>x.id===currentManagingSessionId); if(!s) return; const elapsedSec=calculateElapsedSeconds(s); const elapsedMin=elapsedSec/60; const dev=appData.devices.find(d=>d.id===s.deviceId); const timeCost=calculateTimeCost(s); const prodCost=s.products?.reduce((sum,p)=>sum+p.price,0)||0; const final=timeCost+prodCost; s.status='completed'; s.endTime=new Date().toISOString(); s.finalCost=final; s.totalMinutes=Math.floor(elapsedMin); s.totalSeconds=elapsedSec; const idx=appData.devices.findIndex(d=>d.id===s.deviceId); if(idx!==-1) appData.devices[idx].status='available'; appData.transactions.push({ date:new Date().toISOString(), type:'session', customerName:s.customerName, description:`${s.type} - ${Math.floor(elapsedMin)} دقيقة`, amount:timeCost, screenNumber:dev?.number }); if(s.products?.length){ s.products.forEach(p=>{ appData.transactions.push({ date:new Date().toISOString(), type:'product', customerName:s.customerName, description:p.name, amount:p.price, screenNumber:dev?.number }); }); } if(s.customerName && s.customerName!=='عميل بدون اسم'){ const ci=appData.clients.findIndex(c=>c.name===s.customerName); if(ci!==-1){ appData.clients[ci].visits++; appData.clients[ci].total+=final; }else{ appData.clients.push({ name:s.customerName, phone:'', visits:1, total:final }); } } alertedSessions.delete(s.id); alertSoundPlayed.delete(`alert-${s.id}`); saveData(); closeActiveSessionModal(); generateInvoice(s,dev,final,elapsedSec,timeCost,prodCost); renderAll(); }
-        function generateInvoice(s,dev,final,elapsedSec,timeCost,prodCost){ const start=new Date(s.startTime); const end=new Date(s.endTime); const mins=Math.floor(elapsedSec/60); const secs=elapsedSec%60; let extHTML=''; if(s.timeExtensions?.length>0){ const extCost=s.timeExtensions.reduce((s,e)=>s+e.cost,0); extHTML=`<div class="invoice-section"><div class="invoice-section-title">⏰ الوقت الإضافي</div>${s.timeExtensions.map((e,idx)=>`<div class="invoice-row"><span>➕ الإضافة ${idx+1}: +${e.minutes} دقيقة</span><span style="direction:ltr">${e.cost.toFixed(2)} EGP</span></div>`).join('')}<div class="invoice-row" style="font-weight:800;border-top:2px solid var(--warning);margin-top:0.5rem;padding-top:0.5rem;"><span>إجمالي الإضافات:</span><span style="direction:ltr;color:var(--warning);">${extCost.toFixed(2)} EGP</span></div></div>`; } document.getElementById('invoiceBody').innerHTML=`<div class="invoice-section"><div class="invoice-section-title">📋 معلومات الجلسة</div><div class="invoice-row"><span>رقم الشاشة:</span><strong>${dev?.number||'-'}</strong></div><div class="invoice-row"><span>نوع الجهاز:</span><strong>${s.type||'-'}</strong></div><div class="invoice-row"><span>العميل:</span><strong>${s.customerName}</strong></div><div class="invoice-row"><span>نوع الجلسة:</span><strong>${s.sessionType==='open'?'مفتوح':'محدد'}</strong></div></div><div class="invoice-section"><div class="invoice-section-title">⏱ تفاصيل الوقت الدقيقة</div><div class="invoice-row"><span>البداية:</span><span style="direction:ltr;">${formatTime(start)}</span></div><div class="invoice-row"><span>النهاية:</span><span style="direction:ltr;">${formatTime(end)}</span></div><div class="invoice-row"><span>📌 المدة الأساسية:</span><strong>${s.initialDuration||s.duration||0} دقيقة (${((s.initialDuration||s.duration||0)/60).toFixed(1)} ساعة)</strong></div><div class="invoice-row"><span>⏱ الوقت الفعلي المستخدم:</span><strong style="color:var(--primary);">${mins} دقيقة ${secs} ثانية</strong></div><div class="invoice-row"><span>سعر/ساعة:</span><span style="direction:ltr;">${s.hourlyRate} EGP</span></div><div class="invoice-row"><span>تكلفة الوقت:</span><span style="direction:ltr;font-weight:700;">${timeCost.toFixed(2)} EGP</span></div></div>${extHTML}<div class="invoice-section"><div class="invoice-section-title">🛒 المنتجات</div>${s.products?.length?`<div class="invoice-products-container"><table class="invoice-products-table"><thead><tr><th>المنتج</th><th>السعر</th></tr></thead><tbody>${s.products.map(p=>`<tr><td>${p.name}</td><td style="direction:ltr;text-align:left;">${parseFloat(p.price).toFixed(2)} EGP</td></tr>`).join('')}</tbody><tfoot><tr><td><strong>الإجمالي</strong></td><td style="direction:ltr;text-align:left;color:var(--primary);"><strong>${prodCost.toFixed(2)} EGP</strong></td></tr></tfoot></table></div>`:'<p style="color:var(--gray-500);text-align:center;padding:1rem;">لا توجد منتجات</p>'}</div><div class="invoice-section" style="border:none;"><div class="invoice-row total"><span>💰 الإجمالي الكلي:</span><span style="direction:ltr;">${final.toFixed(2)} EGP</span></div><div style="text-align:center;margin-top:1rem;padding:1rem;background:#d1fae5;border-radius:12px;font-weight:700;color:#065f46;">✅ تم بنجاح - شكراً لزيارتك!</div></div>`; document.getElementById('invoiceModal').classList.add('active'); }
-        function closeInvoiceModal(){ document.getElementById('invoiceModal').classList.remove('active'); }
-        function openAddProductModal(){ document.getElementById('productName').value=''; document.getElementById('productPrice').value=''; document.getElementById('addProductModal').classList.add('active'); }
-        function closeAddProductModal(){ document.getElementById('addProductModal').classList.remove('active'); }
-        function addNewProduct(){ const name=document.getElementById('productName').value.trim(); const price=parseFloat(document.getElementById('productPrice').value); if(!name){ showToast('error','خطأ','اسم المنتج مطلوب'); return; } if(!price||price<=0){ showToast('error','خطأ','السعر مطلوب'); return; } appData.products.push({ id:Date.now(), name, price, createdAt:new Date().toISOString() }); saveData(); closeAddProductModal(); renderProducts(); showToast('success','تم!',`✓ "${name}" تمت الإضافة`); }
-        function openSelectSessionModal(productId){ const product=appData.products.find(p=>p.id===productId); if(!product) return; pendingProductId=productId; const active=appData.sessions.filter(s=>s.status==='active'); if(!active.length){ showToast('warning','تنبيه','لا توجد جلسات نشطة'); return; } document.getElementById('activeSessionsList').innerHTML=active.map(sess=>{ const dev=appData.devices.find(d=>d.id===sess.deviceId); const elapsed=calculateElapsedSeconds(sess); return `<div class="session-list-item" onclick="addProductToSession(${sess.id})" style="padding:1rem;background:var(--gray-50);border-radius:12px;margin-bottom:0.75rem;cursor:pointer;"><div><strong style="font-size:1rem;">🖥 شاشة ${dev?.number||''}</strong><div style="color:var(--gray-600);font-size:0.85rem;margin-top:0.2rem;">${sess.type||''} | ${sess.customerName} | ${formatTimeDetailed(elapsed)}</div></div><div style="direction:ltr;text-align:left;"><span style="font-weight:800;color:var(--primary);">${calculateCurrentCost(sess).toFixed(2)} EGP</span></div></div>`; }).join(''); document.getElementById('selectSessionModal').classList.add('active'); }
-        function closeSelectSessionModal(){ document.getElementById('selectSessionModal').classList.remove('active'); pendingProductId=null; }
-        function addProductToSession(sessionId){ const product=appData.products.find(p=>p.id===pendingProductId); const session=appData.sessions.find(s=>s.id===sessionId); if(!product||!session) return; if(!session.products) session.products=[]; session.products.push({ id:product.id, name:product.name, price:product.price, addedAt:new Date().toISOString() }); saveData(); closeSelectSessionModal(); renderProducts(); const dev=appData.devices.find(d=>d.id===session.deviceId); showToast('success','تم!',`✓ "${product.name}" أُضيف لشاشة ${dev?.number||sessionId}`); }
-        function backupData(){ const str=JSON.stringify(appData,null,2); const blob=new Blob([str],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`backup_${new Date().toISOString().split('T')[0]}.json`; a.click(); URL.revokeObjectURL(url); showToast('success','تم التصدير','✓ تم تصدير البيانات'); }
-        function restoreData(event){ const file=event.target.files[0]; if(file){ const reader=new FileReader(); reader.onload=(e)=>{ try{ appData=JSON.parse(e.target.result); saveData(); renderAll(); showToast('success','تم الاستعادة','✓ تم استعادة البيانات'); }catch(err){ showToast('error','خطأ','❌ ملف غير صالح'); } }; reader.readAsText(file); } }
-        function registerServiceWorkerProperly(){ if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js').then(reg=>console.log('✅ SW registered:',reg.scope)).catch(err=>console.log('❌ SW failed:',err)); } }
-        function setupInstallPrompt(){ if(isRunningAsPWA()||localStorage.getItem('pwaInstalled')){ hideInstallBanner(); return; } setTimeout(()=>{ if(!isRunningAsPWA()&&!localStorage.getItem('pwaInstalled')) showInstallBanner(); },3000); window.addEventListener('beforeinstallprompt',(e)=>{ e.preventDefault(); deferredPrompt=e; if(!isRunningAsPWA()) showInstallBanner(); }); window.addEventListener('appinstalled',()=>{ deferredPrompt=null; localStorage.setItem('pwaInstalled','true'); hideInstallBanner(); showToast('success','تم التثبيت!','التطبيق جاهز 🎉'); }); }
-        function showInstallBanner(){ if(isRunningAsPWA()) return; const banner=document.getElementById('installBanner'); if(banner&&!localStorage.getItem('pwaInstalled')){ banner.classList.remove('hidden'); banner.classList.remove('pwa-hidden'); } }
-        function hideInstallBanner(){ const banner=document.getElementById('installBanner'); if(banner){ banner.classList.add('hidden'); banner.classList.add('pwa-hidden'); } }
-        function dismissInstall(){ localStorage.setItem('pwaDismissed','true'); hideInstallBanner(); }
-        async function installApp(){ if(deferredPrompt){ deferredPrompt.prompt(); const result=await deferredPrompt.userChoice; deferredPrompt=null; if(result.outcome==='accepted') localStorage.setItem('pwaInstalled','true'); hideInstallBanner(); }else{ showToast('info','تنبيه','يمكنك تثبيت التطبيق من قائمة المتصفح ☝️'); } }
 
-        // Global alert checker with professional notifications
-        function startGlobalAlertChecker(){ if(globalAlertInterval) clearInterval(globalAlertInterval); globalAlertInterval=setInterval(()=>{ checkAllSessionsForExpiration(); renderSessions(); },5000); }
-        function checkAllSessionsForExpiration(){ const activeSessions=appData.sessions.filter(s=>s.status==='active'&&s.sessionType==='timed'); if(activeSessions.length===0) return; const now=Date.now(); activeSessions.forEach(session=>{ const start=new Date(session.startTime).getTime(); let totalDuration=session.duration||0; if(session.timeExtensions?.length>0) totalDuration=session.initialDuration+session.timeExtensions.reduce((s,e)=>s+e.minutes,0); const elapsedMinutes=(now-start)/60000; const remainingMinutes=totalDuration-elapsedMinutes; const alertThreshold=Math.max(1,Math.floor(totalDuration*(ALERT_PERCENTAGE_THRESHOLD/100))); const device=appData.devices.find(d=>d.id===session.deviceId); const deviceNum=device?device.number:'?'; if(remainingMinutes>0 && remainingMinutes<=alertThreshold){ if(!alertSoundPlayed.has(`alert-${session.id}`)){ alertSoundPlayed.add(`alert-${session.id}`); playSound('alert'); sendProfessionalNotification(session.id,'⏰ تنبيه - وقت قريب من الانتهاء!',`متبقي ${Math.ceil(remainingMinutes)} دقيقة فقط`,'warning',deviceNum,session.customerName); showToast('warning','⏰ تنبيه!',`جلسة ${session.customerName}\nالشاشة ${deviceNum}\nمتبقي ${Math.ceil(remainingMinutes)} دقيقة`); } } else if(elapsedMinutes>=totalDuration){ if(!alertedSessions.has(session.id)){ alertedSessions.add(session.id); playSound('alert'); sendProfessionalNotification(session.id,'🚨 انتهاء الوقت - هام جداً!',`الوقت انتهى!\nالشاشة: ${deviceNum}\nالعميل: ${session.customerName}`,'critical',deviceNum,session.customerName); if(document.visibilityState==='visible') showToast('alert-critical','🚨 انتهاء الوقت!',`الشاشة: ${deviceNum}\nالعميل: ${session.customerName}`,25000,true); } } }); }
-        function checkExpiredSessionsOnStartup(){ const now=Date.now(); let any=false; for(const session of appData.sessions){ if(session.status==='active'&&session.sessionType==='timed'){ const start=new Date(session.startTime).getTime(); let total=session.duration||0; if(session.timeExtensions?.length>0) total=session.initialDuration+session.timeExtensions.reduce((s,e)=>s+e.minutes,0); if((now-start)/60000 >= total && !alertedSessions.has(session.id)){ alertedSessions.add(session.id); any=true; const dev=appData.devices.find(d=>d.id===session.deviceId); sendProfessionalNotification(session.id,'🚨 جلسة منتهية (تم اكتشافها عند فتح التطبيق)',`الشاشة: ${dev?.number||'?'}\nالعميل: ${session.customerName}\nانتهى الوقت منذ فترة`,'critical',dev?.number||'?',session.customerName); } } } if(any) showToast('warning','تنبيه','توجد جلسات منتهية، يرجى مراجعتها'); }
+        function endActiveSessionAndShowInvoice() { const s = appData.sessions.find(x => x.id === currentManagingSessionId); if (!s) return; const elapsedSeconds = calculateElapsedSeconds(s); const elapsedMinutes = elapsedSeconds / 60; const dev = appData.devices.find(d => d.id === s.deviceId); const timeCost = calculateTimeCost(s); const prodCost = s.products?.reduce((sum, p) => sum + p.price, 0) || 0; const final = timeCost + prodCost; s.status = 'completed'; s.endTime = new Date().toISOString(); s.finalCost = final; s.totalMinutes = Math.floor(elapsedMinutes); const idx = appData.devices.findIndex(d => d.id === s.deviceId); if (idx !== -1) appData.devices[idx].status = 'available'; appData.transactions.push({ date: new Date().toISOString(), type: 'session', customerName: s.customerName, description: `${s.type} - ${Math.floor(elapsedMinutes)} دقيقة`, amount: timeCost, screenNumber: dev?.number }); if (s.products?.length) s.products.forEach(p => appData.transactions.push({ date: new Date().toISOString(), type: 'product', customerName: s.customerName, description: p.name, amount: p.price, screenNumber: dev?.number })); if (s.customerName && s.customerName !== 'عميل بدون اسم') { const ci = appData.clients.findIndex(c => c.name === s.customerName); if (ci !== -1) { appData.clients[ci].visits++; appData.clients[ci].total += final; } else appData.clients.push({ name: s.customerName, phone: '', visits: 1, total: final }); } alertedSessions.delete(s.id); alertSoundPlayed.delete(`alert-${s.id}`); saveData(); closeActiveSessionModal(); generateInvoice(s, dev, final, elapsedSeconds, timeCost, prodCost); renderAll(); releaseWakeLock(); }
+        function generateInvoice(s, dev, final, elapsedSeconds, timeCost, prodCost) { const start = new Date(s.startTime); const end = new Date(); document.getElementById('invoiceBody').innerHTML = `<div style="margin-bottom:1rem;"><div class="invoice-row" style="display:flex;justify-content:space-between;padding:0.4rem 0;"><span>رقم الشاشة:</span><strong>${dev?.number || '-'}</strong></div><div class="invoice-row" style="display:flex;justify-content:space-between;padding:0.4rem 0;"><span>العميل:</span><strong>${s.customerName}</strong></div><div class="invoice-row" style="display:flex;justify-content:space-between;padding:0.4rem 0;"><span>نوع الجلسة:</span><strong>${s.sessionType === 'open' ? 'مفتوح' : 'محدد'}</strong></div><div class="invoice-row" style="display:flex;justify-content:space-between;padding:0.4rem 0;"><span>البداية:</span><span>${start.toLocaleTimeString('ar-EG')}</span></div><div class="invoice-row" style="display:flex;justify-content:space-between;padding:0.4rem 0;"><span>النهاية:</span><span>${end.toLocaleTimeString('ar-EG')}</span></div><div class="invoice-row" style="display:flex;justify-content:space-between;padding:0.4rem 0;"><span>الوقت المستخدم:</span><strong>${Math.floor(elapsedSeconds / 60)} دقيقة</strong></div><div class="invoice-row" style="display:flex;justify-content:space-between;padding:0.4rem 0;"><span>تكلفة الوقت:</span><strong>${timeCost.toFixed(2)} EGP</strong></div>${s.products?.length ? `<div style="margin-top:0.5rem;"><strong>🛒 المنتجات:</strong><ul>${s.products.map(p => `<li>${p.name} - ${p.price.toFixed(2)} EGP</li>`).join('')}</ul><div style="display:flex;justify-content:space-between;margin-top:0.5rem;"><span>إجمالي المنتجات:</span><strong>${prodCost.toFixed(2)} EGP</strong></div></div>` : ''}<div style="margin-top:1rem;padding:0.8rem;background:#d1fae5;border-radius:12px;text-align:center;font-weight:800;">💰 الإجمالي الكلي: ${final.toFixed(2)} EGP</div></div>`; document.getElementById('invoiceModal').classList.add('active'); }
+        function closeInvoiceModal() { document.getElementById('invoiceModal').classList.remove('active'); }
 
-        function renderAll(){ renderDevices(); renderProducts(); renderClients(); updateStats(); renderReports(); renderSessions(); }
-        function init(){ loadData(); if(isRunningAsPWA()){ document.getElementById('installBanner').classList.add('pwa-hidden'); localStorage.setItem('pwaInstalled','true'); } if(sessionStorage.getItem('isLoggedIn')==='true'){ document.getElementById('loginScreen').classList.add('hidden'); document.getElementById('appContainer').classList.add('active'); } if(!appData.devices.length) for(let i=1;i<=16;i++) appData.devices.push({ id:i, number:i, status:'available' }); saveData(); if('Notification' in window && Notification.permission === 'default') requestNotificationPermission(); checkExpiredSessionsOnStartup(); renderAll(); startGlobalAlertChecker(); setupInstallPrompt(); registerServiceWorkerProperly(); if('serviceWorker' in navigator){ navigator.serviceWorker.addEventListener('message',event=>{ if(event.data && event.data.type==='GET_EXPIRED_SESSIONS' && event.ports && event.ports[0]){ const now=Date.now(); const expired=[]; for(const s of appData.sessions){ if(s.status==='active' && s.sessionType==='timed'){ let total=s.duration||0; if(s.timeExtensions?.length>0) total=s.initialDuration+s.timeExtensions.reduce((a,b)=>a+b.minutes,0); if((now - new Date(s.startTime).getTime())/60000 >= total){ const dev=appData.devices.find(d=>d.id===s.deviceId); expired.push({ id:s.id, deviceNumber:dev?dev.number:'?', customerName:s.customerName }); } } } event.ports[0].postMessage({ expiredSessions: expired }); } }); } }
+        function openAddProductModal() { document.getElementById('productName').value = ''; document.getElementById('productPrice').value = ''; document.getElementById('addProductModal').classList.add('active'); }
+        function closeAddProductModal() { document.getElementById('addProductModal').classList.remove('active'); }
+        function addNewProduct() { const name = document.getElementById('productName').value.trim(); const price = parseFloat(document.getElementById('productPrice').value); if (!name) { showToast('error', 'خطأ', 'اسم المنتج مطلوب'); return; } if (!price || price <= 0) { showToast('error', 'خطأ', 'السعر مطلوب'); return; } appData.products.push({ id: Date.now(), name, price, createdAt: new Date().toISOString() }); saveData(); closeAddProductModal(); renderProducts(); showToast('success', 'تم!', `✓ "${name}" تمت الإضافة`); }
+        function openSelectSessionModal(productId) { const product = appData.products.find(p => p.id === productId); if (!product) return; pendingProductId = productId; const active = appData.sessions.filter(s => s.status === 'active'); if (!active.length) { showToast('warning', 'تنبيه', 'لا توجد جلسات نشطة'); return; } document.getElementById('activeSessionsList').innerHTML = active.map(sess => { const dev = appData.devices.find(d => d.id === sess.deviceId); return `<div onclick="addProductToSession(${sess.id})" style="padding:1rem;background:var(--gray-50);border-radius:12px;margin-bottom:0.75rem;cursor:pointer;"><div><strong>🖥 شاشة ${dev?.number || ''}</strong><div style="font-size:0.85rem;">${sess.customerName}</div></div></div>`; }).join(''); document.getElementById('selectSessionModal').classList.add('active'); }
+        function closeSelectSessionModal() { document.getElementById('selectSessionModal').classList.remove('active'); pendingProductId = null; }
+        function addProductToSession(sessionId) { const product = appData.products.find(p => p.id === pendingProductId); const session = appData.sessions.find(s => s.id === sessionId); if (!product || !session) return; if (!session.products) session.products = []; session.products.push({ id: product.id, name: product.name, price: product.price, addedAt: new Date().toISOString() }); saveData(); closeSelectSessionModal(); renderProducts(); showToast('success', 'تم!', `✓ "${product.name}" أُضيف للجلسة`); }
+        function backupData() { const str = JSON.stringify(appData, null, 2); const blob = new Blob([str], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `backup_${new Date().toISOString().split('T')[0]}.json`; a.click(); URL.revokeObjectURL(url); showToast('success', 'تم التصدير', '✓ تم تصدير البيانات'); }
+        function restoreData(event) { const file = event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = (e) => { try { appData = JSON.parse(e.target.result); saveData(); renderAll(); showToast('success', 'تم الاستعادة', '✓ تم استعادة البيانات'); } catch(err) { showToast('error', 'خطأ', '❌ ملف غير صالح'); } }; reader.readAsText(file); } }
+        function setupInstallPrompt() { if (isRunningAsPWA() || localStorage.getItem('pwaInstalled')) { hideInstallBanner(); return; } setTimeout(() => { if (!isRunningAsPWA() && !localStorage.getItem('pwaInstalled')) showInstallBanner(); }, 3000); window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; if (!isRunningAsPWA()) showInstallBanner(); }); window.addEventListener('appinstalled', () => { deferredPrompt = null; localStorage.setItem('pwaInstalled', 'true'); hideInstallBanner(); showToast('success', 'تم التثبيت!', 'التطبيق جاهز 🎉'); }); }
+        function showInstallBanner() { if (isRunningAsPWA()) return; const banner = document.getElementById('installBanner'); if (banner && !localStorage.getItem('pwaInstalled')) { banner.classList.remove('hidden', 'pwa-hidden'); } }
+        function hideInstallBanner() { const banner = document.getElementById('installBanner'); if (banner) banner.classList.add('hidden', 'pwa-hidden'); }
+        function dismissInstall() { localStorage.setItem('pwaDismissed', 'true'); hideInstallBanner(); }
+        async function installApp() { if (deferredPrompt) { deferredPrompt.prompt(); const result = await deferredPrompt.userChoice; deferredPrompt = null; if (result.outcome === 'accepted') localStorage.setItem('pwaInstalled', 'true'); hideInstallBanner(); } else showToast('info', 'تنبيه', 'يمكنك تثبيت التطبيق من قائمة المتصفح ☝️'); }
 
-        // Modal close on overlay click
-        ['sessionModal','activeSessionModal','addProductModal','extendTimeModal','selectSessionModal','invoiceModal'].forEach(id=>{ document.getElementById(id).addEventListener('click',(e)=>{ if(e.target.id===id) window['close'+(id.charAt(0).toUpperCase()+id.slice(1))]?.(); }); });
+        ['sessionModal', 'activeSessionModal', 'addProductModal', 'extendTimeModal', 'selectSessionModal', 'invoiceModal'].forEach(id => { document.getElementById(id)?.addEventListener('click', (e) => { if (e.target.id === id) { const closeFn = { sessionModal: closeModal, activeSessionModal: closeActiveSessionModal, addProductModal: closeAddProductModal, extendTimeModal: closeExtendTimeModal, selectSessionModal: closeSelectSessionModal, invoiceModal: closeInvoiceModal }[id]; if (closeFn) closeFn(); } }); });
+
         init();
     </script>
 </body>
