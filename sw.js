@@ -104,7 +104,7 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// ===== ENHANCED NOTIFICATION HANDLER =====
+// ===== ENHANCED NOTIFICATION HANDLER FOR BACKGROUND MODE =====
 self.addEventListener('message', event => {
   const { data } = event;
   
@@ -118,10 +118,8 @@ self.addEventListener('message', event => {
     showBackgroundNotification(data.payload);
   }
   
-  // Handle sound notification
+  // Handle sound notification (forward to clients)
   if (data && data.type === 'PLAY_SOUND') {
-    // Note: Service workers cannot play sounds directly,
-    // but we can forward to all clients to play
     self.clients.matchAll().then(clients => {
       clients.forEach(client => {
         client.postMessage({ type: 'PLAY_SOUND', sound: data.sound });
@@ -130,7 +128,7 @@ self.addEventListener('message', event => {
   }
 });
 
-// Professional background notification function
+// Professional background notification function (works even when app is closed/locked)
 async function showBackgroundNotification(notificationData) {
   const { 
     title, 
@@ -142,11 +140,11 @@ async function showBackgroundNotification(notificationData) {
     remainingMinutes = null
   } = notificationData;
   
-  // Build rich notification body
+  // Build rich notification body with professional details
   let body = message;
   if (deviceNumber && customerName) {
     body = `🖥 الشاشة: ${deviceNumber}\n👤 العميل: ${customerName}\n\n${message}`;
-    if (remainingMinutes !== null) {
+    if (remainingMinutes !== null && remainingMinutes > 0) {
       body += `\n⏰ متبقي: ${remainingMinutes} دقيقة`;
     }
   }
@@ -167,19 +165,18 @@ async function showBackgroundNotification(notificationData) {
     silent: false,
     renotify: true,
     requireInteraction: type === 'critical', // Stay visible until user interacts
-    actions: []
-  };
-  
-  // Add actions for critical notifications
-  if (type === 'critical') {
-    options.actions = [
+    actions: type === 'critical' ? [
       { action: 'open', title: '🎮 فتح التطبيق' },
       { action: 'dismiss', title: 'إغلاق' }
-    ];
+    ] : []
+  };
+  
+  // Add custom data for click handling
+  if (sessionId) {
     options.data = { sessionId, url: './index.html' };
   }
   
-  // Show the notification
+  // Show the notification via Service Worker
   try {
     await self.registration.showNotification(title, options);
     console.log('✅ Background notification shown:', title);
@@ -188,12 +185,13 @@ async function showBackgroundNotification(notificationData) {
   }
 }
 
-// Handle notification clicks
+// Handle notification clicks (when user taps on notification)
 self.addEventListener('notificationclick', event => {
   event.notification.close();
   
-  const { action, data } = event;
-  const urlToOpen = data?.url || './index.html';
+  const { action, notification } = event;
+  const data = notification.data || {};
+  const urlToOpen = data.url || './index.html';
   
   if (action === 'open' || !action) {
     // Focus or open the app
@@ -209,22 +207,18 @@ self.addEventListener('notificationclick', event => {
           // Open new window
           return self.clients.openWindow(urlToOpen);
         })
+        .then(windowClient => {
+          // Send session ID to the app after a short delay
+          if (data.sessionId && windowClient) {
+            setTimeout(() => {
+              windowClient.postMessage({ 
+                type: 'FOCUS_SESSION', 
+                sessionId: data.sessionId 
+              });
+            }, 500);
+          }
+        })
     );
-  }
-  
-  // Send session ID to the app if available
-  if (data?.sessionId) {
-    setTimeout(() => {
-      self.clients.matchAll({ type: 'window', includeUncontrolled: true })
-        .then(clients => {
-          clients.forEach(client => {
-            client.postMessage({ 
-              type: 'FOCUS_SESSION', 
-              sessionId: data.sessionId 
-            });
-          });
-        });
-    }, 500);
   }
 });
 
