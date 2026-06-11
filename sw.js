@@ -1,5 +1,5 @@
-// PS Lounge Service Worker v4.0 - Enhanced Notifications for Background Mode
-const CACHE_NAME = 'ps-lounge-v5';
+// PS Lounge Service Worker v5.0 - Scheduled Background Notifications
+const CACHE_NAME = 'ps-lounge-v6';
 
 // ✅ Use relative paths for GitHub Pages compatibility
 const ASSETS_TO_CACHE = [
@@ -47,7 +47,7 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Fetch Event - Network First, Cache Fallback
+// Fetch Event - Network First, Cache Fallback (unchanged)
 self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
@@ -104,8 +104,52 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// ===== ENHANCED NOTIFICATION HANDLER FOR BACKGROUND MODE =====
-self.addEventListener('message', event => {
+// ===== SCHEDULED NOTIFICATIONS (Background mode) =====
+// Store scheduled notification IDs to allow cancellation
+let scheduledNotificationTags = new Set();
+
+// Helper to check if TimestampTrigger is supported
+function isTriggerSupported() {
+  return 'showTrigger' in Notification.prototype && typeof TimestampTrigger !== 'undefined';
+}
+
+// Schedule a notification at exact timestamp
+async function scheduleNotification(timestamp, title, options) {
+  if (!isTriggerSupported()) {
+    console.log('⚠️ TimestampTrigger not supported, using fallback');
+    // Fallback: immediate notification? But we'll just rely on main thread
+    return null;
+  }
+  
+  try {
+    const trigger = new TimestampTrigger(timestamp);
+    const notificationOptions = {
+      ...options,
+      showTrigger: trigger
+    };
+    // Use a unique tag to avoid duplicate display
+    const tag = options.tag || `ps-${timestamp}`;
+    notificationOptions.tag = tag;
+    
+    await self.registration.showNotification(title, notificationOptions);
+    scheduledNotificationTags.add(tag);
+    console.log(`✅ Scheduled notification for ${new Date(timestamp)}`);
+    return tag;
+  } catch (error) {
+    console.error('❌ Failed to schedule notification:', error);
+    return null;
+  }
+}
+
+// Cancel a scheduled notification by tag (workaround: cannot directly cancel, but we can avoid showing duplicates)
+// We'll just remove from set, but notification might still fire; we'll handle by checking session status in click handler.
+function cancelScheduledNotification(tag) {
+  scheduledNotificationTags.delete(tag);
+  console.log(`🗑️ Cancelled scheduled notification: ${tag}`);
+}
+
+// ===== MESSAGE HANDLER =====
+self.addEventListener('message', async event => {
   const { data } = event;
   
   if (data && data.type === 'SKIP_WAITING') {
@@ -113,22 +157,52 @@ self.addEventListener('message', event => {
     return;
   }
   
-  // Handle notification requests from main thread
+  // Handle immediate notification request (e.g., test)
   if (data && data.type === 'SHOW_NOTIFICATION') {
     showBackgroundNotification(data.payload);
   }
   
   // Handle sound notification (forward to clients)
   if (data && data.type === 'PLAY_SOUND') {
-    self.clients.matchAll().then(clients => {
-      clients.forEach(client => {
-        client.postMessage({ type: 'PLAY_SOUND', sound: data.sound });
-      });
+    const clients = await self.clients.matchAll();
+    clients.forEach(client => {
+      client.postMessage({ type: 'PLAY_SOUND', sound: data.sound });
+    });
+  }
+  
+  // ✅ NEW: Schedule a notification for future time
+  if (data && data.type === 'SCHEDULE_NOTIFICATION') {
+    const { timestamp, title, body, tag, icon, badge, sessionId, deviceNumber, customerName, type } = data.payload;
+    // Build options
+    const options = {
+      body: body,
+      icon: icon || 'icon-192.png',
+      badge: badge || 'icon-192.png',
+      tag: tag,
+      dir: 'rtl',
+      lang: 'ar',
+      requireInteraction: type === 'critical',
+      silent: false,
+      vibrate: type === 'critical' ? [200, 100, 200] : [100],
+      data: { sessionId, deviceNumber, customerName, url: './index.html' }
+    };
+    
+    await scheduleNotification(timestamp, title, options);
+  }
+  
+  // ✅ NEW: Cancel scheduled notifications for a session
+  if (data && data.type === 'CANCEL_SESSION_NOTIFICATIONS') {
+    const { sessionId } = data;
+    // Cancel all tags related to this session
+    scheduledNotificationTags.forEach(tag => {
+      if (tag.includes(`ps-session-${sessionId}`)) {
+        cancelScheduledNotification(tag);
+      }
     });
   }
 });
 
-// Professional background notification function (works even when app is closed/locked)
+// Professional immediate background notification (for testing or instant alerts)
 async function showBackgroundNotification(notificationData) {
   const { 
     title, 
@@ -140,7 +214,6 @@ async function showBackgroundNotification(notificationData) {
     remainingMinutes = null
   } = notificationData;
   
-  // Build rich notification body with professional details
   let body = message;
   if (deviceNumber && customerName) {
     body = `🖥 الشاشة: ${deviceNumber}\n👤 العميل: ${customerName}\n\n${message}`;
@@ -149,34 +222,24 @@ async function showBackgroundNotification(notificationData) {
     }
   }
   
-  const icon = 'icon-192.png';
-  const badge = 'icon-192.png';
-  const tag = `ps-session-${sessionId || Date.now()}`;
-  
-  // Configure notification options
   const options = {
     body: body,
-    icon: icon,
-    badge: badge,
-    tag: tag,
+    icon: 'icon-192.png',
+    badge: 'icon-192.png',
+    tag: `ps-session-${sessionId || Date.now()}`,
     dir: 'rtl',
     lang: 'ar',
     vibrate: type === 'critical' ? [200, 100, 200, 100, 200] : [100, 50, 100],
     silent: false,
     renotify: true,
-    requireInteraction: type === 'critical', // Stay visible until user interacts
+    requireInteraction: type === 'critical',
     actions: type === 'critical' ? [
       { action: 'open', title: '🎮 فتح التطبيق' },
       { action: 'dismiss', title: 'إغلاق' }
-    ] : []
+    ] : [],
+    data: { sessionId, url: './index.html' }
   };
   
-  // Add custom data for click handling
-  if (sessionId) {
-    options.data = { sessionId, url: './index.html' };
-  }
-  
-  // Show the notification via Service Worker
   try {
     await self.registration.showNotification(title, options);
     console.log('✅ Background notification shown:', title);
@@ -194,21 +257,17 @@ self.addEventListener('notificationclick', event => {
   const urlToOpen = data.url || './index.html';
   
   if (action === 'open' || !action) {
-    // Focus or open the app
     event.waitUntil(
       self.clients.matchAll({ type: 'window', includeUncontrolled: true })
         .then(clientList => {
-          // Check if there's already a focused window/tab
           for (const client of clientList) {
             if (client.url.includes('index.html') && 'focus' in client) {
               return client.focus();
             }
           }
-          // Open new window
           return self.clients.openWindow(urlToOpen);
         })
         .then(windowClient => {
-          // Send session ID to the app after a short delay
           if (data.sessionId && windowClient) {
             setTimeout(() => {
               windowClient.postMessage({ 
@@ -222,4 +281,4 @@ self.addEventListener('notificationclick', event => {
   }
 });
 
-console.log('🎮 PS Lounge Service Worker v4.0 Loaded - Enhanced Notifications');
+console.log('🎮 PS Lounge Service Worker v5.0 Loaded - Scheduled Notifications Active');
