@@ -899,8 +899,10 @@
                 <div class="section-header"><h2 class="section-title">⏱ إدارة الجلسات</h2></div>
                 <p style="color: var(--gray-500); margin-bottom: 1.35rem;">اضغط على أي جهاز متاح لبدء جلسة جديدة</p>
                 <div class="table-container">
-                    <table><thead><tr><th>الجهاز</th><th>نوع الجهاز</th><th>العميل</th><th>نوع الجلسة</th><th>البداية</th><th>⏰ المدة</th><th>السعر</th><th>الحالة</th><th>إجراء</th></tr></thead>
-                    <tbody id="sessionsTableBody"><tr><td colspan="9" style="text-align:center;padding:1.8rem;">لا توجد جلسات نشطة</td></tr></tbody></table>
+                    <table>
+                        <thead><tr><th>الجهاز</th><th>نوع الجهاز</th><th>العميل</th><th>نوع الجلسة</th><th>البداية</th><th>⏰ المدة</th><th>السعر</th><th>الحالة</th><th>إجراء</th></tr></thead>
+                        <tbody id="sessionsTableBody"><tr><td colspan="9" style="text-align:center;padding:1.8rem;">لا توجد جلسات نشطة</td></tr></tbody>
+                    </table>
                 </div>
             </section>
 
@@ -920,8 +922,10 @@
                     <div class="stat-card"><div class="stat-icon orange">📦</div><div class="stat-value" id="totalProductsSold">0</div><div class="stat-label">منتجات مباعة</div></div>
                 </div>
                 <div class="table-container">
-                    <table><thead><tr><th>Date</th><th>Time</th><th>Type</th><th>Customer</th><th>Details</th><th>Device</th><th>Amount</th></tr></thead>
-                    <tbody id="reportsTableBody"><tr><td colspan="7" style="text-align:center;padding:1.8rem;">لا توجد معاملات</td></tr></tbody></table>
+                    <table>
+                        <thead><tr><th>Date</th><th>Time</th><th>Type</th><th>Customer</th><th>Details</th><th>Device</th><th>Amount</th></tr></thead>
+                        <tbody id="reportsTableBody"><tr><td colspan="7" style="text-align:center;padding:1.8rem;">لا توجد معاملات</td></tr></tbody>
+                    </table>
                 </div>
             </section>
 
@@ -998,10 +1002,30 @@
                 document.getElementById('appContainer').classList.add('active');
             }
             if (!appData.devices.length) { for (let i = 1; i <= 16; i++) appData.devices.push({ id: i, number: i, status: 'available' }); saveData(); }
-            renderAll(); checkNotificationPermission(); startGlobalAlertChecker(); setupInstallPrompt(); registerServiceWorker();
-            
-            // Listen for messages from service worker
-            if (navigator.serviceWorker) {
+            renderAll(); checkNotificationPermission(); startGlobalAlertChecker(); setupInstallPrompt(); registerServiceWorkerProperly();
+        }
+
+        function isRunningAsPWA() { return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true; }
+        function saveData() { localStorage.setItem('playstationLounge', JSON.stringify(appData)); }
+        function loadData() { const saved = localStorage.getItem('playstationLounge'); if (saved) appData = JSON.parse(saved); }
+
+        function registerServiceWorkerProperly() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => {
+                        console.log('✅ Service Worker registered:', registration.scope);
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    console.log('✅ New version available');
+                                }
+                            });
+                        });
+                    })
+                    .catch(error => console.log('❌ SW failed:', error));
+                
+                // Listen for messages from Service Worker (e.g., focus session)
                 navigator.serviceWorker.addEventListener('message', event => {
                     if (event.data && event.data.type === 'PLAY_SOUND') {
                         const audio = document.getElementById(event.data.sound + 'Sound');
@@ -1016,17 +1040,54 @@
             }
         }
 
-        function isRunningAsPWA() { return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true; }
-        function saveData() { localStorage.setItem('playstationLounge', JSON.stringify(appData)); }
-        function loadData() { const saved = localStorage.getItem('playstationLounge'); if (saved) appData = JSON.parse(saved); }
+        // ===== PWA INSTALL =====
+        function setupInstallPrompt() {
+            if (isRunningAsPWA() || localStorage.getItem('pwaInstalled')) { hideInstallBanner(); return; }
+            setTimeout(() => { if (!isRunningAsPWA() && !localStorage.getItem('pwaInstalled')) showInstallBanner(); }, 3000);
+            window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; if (!isRunningAsPWA()) showInstallBanner(); });
+            window.addEventListener('appinstalled', () => { deferredPrompt = null; localStorage.setItem('pwaInstalled', 'true'); hideInstallBanner(); showToast('success', 'تم التثبيت!', 'التطبيق جاهز 🎉'); });
+        }
 
-        function registerServiceWorker() {
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js').then(reg => console.log('✅ SW registered')).catch(err => console.log('❌ SW failed:', err));
+        function showInstallBanner() { if (isRunningAsPWA()) return; const banner = document.getElementById('installBanner'); if (banner && !localStorage.getItem('pwaInstalled')) { banner.classList.remove('hidden', 'pwa-hidden'); } }
+        function hideInstallBanner() { const banner = document.getElementById('installBanner'); if (banner) banner.classList.add('hidden', 'pwa-hidden'); }
+        function dismissInstall() { localStorage.setItem('pwaDismissed', 'true'); hideInstallBanner(); }
+        async function installApp() { if (deferredPrompt) { deferredPrompt.prompt(); const result = await deferredPrompt.userChoice; deferredPrompt = null; if (result.outcome === 'accepted') localStorage.setItem('pwaInstalled', 'true'); hideInstallBanner(); } else showToast('info', 'تنبيه', 'يمكنك تثبيت التطبيق من قائمة المتصفح ☝️'); }
+
+        // ===== NOTIFICATIONS - ENHANCED (via Service Worker) =====
+        async function checkNotificationPermission() {
+            if ('Notification' in window) {
+                const perm = Notification.permission;
+                notificationPermissionGranted = perm === 'granted';
+                updateNotifButton(notificationPermissionGranted);
+                if (perm === 'default') await requestNotificationPermission();
             }
         }
 
-        // ===== ENHANCED NOTIFICATION (Sends through Service Worker for background) =====
+        function updateNotifButton(granted) {
+            const btn = document.getElementById('notifBtn');
+            if (granted) { btn.textContent = '✅ مفعل'; btn.style.background = 'var(--success)'; btn.style.color = 'white'; }
+            else { btn.textContent = '🔔 تفعيل الإشعارات'; btn.style.background = 'var(--primary)'; btn.style.color = 'white'; }
+        }
+
+        async function requestNotificationPermission() {
+            if (!('Notification' in window)) { showToast('error', 'غير مدعوم', 'متصفحك لا يدعم الإشعارات'); return false; }
+            try {
+                const perm = await Notification.requestPermission();
+                if (perm === 'granted') {
+                    notificationPermissionGranted = true;
+                    updateNotifButton(true);
+                    sendProfessionalNotification('test', '✅ تم تفعيل الإشعارات!', 'ستصلك إشعارات عند انتهاء الوقت', 'info');
+                    showToast('success', 'تم التفعيل', 'الإشعارات تعمل الآن 🔔');
+                    return true;
+                } else {
+                    notificationPermissionGranted = false;
+                    updateNotifButton(false);
+                    showToast('warning', 'لم يتم التفعيل', 'يرجى السماح بالإشعارات');
+                    return false;
+                }
+            } catch (error) { console.log('Notification error:', error); return false; }
+        }
+
         async function sendProfessionalNotification(sessionId, title, message, type = 'warning', deviceNumber = '', customerName = '', remainingMinutes = null) {
             if (!notificationPermissionGranted) return;
             
@@ -1036,7 +1097,7 @@
             if (navigator.serviceWorker && navigator.serviceWorker.controller) {
                 navigator.serviceWorker.controller.postMessage({ type: 'SHOW_NOTIFICATION', payload });
             } else {
-                // Fallback to regular notification
+                // Fallback to regular notification (only works when app is foreground)
                 if ('Notification' in window && Notification.permission === 'granted') {
                     let body = message;
                     if (deviceNumber && customerName) body = `🖥 الشاشة: ${deviceNumber}\n👤 العميل: ${customerName}\n\n${message}`;
@@ -1044,37 +1105,16 @@
                 }
             }
             
-            // Also show in-app toast
+            // Also show in-app toast for immediate feedback
             showToast(type === 'critical' ? 'alert-critical' : 'warning', title, message, 8000, type === 'critical');
         }
 
-        async function checkNotificationPermission() {
-            if ('Notification' in window) {
-                const perm = Notification.permission;
-                notificationPermissionGranted = perm === 'granted';
-                const btn = document.getElementById('notifBtn');
-                if (btn) btn.textContent = notificationPermissionGranted ? '✅ مفعل' : '🔔 تفعيل الإشعارات';
-                if (perm === 'default') await requestNotificationPermission();
-            }
-        }
-
-        async function requestNotificationPermission() {
-            if (!('Notification' in window)) { showToast('error', 'غير مدعوم', 'متصفحك لا يدعم الإشعارات'); return false; }
-            const perm = await Notification.requestPermission();
-            notificationPermissionGranted = perm === 'granted';
-            const btn = document.getElementById('notifBtn');
-            if (btn) btn.textContent = notificationPermissionGranted ? '✅ مفعل' : '🔔 تفعيل الإشعارات';
-            if (notificationPermissionGranted) sendProfessionalNotification('test', '✅ تم التفعيل!', 'ستصلك إشعارات عند انتهاء الوقت', 'info');
-            return notificationPermissionGranted;
-        }
-
-        // ===== GLOBAL ALERT CHECKER WITH WAKE LOCK =====
+        // ===== GLOBAL ALERT CHECKER =====
         function startGlobalAlertChecker() {
             if (globalAlertInterval) clearInterval(globalAlertInterval);
             globalAlertInterval = setInterval(() => {
                 checkAllSessionsForExpiration();
                 renderSessions();
-                // Manage wake lock based on active sessions
                 const hasActive = appData.sessions.filter(s => s.status === 'active').length > 0;
                 if (hasActive && !wakeLock) requestWakeLock();
                 else if (!hasActive && wakeLock) releaseWakeLock();
@@ -1083,12 +1123,16 @@
 
         function checkAllSessionsForExpiration() {
             const activeSessions = appData.sessions.filter(s => s.status === 'active' && s.sessionType === 'timed');
+            if (activeSessions.length === 0) return;
+            
             const now = Date.now();
             
             activeSessions.forEach(session => {
                 const startTime = new Date(session.startTime).getTime();
-                let totalDuration = session.initialDuration || session.duration || 0;
-                if (session.timeExtensions?.length) totalDuration += session.timeExtensions.reduce((sum, ext) => sum + ext.minutes, 0);
+                let totalDuration = session.duration || 0;
+                if (session.timeExtensions?.length > 0) {
+                    totalDuration = session.initialDuration + session.timeExtensions.reduce((sum, ext) => sum + ext.minutes, 0);
+                }
                 
                 const elapsedMs = now - startTime;
                 const elapsedMinutes = elapsedMs / 60000;
@@ -1097,35 +1141,47 @@
                 const deviceNum = device ? device.number : '?';
                 const alertThreshold = Math.max(1, Math.floor(totalDuration * 0.2));
                 
-                // Alert at 20% remaining via Service Worker
                 if (remainingMinutes > 0 && remainingMinutes <= alertThreshold && !alertSoundPlayed.has(`alert-${session.id}`)) {
                     alertSoundPlayed.add(`alert-${session.id}`);
-                    sendProfessionalNotification(
-                        session.id, '⏰ تنبيه - وقت قريب من الانتهاء!',
-                        `متبقي ${Math.ceil(remainingMinutes)} دقيقة`, 'warning',
-                        deviceNum, session.customerName, Math.ceil(remainingMinutes)
-                    );
                     playSound('alert');
+                    showToast('warning', '⏰ تنبيه!', `جلسة ${session.customerName}\nالشاشة ${deviceNum}\nمتبقي ${Math.ceil(remainingMinutes)} دقيقة`);
+                    sendProfessionalNotification(
+                        session.id,
+                        '⏰ تنبيه - وقت قريب من الانتهاء!',
+                        `متبقي ${Math.ceil(remainingMinutes)} دقيقة`,
+                        'warning',
+                        deviceNum,
+                        session.customerName,
+                        Math.ceil(remainingMinutes)
+                    );
                 }
                 
-                // EXPIRED - Critical persistent notification
                 if (elapsedMinutes >= totalDuration && !alertedSessions.has(session.id)) {
                     alertedSessions.add(session.id);
-                    sendProfessionalNotification(
-                        session.id, '🚨 انتهاء الوقت - هام جداً!',
-                        `الوقت انتهى! الرجاء إنهاء الجلسة فوراً`, 'critical',
-                        deviceNum, session.customerName, 0
-                    );
                     startAlarmLoop();
+                    sendProfessionalNotification(
+                        session.id,
+                        '🚨 انتهاء الوقت - هام جداً!',
+                        `الوقت انتهى! الرجاء إنهاء الجلسة فوراً`,
+                        'critical',
+                        deviceNum,
+                        session.customerName,
+                        0
+                    );
                 }
             });
         }
 
+        // ===== SOUND MANAGEMENT =====
         function playSound(type) { try { const audio = document.getElementById(type + 'Sound'); if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); } } catch(e) {} }
         function startAlarmLoop() { if (alertInterval) clearInterval(alertInterval); alertInterval = setInterval(() => { const audio = document.getElementById('alarmSound'); if (audio && !isManagingSession) audio.play().catch(() => {}); }, 1500); }
         function stopAlarmLoop() { if (alertInterval) { clearInterval(alertInterval); alertInterval = null; } const audio = document.getElementById('alarmSound'); if (audio) { audio.pause(); audio.currentTime = 0; } }
         function stopAllSounds() { stopAlarmLoop(); ['alarmSound', 'alertSound', 'timerSound'].forEach(id => { const a = document.getElementById(id); if (a) { a.pause(); a.currentTime = 0; } }); }
+        function stopAllSoundsExceptTimer() { stopAlarmLoop(); ['alarmSound', 'alertSound'].forEach(id => { const a = document.getElementById(id); if (a) { a.pause(); a.currentTime = 0; } }); }
+        function playTimerSound() { const a = document.getElementById('timerSound'); if (a) { a.currentTime = 0; a.play().catch(() => {}); } }
+        function stopTimerSound() { const a = document.getElementById('timerSound'); if (a) { a.pause(); a.currentTime = 0; } }
 
+        // ===== TOAST SYSTEM =====
         function showToast(type, title, message, duration = 5000, persistent = false) {
             const container = document.getElementById('toastContainer');
             const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️', 'alert-critical': '🚨' };
@@ -1136,6 +1192,7 @@
             if (!persistent) setTimeout(() => toast.remove(), duration);
         }
 
+        // ===== DIALOG SYSTEM =====
         function showCustomDialog(type, title, message, confirmText = 'تأكيد', cancelText = 'إلغاء') {
             return new Promise((resolve) => {
                 customDialogResolver = resolve;
@@ -1165,10 +1222,30 @@
         });
         function updatePinDisplay() { document.querySelectorAll('.pin-dot').forEach((dot, i) => { dot.textContent = i < enteredPin.length ? enteredPin[i] : ''; dot.classList.toggle('filled', i < enteredPin.length); }); document.getElementById('errorMsg').classList.remove('show'); }
         function validatePin() { if (enteredPin === CORRECT_PIN) { sessionStorage.setItem('isLoggedIn', 'true'); document.getElementById('loginScreen').classList.add('hidden'); document.getElementById('appContainer').classList.add('active'); showToast('success', 'مرحباً!', 'تم تسجيل الدخول 🎉'); } else { document.getElementById('errorMsg').textContent = '❌ رمز غير صحيح'; document.getElementById('errorMsg').classList.add('show'); setTimeout(() => { enteredPin = ''; updatePinDisplay(); }, 1000); } }
-        async function handleLogout() { if (await showCustomDialog('warning', '⏻ تأكيد الخروج', 'هل أنت متأكد؟', 'نعم', 'إلغاء')) { sessionStorage.removeItem('isLoggedIn'); document.getElementById('appContainer').classList.remove('active'); document.getElementById('loginScreen').classList.remove('hidden'); enteredPin = ''; updatePinDisplay(); releaseWakeLock(); } }
-        async function handleResetData() { if (await showCustomDialog('danger', '🗑 مسح البيانات', 'هل أنت متأكد؟', 'نعم، امسح الكل!', 'إلغاء')) { localStorage.removeItem('playstationLounge'); showToast('success', 'تم المسح', '✓ تم حذف البيانات'); setTimeout(() => location.reload(), 1500); } }
+        
+        async function handleLogout() {
+            if (await showCustomDialog('warning', '⏻ تأكيد الخروج', 'هل أنت متأكد؟', 'نعم', 'إلغاء')) {
+                releaseWakeLock();
+                sessionStorage.removeItem('isLoggedIn');
+                document.getElementById('appContainer').classList.remove('active');
+                document.getElementById('loginScreen').classList.remove('hidden');
+                enteredPin = '';
+                updatePinDisplay();
+            }
+        }
+
+        async function handleResetData() {
+            if (await showCustomDialog('danger', '🗑 مسح البيانات', 'هل أنت متأكد؟', 'نعم، امسح الكل!', 'إلغاء')) {
+                releaseWakeLock();
+                localStorage.removeItem('playstationLounge');
+                showToast('success', 'تم المسح', '✓ تم حذف البيانات');
+                setTimeout(() => location.reload(), 1500);
+            }
+        }
+
         function showSection(id) { document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active')); document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active')); document.getElementById(id).classList.add('active'); event.target.classList.add('active'); }
 
+        // ===== RENDER FUNCTIONS =====
         function renderAll() { renderDevices(); renderProducts(); renderClients(); updateStats(); renderReports(); renderSessions(); }
         function renderDevices() { document.getElementById('devicesGrid').innerHTML = appData.devices.map(d => `<div class="device-card ${d.status}" onclick="openSessionModal(${d.id})"><div class="device-number">شاشة ${d.number}</div><div class="device-status status-${d.status}">${d.status === 'available' ? '✓ متاح' : d.status === 'in-use' ? '▶ مشغل' : '🔧 صيانة'}</div></div>`).join(''); }
         function renderProducts() { const grid = document.getElementById('productsGrid'); if (!appData.products.length) { grid.innerHTML = '<p style="text-align:center;padding:2rem;">📦 لا توجد منتجات</p>'; return; } grid.innerHTML = appData.products.map(p => `<div class="product-card"><div class="product-image">📦</div><div class="product-info"><div class="product-name">${p.name}</div><div class="product-footer" style="display:flex;justify-content:space-between;margin-top:0.5rem;"><div class="product-price">${parseFloat(p.price).toFixed(2)} EGP</div><button class="add-btn" onclick="openSelectSessionModal(${p.id})">+ إضافة</button></div></div></div>`).join(''); }
@@ -1176,20 +1253,24 @@
         function updateStats() { document.getElementById('availableDevices').textContent = appData.devices.filter(d => d.status === 'available').length; document.getElementById('activeSessions').textContent = appData.sessions.filter(s => s.status === 'active').length; document.getElementById('totalClients').textContent = appData.clients.length; document.getElementById('todayRevenue').textContent = parseFloat(appData.transactions.filter(t => new Date(t.date).toDateString() === new Date().toDateString()).reduce((s, t) => s + t.amount, 0)).toFixed(2) + ' EGP'; document.getElementById('totalRevenue').textContent = parseFloat(appData.transactions.reduce((s, t) => s + t.amount, 0)).toFixed(2) + ' EGP'; document.getElementById('completedSessions').textContent = appData.sessions.filter(s => s.status === 'completed').length; document.getElementById('totalProductsSold').textContent = appData.transactions.filter(t => t.type === 'product').length; }
         function renderSessions() { const tbody = document.getElementById('sessionsTableBody'); const active = appData.sessions.filter(s => s.status === 'active'); if (!active.length) { tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:1.8rem;">لا توجد جلسات نشطة</td></tr>'; return; } tbody.innerHTML = active.map(s => { const dev = appData.devices.find(d => d.id === s.deviceId); const start = new Date(s.startTime); const elapsedSeconds = Math.floor((Date.now() - start) / 1000); let durationText = s.sessionType === 'timed' ? `${s.duration || 0} دقيقة` : `${Math.floor(elapsedSeconds / 60)} دقيقة`; return `<tr><td>${dev?.number || '-'}</td><td>${s.type || '-'}</td><td>${s.customerName || '-'}</td><td><span class="badge badge-${s.sessionType === 'open' ? 'info' : 'success'}">${s.sessionType === 'open' ? 'مفتوح' : 'محدد'}</span></td><td>${start.toLocaleTimeString('ar-EG')}</td><td><strong>${durationText}</strong></td><td>${calculateCurrentCost(s).toFixed(2)} EGP</td><td><span class="badge badge-success">نشطة</span></td><td><button class="add-btn" onclick="manageSession(${s.id})">إدارة</button></td></tr>`; }).join(''); }
         function renderReports() { const tbody = document.getElementById('reportsTableBody'); if (!appData.transactions.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:1.8rem;">لا توجد معاملات</td></tr>'; return; } tbody.innerHTML = appData.transactions.slice(-30).reverse().map(t => `<tr><td>${new Date(t.date).toLocaleDateString()}</td><td>${new Date(t.date).toLocaleTimeString()}</td><td><span class="badge badge-${t.type === 'session' ? 'success' : 'warning'}">${t.type === 'session' ? 'جلسة' : 'منتج'}</span></td><td>${t.customerName || '-'}</td><td>${t.description || '-'}</td><td>${t.screenNumber || '-'}</td><td style="font-weight:800;color:var(--success);">+${parseFloat(t.amount).toFixed(2)} EGP</td></tr>`).join(''); }
+        function formatTime(date) { let hours = date.getHours(); const minutes = date.getMinutes().toString().padStart(2, '0'); const ampm = hours >= 12 ? 'PM' : 'AM'; hours = hours % 12; hours = hours ? hours : 12; return `${hours.toString().padStart(2, '0')}:${minutes} ${ampm}`; }
+        function formatTimeHMS(totalSeconds) { const h = Math.floor(totalSeconds / 3600); const m = Math.floor((totalSeconds % 3600) / 60); const s = Math.floor(totalSeconds % 60); return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; }
+        function formatTimeDetailed(totalSeconds) { const m = Math.floor(totalSeconds / 60); const s = Math.floor(totalSeconds % 60); return `${m} دقيقة ${s} ثانية`; }
         function calculateElapsedSeconds(session) { return Math.floor((Date.now() - new Date(session.startTime).getTime()) / 1000); }
         function calculateTimeCost(session) { return (calculateElapsedSeconds(session) / 3600) * session.hourlyRate; }
         function calculateCurrentCost(session) { return calculateTimeCost(session) + (session.products?.reduce((sum, p) => sum + p.price, 0) || 0); }
 
+        // ===== SESSION MODAL =====
         function openSessionModal(deviceId) { const device = appData.devices.find(d => d.id === deviceId); if (device?.status !== 'available') { showToast('error', 'غير متاح', 'هذا الجهاز غير متاح!'); return; } currentDevice = deviceId; selectedType = 'ps4'; selectedPrice = 50; selectedSessionType = 'timed'; document.getElementById('modalDevice').value = `شاشة ${device.number}`; document.querySelectorAll('#deviceTypeToggle .type-option').forEach(o => o.classList.toggle('selected', o.dataset.type === 'ps4')); document.querySelectorAll('.session-type-option').forEach(o => o.classList.toggle('selected', o.dataset.sessiontype === 'timed')); document.getElementById('sessionHours').value = 1; document.getElementById('sessionMinutes').value = 0; document.getElementById('customerName').value = ''; document.getElementById('customPriceInput').value = 50; document.getElementById('timedSessionFields').style.display = 'block'; document.getElementById('openSessionInfo').style.display = 'none'; document.getElementById('hourlyRateDisplay').textContent = '50'; calcPrice(); document.getElementById('sessionModal').classList.add('active'); }
         function closeModal() { document.getElementById('sessionModal').classList.remove('active'); currentDevice = null; }
         function selectDeviceType(el) { document.querySelectorAll('#deviceTypeToggle .type-option').forEach(o => o.classList.remove('selected')); el.classList.add('selected'); selectedType = el.dataset.type; selectedPrice = selectedType === 'ps5' ? 80 : 50; document.getElementById('customPriceInput').value = selectedPrice; document.getElementById('hourlyRateDisplay').textContent = selectedPrice; calcPrice(); }
         function updatePriceFromInput() { selectedPrice = parseFloat(document.getElementById('customPriceInput').value) || 0; document.getElementById('hourlyRateDisplay').textContent = selectedPrice.toFixed(2); calcPrice(); }
         function selectSessionType(el) { document.querySelectorAll('.session-type-option').forEach(o => o.classList.remove('selected')); el.classList.add('selected'); selectedSessionType = el.dataset.sessiontype; document.getElementById('timedSessionFields').style.display = selectedSessionType === 'timed' ? 'block' : 'none'; document.getElementById('openSessionInfo').style.display = selectedSessionType === 'timed' ? 'none' : 'block'; }
         function calcPrice() { const h = parseInt(document.getElementById('sessionHours').value) || 0; const m = parseInt(document.getElementById('sessionMinutes').value) || 0; const price = ((h * 60) + m) / 60 * selectedPrice; document.getElementById('sessionPrice').textContent = price.toFixed(2) + ' EGP'; }
-        function startSession() { const customerName = document.getElementById('customerName').value.trim() || 'عميل بدون اسم'; let duration = 0; if (selectedSessionType === 'timed') { const h = parseInt(document.getElementById('sessionHours').value) || 0; const m = parseInt(document.getElementById('sessionMinutes').value) || 0; duration = (h * 60) + m; if (duration <= 0) { showToast('error', 'خطأ', 'يرجى إدخال مدة صحيحة'); return; } } const session = { id: Date.now(), deviceId: currentDevice, type: selectedType.toUpperCase(), customerName, sessionType: selectedSessionType, duration, startTime: new Date().toISOString(), initialDuration: duration, price: (duration / 60) * selectedPrice, hourlyRate: selectedPrice, status: 'active', products: [], timeExtensions: [] }; appData.sessions.push(session); const idx = appData.devices.findIndex(d => d.id === currentDevice); if (idx !== -1) appData.devices[idx].status = 'in-use'; saveData(); closeModal(); renderAll(); showToast('success', 'تم!', `✓ تم بدء جلسة ${selectedSessionType === 'open' ? 'مفتوحة' : 'محددة'}!`); requestWakeLock(); }
+        function startSession() { const customerName = document.getElementById('customerName').value.trim() || 'عميل بدون اسم'; let duration = 0; if (selectedSessionType === 'timed') { const h = parseInt(document.getElementById('sessionHours').value) || 0; const m = parseInt(document.getElementById('sessionMinutes').value) || 0; duration = (h * 60) + m; if (duration <= 0) { showToast('error', 'خطأ', 'يرجى إدخال مدة صحيحة'); return; } } const session = { id: Date.now(), deviceId: currentDevice, type: selectedType.toUpperCase(), customerName, sessionType: selectedSessionType, duration, startTime: new Date().toISOString(), initialDuration: duration, price: (duration / 60) * selectedPrice, hourlyRate: selectedPrice, status: 'active', products: [], timeExtensions: [] }; appData.sessions.push(session); const idx = appData.devices.findIndex(d => d.id === currentDevice); if (idx !== -1) appData.devices[idx].status = 'in-use'; saveData(); requestWakeLock(); closeModal(); renderAll(); showToast('success', 'تم!', `✓ تم بدء جلسة ${selectedSessionType === 'open' ? 'مفتوحة' : 'محددة'}!`); }
 
         function manageSession(id) { const session = appData.sessions.find(s => s.id === id); if (!session) return; currentManagingSessionId = id; isManagingSession = true; stopAllSounds(); const dev = appData.devices.find(d => d.id === session.deviceId); document.getElementById('activeDeviceInfo').textContent = dev ? `شاشة ${dev.number}` : '-'; document.getElementById('activeCustomerName').textContent = session.customerName; document.getElementById('activeSessionType').textContent = session.sessionType === 'open' ? '⏳ مفتوح' : '⏰ محدد'; if (timerInterval) clearInterval(timerInterval); timerInterval = setInterval(() => updateActiveDisplay(session), 1000); document.getElementById('activeSessionModal').classList.add('active'); updateActiveDisplay(session); }
-        function updateActiveDisplay(session) { const elapsedSeconds = calculateElapsedSeconds(session); document.getElementById('sessionTimerDisplay').textContent = `${Math.floor(elapsedSeconds / 3600).toString().padStart(2,'0')}:${Math.floor((elapsedSeconds % 3600) / 60).toString().padStart(2,'0')}:${(elapsedSeconds % 60).toString().padStart(2,'0')}`; document.getElementById('activeCurrentCost').textContent = `${calculateCurrentCost(session).toFixed(2)} EGP`; if (session.sessionType === 'timed') { let totalDuration = session.initialDuration || 0; if (session.timeExtensions?.length) totalDuration += session.timeExtensions.reduce((s, e) => s + e.minutes, 0); const remainingSeconds = (totalDuration * 60) - elapsedSeconds; if (remainingSeconds <= 0) { document.getElementById('sessionTimerDisplay').classList.add('warning'); document.getElementById('activeRemainingTime').textContent = '⚠️ انتهى!'; document.getElementById('remainingTimeRow').style.display = 'flex'; if (!isManagingSession) startAlarmLoop(); } else if (remainingSeconds <= 300) { document.getElementById('sessionTimerDisplay').classList.add('warning'); document.getElementById('activeRemainingTime').textContent = `${Math.floor(remainingSeconds / 3600).toString().padStart(2,'0')}:${Math.floor((remainingSeconds % 3600) / 60).toString().padStart(2,'0')}:${(remainingSeconds % 60).toString().padStart(2,'0')}`; document.getElementById('remainingTimeRow').style.display = 'flex'; } else { document.getElementById('sessionTimerDisplay').classList.remove('warning'); document.getElementById('activeRemainingTime').textContent = `${Math.floor(remainingSeconds / 3600).toString().padStart(2,'0')}:${Math.floor((remainingSeconds % 3600) / 60).toString().padStart(2,'0')}:${(remainingSeconds % 60).toString().padStart(2,'0')}`; document.getElementById('remainingTimeRow').style.display = 'flex'; stopAlarmLoop(); } } const prodsDiv = document.getElementById('sessionProductsItems'); if (session.products?.length) prodsDiv.innerHTML = session.products.map(p => `<div style="padding:0.45rem;background:var(--gray-50);border-radius:8px;margin-bottom:0.45rem;display:flex;justify-content:space-between;"><span>${p.name}</span><strong>${parseFloat(p.price).toFixed(2)} EGP</strong></div>`).join(''); else prodsDiv.textContent = 'لا توجد منتجات'; }
+        function updateActiveDisplay(session) { const elapsedSeconds = calculateElapsedSeconds(session); document.getElementById('sessionTimerDisplay').textContent = formatTimeHMS(elapsedSeconds); document.getElementById('activeCurrentCost').textContent = `${calculateCurrentCost(session).toFixed(2)} EGP`; if (session.sessionType === 'timed') { let totalDuration = session.initialDuration || 0; if (session.timeExtensions?.length) totalDuration += session.timeExtensions.reduce((s, e) => s + e.minutes, 0); const remainingSeconds = (totalDuration * 60) - elapsedSeconds; if (remainingSeconds <= 0) { document.getElementById('sessionTimerDisplay').classList.add('warning'); document.getElementById('activeRemainingTime').textContent = '⚠️ انتهى!'; document.getElementById('remainingTimeRow').style.display = 'flex'; if (!isManagingSession) startAlarmLoop(); } else if (remainingSeconds <= 300) { document.getElementById('sessionTimerDisplay').classList.add('warning'); document.getElementById('activeRemainingTime').textContent = formatTimeHMS(remainingSeconds); document.getElementById('remainingTimeRow').style.display = 'flex'; } else { document.getElementById('sessionTimerDisplay').classList.remove('warning'); document.getElementById('activeRemainingTime').textContent = formatTimeHMS(remainingSeconds); document.getElementById('remainingTimeRow').style.display = 'flex'; stopAlarmLoop(); } } const prodsDiv = document.getElementById('sessionProductsItems'); if (session.products?.length) prodsDiv.innerHTML = session.products.map(p => `<div style="padding:0.45rem;background:var(--gray-50);border-radius:8px;margin-bottom:0.45rem;display:flex;justify-content:space-between;"><span>${p.name}</span><strong>${parseFloat(p.price).toFixed(2)} EGP</strong></div>`).join(''); else prodsDiv.textContent = 'لا توجد منتجات'; }
         function closeActiveSessionModal() { if (timerInterval) clearInterval(timerInterval); timerInterval = null; stopAlarmLoop(); isManagingSession = false; document.getElementById('activeSessionModal').classList.remove('active'); currentManagingSessionId = null; }
         function showExtendTimeOptions() { document.getElementById('extendHours').value = 0; document.getElementById('extendMinutes').value = 30; calcExtendPrice(); document.getElementById('extendTimeModal').classList.add('active'); }
         function calcExtendPrice() { const s = appData.sessions.find(x => x.id === currentManagingSessionId); if (!s) return; const mins = (parseInt(document.getElementById('extendHours').value) || 0) * 60 + (parseInt(document.getElementById('extendMinutes').value) || 0); document.getElementById('extendPriceDisplay').textContent = ((mins / 60) * s.hourlyRate).toFixed(2) + ' EGP'; }
@@ -1197,7 +1278,7 @@
         function confirmExtendTime() { const s = appData.sessions.find(x => x.id === currentManagingSessionId); if (!s) return; const mins = (parseInt(document.getElementById('extendHours').value) || 0) * 60 + (parseInt(document.getElementById('extendMinutes').value) || 0); if (mins <= 0) { showToast('error', 'خطأ', 'وقت غير صحيح'); return; } const cost = (mins / 60) * s.hourlyRate; if (!s.timeExtensions) s.timeExtensions = []; s.timeExtensions.push({ timestamp: new Date().toISOString(), minutes: mins, cost }); if (s.sessionType === 'timed') s.duration = (s.duration || 0) + mins; alertedSessions.delete(s.id); alertSoundPlayed.delete(`alert-${s.id}`); saveData(); closeExtendTimeModal(); updateActiveDisplay(s); showToast('success', 'تم!', `✓ +${mins} دقيقة (+${cost.toFixed(2)} EGP)`); }
         function closeExtendTimeModal() { document.getElementById('extendTimeModal').classList.remove('active'); }
 
-        function endActiveSessionAndShowInvoice() { const s = appData.sessions.find(x => x.id === currentManagingSessionId); if (!s) return; const elapsedSeconds = calculateElapsedSeconds(s); const elapsedMinutes = elapsedSeconds / 60; const dev = appData.devices.find(d => d.id === s.deviceId); const timeCost = calculateTimeCost(s); const prodCost = s.products?.reduce((sum, p) => sum + p.price, 0) || 0; const final = timeCost + prodCost; s.status = 'completed'; s.endTime = new Date().toISOString(); s.finalCost = final; s.totalMinutes = Math.floor(elapsedMinutes); const idx = appData.devices.findIndex(d => d.id === s.deviceId); if (idx !== -1) appData.devices[idx].status = 'available'; appData.transactions.push({ date: new Date().toISOString(), type: 'session', customerName: s.customerName, description: `${s.type} - ${Math.floor(elapsedMinutes)} دقيقة`, amount: timeCost, screenNumber: dev?.number }); if (s.products?.length) s.products.forEach(p => appData.transactions.push({ date: new Date().toISOString(), type: 'product', customerName: s.customerName, description: p.name, amount: p.price, screenNumber: dev?.number })); if (s.customerName && s.customerName !== 'عميل بدون اسم') { const ci = appData.clients.findIndex(c => c.name === s.customerName); if (ci !== -1) { appData.clients[ci].visits++; appData.clients[ci].total += final; } else appData.clients.push({ name: s.customerName, phone: '', visits: 1, total: final }); } alertedSessions.delete(s.id); alertSoundPlayed.delete(`alert-${s.id}`); saveData(); closeActiveSessionModal(); generateInvoice(s, dev, final, elapsedSeconds, timeCost, prodCost); renderAll(); releaseWakeLock(); }
+        function endActiveSessionAndShowInvoice() { const s = appData.sessions.find(x => x.id === currentManagingSessionId); if (!s) return; const elapsedSeconds = calculateElapsedSeconds(s); const dev = appData.devices.find(d => d.id === s.deviceId); const timeCost = calculateTimeCost(s); const prodCost = s.products?.reduce((sum, p) => sum + p.price, 0) || 0; const final = timeCost + prodCost; s.status = 'completed'; s.endTime = new Date().toISOString(); s.finalCost = final; const idx = appData.devices.findIndex(d => d.id === s.deviceId); if (idx !== -1) appData.devices[idx].status = 'available'; appData.transactions.push({ date: new Date().toISOString(), type: 'session', customerName: s.customerName, description: `${s.type} - ${Math.floor(elapsedSeconds / 60)} دقيقة`, amount: timeCost, screenNumber: dev?.number }); if (s.products?.length) s.products.forEach(p => appData.transactions.push({ date: new Date().toISOString(), type: 'product', customerName: s.customerName, description: p.name, amount: p.price, screenNumber: dev?.number })); if (s.customerName && s.customerName !== 'عميل بدون اسم') { const ci = appData.clients.findIndex(c => c.name === s.customerName); if (ci !== -1) { appData.clients[ci].visits++; appData.clients[ci].total += final; } else appData.clients.push({ name: s.customerName, phone: '', visits: 1, total: final }); } alertedSessions.delete(s.id); alertSoundPlayed.delete(`alert-${s.id}`); saveData(); closeActiveSessionModal(); generateInvoice(s, dev, final, elapsedSeconds, timeCost, prodCost); renderAll(); releaseWakeLock(); }
         function generateInvoice(s, dev, final, elapsedSeconds, timeCost, prodCost) { const start = new Date(s.startTime); const end = new Date(); document.getElementById('invoiceBody').innerHTML = `<div style="margin-bottom:1rem;"><div class="invoice-row" style="display:flex;justify-content:space-between;padding:0.4rem 0;"><span>رقم الشاشة:</span><strong>${dev?.number || '-'}</strong></div><div class="invoice-row" style="display:flex;justify-content:space-between;padding:0.4rem 0;"><span>العميل:</span><strong>${s.customerName}</strong></div><div class="invoice-row" style="display:flex;justify-content:space-between;padding:0.4rem 0;"><span>نوع الجلسة:</span><strong>${s.sessionType === 'open' ? 'مفتوح' : 'محدد'}</strong></div><div class="invoice-row" style="display:flex;justify-content:space-between;padding:0.4rem 0;"><span>البداية:</span><span>${start.toLocaleTimeString('ar-EG')}</span></div><div class="invoice-row" style="display:flex;justify-content:space-between;padding:0.4rem 0;"><span>النهاية:</span><span>${end.toLocaleTimeString('ar-EG')}</span></div><div class="invoice-row" style="display:flex;justify-content:space-between;padding:0.4rem 0;"><span>الوقت المستخدم:</span><strong>${Math.floor(elapsedSeconds / 60)} دقيقة</strong></div><div class="invoice-row" style="display:flex;justify-content:space-between;padding:0.4rem 0;"><span>تكلفة الوقت:</span><strong>${timeCost.toFixed(2)} EGP</strong></div>${s.products?.length ? `<div style="margin-top:0.5rem;"><strong>🛒 المنتجات:</strong><ul>${s.products.map(p => `<li>${p.name} - ${p.price.toFixed(2)} EGP</li>`).join('')}</ul><div style="display:flex;justify-content:space-between;margin-top:0.5rem;"><span>إجمالي المنتجات:</span><strong>${prodCost.toFixed(2)} EGP</strong></div></div>` : ''}<div style="margin-top:1rem;padding:0.8rem;background:#d1fae5;border-radius:12px;text-align:center;font-weight:800;">💰 الإجمالي الكلي: ${final.toFixed(2)} EGP</div></div>`; document.getElementById('invoiceModal').classList.add('active'); }
         function closeInvoiceModal() { document.getElementById('invoiceModal').classList.remove('active'); }
 
@@ -1209,12 +1290,8 @@
         function addProductToSession(sessionId) { const product = appData.products.find(p => p.id === pendingProductId); const session = appData.sessions.find(s => s.id === sessionId); if (!product || !session) return; if (!session.products) session.products = []; session.products.push({ id: product.id, name: product.name, price: product.price, addedAt: new Date().toISOString() }); saveData(); closeSelectSessionModal(); renderProducts(); showToast('success', 'تم!', `✓ "${product.name}" أُضيف للجلسة`); }
         function backupData() { const str = JSON.stringify(appData, null, 2); const blob = new Blob([str], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `backup_${new Date().toISOString().split('T')[0]}.json`; a.click(); URL.revokeObjectURL(url); showToast('success', 'تم التصدير', '✓ تم تصدير البيانات'); }
         function restoreData(event) { const file = event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = (e) => { try { appData = JSON.parse(e.target.result); saveData(); renderAll(); showToast('success', 'تم الاستعادة', '✓ تم استعادة البيانات'); } catch(err) { showToast('error', 'خطأ', '❌ ملف غير صالح'); } }; reader.readAsText(file); } }
-        function setupInstallPrompt() { if (isRunningAsPWA() || localStorage.getItem('pwaInstalled')) { hideInstallBanner(); return; } setTimeout(() => { if (!isRunningAsPWA() && !localStorage.getItem('pwaInstalled')) showInstallBanner(); }, 3000); window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; if (!isRunningAsPWA()) showInstallBanner(); }); window.addEventListener('appinstalled', () => { deferredPrompt = null; localStorage.setItem('pwaInstalled', 'true'); hideInstallBanner(); showToast('success', 'تم التثبيت!', 'التطبيق جاهز 🎉'); }); }
-        function showInstallBanner() { if (isRunningAsPWA()) return; const banner = document.getElementById('installBanner'); if (banner && !localStorage.getItem('pwaInstalled')) { banner.classList.remove('hidden', 'pwa-hidden'); } }
-        function hideInstallBanner() { const banner = document.getElementById('installBanner'); if (banner) banner.classList.add('hidden', 'pwa-hidden'); }
-        function dismissInstall() { localStorage.setItem('pwaDismissed', 'true'); hideInstallBanner(); }
-        async function installApp() { if (deferredPrompt) { deferredPrompt.prompt(); const result = await deferredPrompt.userChoice; deferredPrompt = null; if (result.outcome === 'accepted') localStorage.setItem('pwaInstalled', 'true'); hideInstallBanner(); } else showToast('info', 'تنبيه', 'يمكنك تثبيت التطبيق من قائمة المتصفح ☝️'); }
 
+        // Close modals on outside click
         ['sessionModal', 'activeSessionModal', 'addProductModal', 'extendTimeModal', 'selectSessionModal', 'invoiceModal'].forEach(id => { document.getElementById(id)?.addEventListener('click', (e) => { if (e.target.id === id) { const closeFn = { sessionModal: closeModal, activeSessionModal: closeActiveSessionModal, addProductModal: closeAddProductModal, extendTimeModal: closeExtendTimeModal, selectSessionModal: closeSelectSessionModal, invoiceModal: closeInvoiceModal }[id]; if (closeFn) closeFn(); } }); });
 
         init();
