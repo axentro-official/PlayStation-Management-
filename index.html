@@ -18,13 +18,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- Firebase SDK + FCM -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js"></script>
     
     <style>
-        /* جميع الأنماط الأصلية كما هي (بدأت من هنا) */
+        /* جميع الأنماط كما هي لم تتغير – تم حذفها للاختصار ولكنها موجودة في الملف الأصلي */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root { --primary: #2563EB; --primary-dark: #1D4ED8; --primary-light: #DBEAFE; --success: #10B981; --danger: #EF4444; --warning: #F59E0B; --dark: #0F172A; --gray-50: #F8FAFC; --gray-100: #F1F5F9; --gray-200: #E2E8F0; --gray-300: #CBD5E1; --gray-400: #94A3B8; --gray-500: #64748B; --gray-600: #475569; --gray-700: #334155; --gray-800: #1E293B; --gray-900: #0F172A; }
         body { font-family: 'Cairo', sans-serif; background-color: var(--gray-50); color: var(--gray-800); direction: rtl; min-height: 100vh; line-height: 1.6; overflow-x: hidden; }
@@ -474,82 +470,10 @@
         let alertSoundPlayed = new Set();
         const ALERT_PERCENTAGE_THRESHOLD = 20;
         let customDialogResolver = null;
+        // Scheduled notifications support
         let scheduledNotificationsSupported = false;
         let activeScheduledNotifications = [];
 
-        // ===== FIREBASE PUSH NOTIFICATIONS =====
-        let fcmToken = null;
-        let fcmMessaging = null;
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyC2bamJrV1-XOygRcK2NDnDH4rsqQpQt3Q",
-            authDomain: "ps-lounge-push.firebaseapp.com",
-            projectId: "ps-lounge-push",
-            storageBucket: "ps-lounge-push.firebasestorage.app",
-            messagingSenderId: "749927682693",
-            appId: "1:749927682693:web:5169ed36b2f6b9d1f0cfec",
-            measurementId: "G-TD4D8JVT7H"
-        };
-
-        async function initFirebase() {
-            if (!firebase.apps.length) {
-                firebase.initializeApp(firebaseConfig);
-            }
-            fcmMessaging = firebase.messaging();
-            await registerForPushNotifications();
-        }
-
-        async function registerForPushNotifications() {
-            try {
-                const permission = await Notification.requestPermission();
-                if (permission !== 'granted') {
-                    console.warn('Push not allowed');
-                    notificationPermissionGranted = false;
-                    return;
-                }
-                notificationPermissionGranted = true;
-                // VAPID key الصحيح الذي أرسلته
-                const token = await fcmMessaging.getToken({ vapidKey: 'Cwmcz7wwiKHYGyYEdCYSurVOkYpLe_3-JYzcoRYJfE8' });
-                console.log('FCM Token:', token);
-                fcmToken = token;
-                // إرسال token إلى خادوم الإشعارات (استبدل الرابط برابط الـ Worker الخاص بك)
-                await fetch('https://your-cloudflare-worker.workers.dev/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token, userId: 'lounge-manager' })
-                });
-            } catch (err) {
-                console.error('FCM registration failed', err);
-            }
-        }
-
-        async function scheduleRemoteNotification(sessionId, deviceNumber, customerName, expiresAt, title, body) {
-            if (!fcmToken) return;
-            try {
-                await fetch('https://your-cloudflare-worker.workers.dev/schedule', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        token: fcmToken,
-                        sessionId: sessionId,
-                        deviceNumber: deviceNumber,
-                        customerName: customerName,
-                        expiresAt: expiresAt,
-                        title: title,
-                        body: body
-                    })
-                });
-            } catch (err) {
-                console.error('Failed to schedule remote notification', err);
-            }
-        }
-
-        // استدعاء Firebase عند تحميل الصفحة
-        window.addEventListener('load', () => {
-            initFirebase();
-        });
-
-        // ===== بقية دوال التطبيق الأصلية =====
         function isRunningAsPWA() { return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true || document.referrer.includes('android-app://'); }
         
         function init() {
@@ -610,7 +534,7 @@
 
         async function checkNotificationPermission() { if ('Notification' in window) { const perm = Notification.permission; notificationPermissionGranted = perm === 'granted'; updateNotifButton(notificationPermissionGranted); if (perm === 'default') await requestNotificationPermission(); } }
         function updateNotifButton(granted) { const btn = document.getElementById('notifBtn'); if (granted) { btn.textContent = '✅ مفعل'; btn.style.background = 'var(--success)'; btn.style.color = 'white'; } else { btn.textContent = '🔔 تفعيل الإشعارات'; btn.style.background = 'var(--primary)'; btn.style.color = 'white'; } }
-        async function requestNotificationPermission() { if (!('Notification' in window)) { showToast('error', 'غير مدعوم', 'متصفحك لا يدعم الإشعارات'); return false; } try { const perm = await Notification.requestPermission(); if (perm === 'granted') { notificationPermissionGranted = true; updateNotifButton(true); sendProfessionalNotification('test', '✅ تم تفعيل الإشعارات!', 'ستصلك إشعارات عند انتهاء الوقت', 'info'); showToast('success', 'تم التفعيل', 'الإشعارات تعمل الآن 🔔'); return true; } else { notificationPermissionGranted = false; updateNotifButton(false); showToast('warning', 'لم يتم التفعيل', 'يرجى السماح للإشعارات'); return false; } } catch (error) { return false; } }
+        async function requestNotificationPermission() { if (!('Notification' in window)) { showToast('error', 'غير مدعوم', 'متصفحك لا يدعم الإشعارات'); return false; } try { const perm = await Notification.requestPermission(); if (perm === 'granted') { notificationPermissionGranted = true; updateNotifButton(true); sendProfessionalNotification('test', '✅ تم تفعيل الإشعارات!', 'ستصلك إشعارات عند انتهاء الوقت', 'info'); showToast('success', 'تم التفعيل', 'الإشعارات تعمل الآن 🔔'); return true; } else { notificationPermissionGranted = false; updateNotifButton(false); showToast('warning', 'لم يتم التفعيل', 'يرى السماح بالإشعارات'); return false; } } catch (error) { return false; } }
         function sendProfessionalNotification(sessionId, title, message, type = 'warning', deviceNumber = '', customerName = '') { if (!notificationPermissionGranted) return; sendToServiceWorker({ type: 'SHOW_NOTIFICATION', payload: { title, message, type, sessionId, deviceNumber, customerName } }); }
 
         function startGlobalAlertChecker() { if (globalAlertInterval) clearInterval(globalAlertInterval); globalAlertInterval = setInterval(() => { checkAllSessionsForExpiration(); renderSessions(); }, 1000); }
@@ -658,59 +582,7 @@
         function updatePriceFromInput() { const inputVal = parseFloat(document.getElementById('customPriceInput').value) || 0; selectedPrice = inputVal; document.getElementById('hourlyRateDisplay').textContent = selectedPrice.toFixed(2); calcPrice(); }
         function selectSessionType(el) { document.querySelectorAll('.session-type-option').forEach(o => o.classList.remove('selected')); el.classList.add('selected'); selectedSessionType = el.dataset.sessiontype; if (selectedSessionType === 'timed') { document.getElementById('timedSessionFields').style.display = 'block'; document.getElementById('openSessionInfo').style.display = 'none'; } else { document.getElementById('timedSessionFields').style.display = 'none'; document.getElementById('openSessionInfo').style.display = 'block'; } }
         function calcPrice() { const h = parseInt(document.getElementById('sessionHours').value) || 0; const m = parseInt(document.getElementById('sessionMinutes').value) || 0; const price = ((h * 60) + m) / 60 * selectedPrice; document.getElementById('sessionPrice').textContent = price.toFixed(2) + ' EGP'; }
-        
-        // دالة startSession المعدلة
-        async function startSession() {
-            const customerName = document.getElementById('customerName').value.trim();
-            let duration = 0;
-            let price = 0;
-            if (selectedSessionType === 'timed') {
-                const h = parseInt(document.getElementById('sessionHours').value) || 0;
-                const m = parseInt(document.getElementById('sessionMinutes').value) || 0;
-                duration = (h * 60) + m;
-                if (duration <= 0) { showToast('error', 'خطأ', 'يرجى إدخال مدة صحيحة'); return; }
-                price = (duration / 60) * selectedPrice;
-            }
-            const session = {
-                id: Date.now(),
-                deviceId: currentDevice,
-                type: selectedType.toUpperCase(),
-                customerName: customerName || 'عميل بدون اسم',
-                sessionType: selectedSessionType,
-                duration: duration,
-                startTime: new Date().toISOString(),
-                initialDuration: duration,
-                price: price,
-                hourlyRate: selectedPrice,
-                status: 'active',
-                products: [],
-                timeExtensions: []
-            };
-            appData.sessions.push(session);
-            const idx = appData.devices.findIndex(d => d.id === currentDevice);
-            if (idx !== -1) appData.devices[idx].status = 'in-use';
-            
-            if (selectedSessionType === 'timed') {
-                const startTimeMs = new Date(session.startTime).getTime();
-                const totalDurationMs = duration * 60 * 1000;
-                const expiresAt = startTimeMs + totalDurationMs;
-                const device = appData.devices.find(d => d.id === currentDevice);
-                await scheduleRemoteNotification(
-                    session.id,
-                    device.number,
-                    customerName || 'عميل',
-                    expiresAt,
-                    '🚨 انتهاء الوقت - هام جداً!',
-                    `🖥 الشاشة: ${device.number}\n👤 العميل: ${customerName || 'عميل'}\n⏰ الوقت انتهى الآن!`
-                );
-                scheduleSessionNotifications(session);
-            }
-            saveData();
-            closeModal();
-            renderAll();
-            showToast('success', 'تم!', `✓ تم بدء جلسة ${selectedSessionType === 'open' ? 'مفتوحة' : 'محددة'}!`);
-        }
-
+        function startSession() { const customerName = document.getElementById('customerName').value.trim(); let duration = 0; let price = 0; if (selectedSessionType === 'timed') { const h = parseInt(document.getElementById('sessionHours').value) || 0; const m = parseInt(document.getElementById('sessionMinutes').value) || 0; duration = (h * 60) + m; if (duration <= 0) { showToast('error', 'خطأ', 'يرجى إدخال مدة صحيحة'); return; } price = (duration / 60) * selectedPrice; } const session = { id: Date.now(), deviceId: currentDevice, type: selectedType.toUpperCase(), customerName: customerName || 'عميل بدون اسم', sessionType: selectedSessionType, duration: duration, startTime: new Date().toISOString(), initialDuration: duration, price: price, hourlyRate: selectedPrice, status: 'active', products: [], timeExtensions: [] }; appData.sessions.push(session); const idx = appData.devices.findIndex(d => d.id === currentDevice); if (idx !== -1) appData.devices[idx].status = 'in-use'; if (selectedSessionType === 'timed') scheduleSessionNotifications(session); saveData(); closeModal(); renderAll(); showToast('success', 'تم!', `✓ تم بدء جلسة ${selectedSessionType === 'open' ? 'مفتوحة' : 'محددة'}!`); }
         function calculateElapsedSeconds(session) { const startTime = new Date(session.startTime).getTime(); const now = Date.now(); return Math.floor((now - startTime) / 1000); }
         function calculateTimeCost(session) { const elapsedSeconds = calculateElapsedSeconds(session); const elapsedMinutes = elapsedSeconds / 60; return (elapsedMinutes / 60) * session.hourlyRate; }
         function calculateCurrentCost(session) { return calculateTimeCost(session) + (session.products?.reduce((sum, p) => sum + p.price, 0)); }
@@ -721,40 +593,7 @@
         function showExtendTimeOptions() { document.getElementById('extendHours').value = 0; document.getElementById('extendMinutes').value = 30; calcExtendPrice(); document.getElementById('extendTimeModal').classList.add('active'); }
         function calcExtendPrice() { const s = appData.sessions.find(x => x.id === currentManagingSessionId); if (!s) return; const h = parseInt(document.getElementById('extendHours').value) || 0; const m = parseInt(document.getElementById('extendMinutes').value) || 0; const mins = (h * 60) + m; document.getElementById('extendPriceDisplay').textContent = ((mins / 60) * s.hourlyRate).toFixed(2) + ' EGP'; }
         document.getElementById('extendHours').addEventListener('input', calcExtendPrice); document.getElementById('extendMinutes').addEventListener('input', calcExtendPrice);
-        
-        // دالة confirmExtendTime المعدلة
-        async function confirmExtendTime() {
-            const s = appData.sessions.find(x => x.id === currentManagingSessionId);
-            if (!s) return;
-            const h = parseInt(document.getElementById('extendHours').value) || 0;
-            const m = parseInt(document.getElementById('extendMinutes').value) || 0;
-            const mins = (h * 60) + m;
-            if (mins <= 0) { showToast('error', 'خطأ', 'وقت غير صحيح'); return; }
-            const cost = (mins / 60) * s.hourlyRate;
-            if (!s.timeExtensions) s.timeExtensions = [];
-            s.timeExtensions.push({ timestamp: new Date().toISOString(), minutes: mins, cost: cost });
-            if (s.sessionType === 'timed') s.duration = (s.duration || 0) + mins;
-            
-            if (s.sessionType === 'timed') {
-                const newTotalMs = (s.initialDuration + s.timeExtensions.reduce((a,b)=>a+b.minutes,0)) * 60 * 1000;
-                const newExpiresAt = new Date(s.startTime).getTime() + newTotalMs;
-                const device = appData.devices.find(d => d.id === s.deviceId);
-                await scheduleRemoteNotification(
-                    s.id, device.number, s.customerName, newExpiresAt,
-                    '🚨 انتهاء الوقت (بعد التمديد)',
-                    `🖥 الشاشة: ${device.number}\n👤 العميل: ${s.customerName}\n⏰ الوقت انتهى الآن!`
-                );
-                await cancelSessionNotifications(s.id);
-                scheduleSessionNotifications(s);
-            }
-            alertedSessions.delete(s.id);
-            alertSoundPlayed.delete(`alert-${s.id}`);
-            saveData();
-            closeExtendTimeModal();
-            updateActiveDisplay(s);
-            showToast('success', 'تم!', `✓ +${mins} دقيقة (+${cost.toFixed(2)} EGP)`);
-        }
-        
+        async function confirmExtendTime() { const s = appData.sessions.find(x => x.id === currentManagingSessionId); if (!s) return; const h = parseInt(document.getElementById('extendHours').value) || 0; const m = parseInt(document.getElementById('extendMinutes').value) || 0; const mins = (h * 60) + m; if (mins <= 0) { showToast('error', 'خطأ', 'وقت غير صحيح'); return; } const cost = (mins / 60) * s.hourlyRate; if (!s.timeExtensions) s.timeExtensions = []; s.timeExtensions.push({ timestamp: new Date().toISOString(), minutes: mins, cost: cost }); if (s.sessionType === 'timed') s.duration = (s.duration || 0) + mins; await cancelSessionNotifications(s.id); scheduleSessionNotifications(s); alertedSessions.delete(s.id); alertSoundPlayed.delete(`alert-${s.id}`); saveData(); closeExtendTimeModal(); updateActiveDisplay(s); showToast('success', 'تم!', `✓ +${mins} دقيقة (+${cost.toFixed(2)} EGP)`); }
         function closeExtendTimeModal() { document.getElementById('extendTimeModal').classList.remove('active'); }
         async function endActiveSessionAndShowInvoice() { const s = appData.sessions.find(x => x.id === currentManagingSessionId); if (!s) return; const elapsedSeconds = calculateElapsedSeconds(s); const elapsedMinutes = elapsedSeconds / 60; const dev = appData.devices.find(d => d.id === s.deviceId); const timeCost = calculateTimeCost(s); const prodCost = s.products?.reduce((sum, p) => sum + p.price, 0); const final = timeCost + prodCost; s.status = 'completed'; s.endTime = new Date().toISOString(); s.finalCost = final; s.totalMinutes = Math.floor(elapsedMinutes); s.totalSeconds = elapsedSeconds; const idx = appData.devices.findIndex(d => d.id === s.deviceId); if (idx !== -1) appData.devices[idx].status = 'available'; appData.transactions.push({ date: new Date().toISOString(), type: 'session', customerName: s.customerName, description: `${s.type} - ${Math.floor(elapsedMinutes)} دقيقة`, amount: timeCost, screenNumber: dev?.number }); if (s.products?.length) { s.products.forEach(p => { appData.transactions.push({ date: new Date().toISOString(), type: 'product', customerName: s.customerName, description: p.name, amount: p.price, screenNumber: dev?.number }); }); } if (s.customerName && s.customerName !== 'عميل بدون اسم') { const ci = appData.clients.findIndex(c => c.name === s.customerName); if (ci !== -1) { appData.clients[ci].visits++; appData.clients[ci].total += final; } else { appData.clients.push({ name: s.customerName, phone: '', visits: 1, total: final }); } } await cancelSessionNotifications(s.id); alertedSessions.delete(s.id); alertSoundPlayed.delete(`alert-${s.id}`); saveData(); closeActiveSessionModal(); generateInvoice(s, dev, final, elapsedSeconds, timeCost, prodCost); renderAll(); }
         function generateInvoice(s, dev, final, elapsedSeconds, timeCost, prodCost) { const start = new Date(s.startTime); const end = new Date(s.endTime); const elapsedMinutes = Math.floor(elapsedSeconds / 60); const elapsedSecondsRemainder = elapsedSeconds % 60; let extHTML = ''; if (s.timeExtensions?.length > 0) { const extCost = s.timeExtensions.reduce((sum, e) => sum + e.cost, 0); extHTML = `<div class="invoice-section"><div class="invoice-section-title">⏰ الوقت الإضافي</div>${s.timeExtensions.map((e, idx) => `<div class="invoice-row"><span>➕ الإضافة ${idx + 1}: +${e.minutes} دقيقة</span><span style="direction:ltr">${e.cost.toFixed(2)} EGP</span></div>`).join('')}<div class="invoice-row" style="font-weight:800;border-top:2px solid var(--warning);margin-top:0.5rem;padding-top:0.5rem;"><span>إجمالي الإضافات:</span><span style="direction:ltr;color:var(--warning);">${extCost.toFixed(2)} EGP</span></div></div>`; } document.getElementById('invoiceBody').innerHTML = `<div class="invoice-section"><div class="invoice-section-title">📋 معلومات الجلسة</div><div class="invoice-row"><span>رقم الشاشة:</span><strong>${dev?.number || '-'}</strong></div><div class="invoice-row"><span>نوع الجهاز:</span><strong>${s.type || '-'}</strong></div><div class="invoice-row"><span>العميل:</span><strong>${s.customerName}</strong></div><div class="invoice-row"><span>نوع الجلسة:</span><strong>${s.sessionType === 'open' ? 'مفتوح' : 'محدد'}</strong></div></div><div class="invoice-section"><div class="invoice-section-title">⏱ تفاصيل الوقت الدقيقة</div><div class="invoice-row"><span>البداية:</span><span style="direction:ltr;">${formatTime(start)}</span></div><div class="invoice-row"><span>النهاية:</span><span style="direction:ltr;">${formatTime(end)}</span></div><div class="invoice-row"><span>📌 المدة الأساسية:</span><strong>${s.initialDuration || s.duration || 0} دقيقة (${((s.initialDuration || s.duration || 0)/60).toFixed(1)} ساعة)</strong></div><div class="invoice-row"><span>⏱ الوقت الفعلي المستخدم:</span><strong style="color:var(--primary);">${elapsedMinutes} دقيقة ${elapsedSecondsRemainder} ثانية</strong></div><div class="invoice-row"><span>سعر/ساعة:</span><span style="direction:ltr;">${s.hourlyRate} EGP</span></div><div class="invoice-row"><span>تكلفة الوقت:</span><span style="direction:ltr;font-weight:700;">${timeCost.toFixed(2)} EGP</span></div></div>${extHTML}<div class="invoice-section"><div class="invoice-section-title">🛒 المنتجات</div>${s.products?.length ? `<div class="invoice-products-container"><table class="invoice-products-table"><thead><tr><th>المنتج</th><th>السعر</th></tr></thead><tbody>${s.products.map(p => `<tr><td>${p.name}</td><td style="direction:ltr;text-align:left;">${parseFloat(p.price).toFixed(2)} EGP</td></tr>`).join('')}</tbody><tfoot><tr><td><strong>الإجمالي</strong></td><td style="direction:ltr;text-align:left;color:var(--primary);"><strong>${prodCost.toFixed(2)} EGP</strong></td></tr></tfoot></table></div>` : '<p style="color:var(--gray-500);text-align:center;padding:1rem;">لا توجد منتجات</p>'}</div><div class="invoice-section" style="border:none;"><div class="invoice-row total"><span>💰 الإجمالي الكلي:</span><span style="direction:ltr;">${final.toFixed(2)} EGP</span></div><div style="text-align:center;margin-top:1rem;padding:1rem;background:#d1fae5;border-radius:12px;font-weight:700;color:#065f46;">✅ تم بنجاح - شكراً لزيارتك!</div></div>`; document.getElementById('invoiceModal').classList.add('active'); }
